@@ -20,7 +20,7 @@ compiler.path={runtime.tools.llvm-rl78.path}/bin/
 # LLVM Compiler variable
 #------------------------------------#
 compiler.c.cmd=clang
-compiler.c.flags=--target=rl78 {compiler.optimize} -ffunction-sections -fdata-sections -fdiagnostics-parseable-fixits -g -mcpu=s3 -v -std=gnu99 -DARDUINO=1813 -D__RL78__ -DG23_FPB -Wnonportable-include-path
+compiler.c.flags=--target=rl78 {compiler.optimize} -ffunction-sections -fdata-sections -fdiagnostics-parseable-fixits -g -mcpu=s3 -std=gnu99 -DARDUINO=1813 -D__RL78__ -DG23_FPB -Wnonportable-include-path -w
 
 #------------------------------------#
 # LLVM C++ Compiler variable
