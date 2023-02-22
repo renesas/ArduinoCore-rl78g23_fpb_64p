@@ -40,7 +40,7 @@
 /*************************************************
  * Exported global functions (to be accessed by other files)
  *************************************************/
-void hdwinit(void);
+void hdwinit (void);
 
-#endif // #define HDWINIT_H
+#endif /* #define HDWINIT_H */
 

@@ -14,19 +14,19 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_ITL012.h
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_ITL012.
-* Creation Date: 
+* File Name        : Config_ITL012.h
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_ITL012.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
-#ifndef Config_ITL012_H
-#define Config_ITL012_H
+#ifndef CFG_Config_ITL012_H
+#define CFG_Config_ITL012_H
 
 /***********************************************************************************************************************
 Includes
@@ -40,6 +40,7 @@ Macro definitions (Register bit)
 /***********************************************************************************************************************
 Macro definitions
 ***********************************************************************************************************************/
+#define _20_ITL_ITLCMP012_VALUE                    (0x20U)    /* 8-bit compare data register */
 #define _1F_ITL_ITLCMP012_VALUE                    (0x1FU)    /* 8-bit compare data register */
 
 /***********************************************************************************************************************

@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_TAU0_3_Servo.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_TAU0_3_Servo.
-* Creation Date: 
+* File Name        : Config_TAU0_3_Servo.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_TAU0_3_Servo.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -70,7 +70,7 @@ void R_Config_TAU0_3_Servo_Create(void)
     TDR03 = _257F_TAU_TDR03_VALUE;
     TOM0 &= (uint16_t)~_0008_TAU_CH3_SLAVE_OUTPUT;
     TOL0 &= (uint16_t)~_0008_TAU_CH3_OUTPUT_LEVEL_L;
-    TO0 |= (uint16_t)_0008_TAU_CH3_OUTPUT_VALUE_1;
+    TO0 &= (uint16_t)~_0008_TAU_CH3_OUTPUT_VALUE_1;
     TOE0 |= _0008_TAU_CH3_OUTPUT_ENABLE;
     /* Set TO03 pin */
     PMCT3 &= 0xFDU;

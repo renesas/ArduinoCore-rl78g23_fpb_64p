@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_sau.h
-* Version      : 1.0.1
-* Device(s)    : R7F100GLGxFB
-* Description  : General header file for SAU peripheral.
-* Creation Date: 2021-05-14
+* File Name        : r_cg_sau.h
+* Version          : 1.0.11
+* Device(s)        : R7F100GLGxFB
+* Description      : General header file for SAU peripheral.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 #ifndef SAU_H
@@ -118,6 +118,7 @@ Macro definitions (Register bit)
 /*  
     Serial Communication Operation Setting Register mn (SCRmn)
 */
+#define _0004_SAU_SCRMN_INITIALVALUE     (0x0004U)
 /* Setting of operation mode of channel n (TXEmn, RXEmn) */
 #define _0000_SAU_NOT_COMMUNICATION      (0x0000U)    /* does not start communication */
 #define _4000_SAU_RECEPTION              (0x4000U)    /* reception only */
@@ -143,10 +144,10 @@ Macro definitions (Register bit)
 #define _0000_SAU_STOP_NONE              (0x0000U)    /* none stop bit */
 #define _0010_SAU_STOP_1                 (0x0010U)    /* 1 stop bit */
 #define _0020_SAU_STOP_2                 (0x0020U)    /* 2 stop bits */
-/* Setting of data length in CSI and UART modes (DLSmn2 - DLSmn0) */
-#define _0005_SAU_LENGTH_9               (0x0005U)    /* 9-bit data length */
-#define _0006_SAU_LENGTH_7               (0x0006U)    /* 7-bit data length */
-#define _0007_SAU_LENGTH_8               (0x0007U)    /* 8-bit data length */
+/* Setting of data length in CSI and UART modes (DLSmn1 - DLSmn0) */
+#define _0001_SAU_LENGTH_9               (0x0001U)    /* 9-bit data length */
+#define _0002_SAU_LENGTH_7               (0x0002U)    /* 7-bit data length */
+#define _0003_SAU_LENGTH_8               (0x0003U)    /* 8-bit data length */
     
 /*
     Serial output level register m (SOLm)
@@ -319,9 +320,6 @@ Typedef definitions
 Global functions
 ***********************************************************************************************************************/
 /* Start user code for function. Do not edit comment generated here */
-// 20220928 temporary removal
-// #warning FIXME: Instead of missing `r_cg_serial_csi.h`, define macros for `SPI` here.
-
 #define _0000_SPI_STATUS_CLEAR         (0x0000U)
 #define _8000_SPI_STATUS_SENDEND       (0x8000U)
 #define _4000_SPI_STATUS_RECEIVEEND    (0x4000U)
@@ -343,6 +341,5 @@ Global functions
 #define SPI_MODE3        ((uint8_t)(_0000_SAU_TIMING_1 >> 8))
 
 #define SPI_MODE_MASK    ((uint16_t)_3000_SAU_TIMING_4)
-
 /* End user code. Do not edit comment generated here */
 #endif

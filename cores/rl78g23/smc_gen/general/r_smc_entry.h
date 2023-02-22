@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_smc_entry.h
-* Version      : 1.0.1
-* Device(s)    : R7F100GLGxFB
-* Description  : SMC platform header file..
-* Creation Date: 2021-05-14
+* File Name        : r_smc_entry.h
+* Version          : 1.0.11
+* Device(s)        : R7F100GLGxFB
+* Description      : SMC platform header file..
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 #ifndef SMC_ENTRY_H
@@ -35,11 +35,13 @@ Includes
 #include "Config_ADC.h"
 #include "Config_IICA0.h"
 #include "Config_IICA1.h"
+#include "Config_INTC.h"
 #include "Config_WDT.h"
 #include "Config_RTC.h"
 #include "Config_ITL000.h"
 #include "Config_ITL001.h"
 #include "Config_ITL012.h"
+#include "Config_ITL013.h"
 #include "Config_UART0.h"
 #include "Config_UART1.h"
 #include "Config_UART2.h"
@@ -68,18 +70,12 @@ Typedef definitions
 Global functions
 ***********************************************************************************************************************/
 /* Start user code for function. Do not edit comment generated here */
-/* 1006 Nhu add */
 #include "Config_TAU0_01_PWM.h"
 #include "Config_TAU0_23_PWM.h"
 #include "Config_TAU0_45_PWM.h"
 #include "Config_TAU0_67_PWM.h"
-/* 1006 Nhu add */
-
-/* 1108 Ueeda add */
 #include "Config_INTC.h"
-/* 1108 Ueeda add */
 
-/* 1112 nhu add */
 #include "Config_TAU0_1_Square_Wave.h"
 #include "Config_TAU0_2_Square_Wave.h"
 #include "Config_TAU0_3_Square_Wave.h"
@@ -88,18 +84,16 @@ Global functions
 #include "Config_TAU0_6_Square_Wave.h"
 #include "Config_TAU0_7_Square_Wave.h"
 
-#include "Config_TAU0_0_Mesure_Signal.h"
-#include "Config_TAU0_1_Mesure_Signal.h"
-#include "Config_TAU0_2_Mesure_Signal.h"
-#include "Config_TAU0_3_Mesure_Signal.h"
-#include "Config_TAU0_4_Mesure_Signal.h"
-#include "Config_TAU0_5_Mesure_Signal.h"
-#include "Config_TAU0_6_Mesure_Signal.h"
-#include "Config_TAU0_7_Mesure_Signal.h"
+#include "Config_TAU0_0_Measure_Signal.h"
+#include "Config_TAU0_1_Measure_Signal.h"
+#include "Config_TAU0_2_Measure_Signal.h"
+#include "Config_TAU0_3_Measure_Signal.h"
+#include "Config_TAU0_4_Measure_Signal.h"
+#include "Config_TAU0_5_Measure_Signal.h"
+#include "Config_TAU0_6_Measure_Signal.h"
+#include "Config_TAU0_7_Measure_Signal.h"
 
 #include "Config_TAU0_6_Micros.h"
-
-/* 1112 nhu add */
 /* End user code. Do not edit comment generated here */
 #endif
 

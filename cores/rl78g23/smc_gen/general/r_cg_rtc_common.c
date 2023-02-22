@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_rtc_common.c
-* Version      : 1.0.3
-* Device(s)    : R7F100GLGxFB
-* Description  : None
-* Creation Date: 
+* File Name        : r_cg_rtc_common.c
+* Version          : 1.0.11
+* Device(s)        : R7F100GLGxFB
+* Description      : None
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -44,7 +44,6 @@ Includes
 Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
-
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************

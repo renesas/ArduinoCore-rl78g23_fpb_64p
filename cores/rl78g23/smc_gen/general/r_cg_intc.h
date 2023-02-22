@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_intc.h
-* Version      : 1.0.2
-* Device(s)    : R7F100GLGxFB
-* Description  : General header file for INTC peripheral.
-* Creation Date: 2021-11-04
+* File Name        : r_cg_intc.h
+* Version          : 1.0.11
+* Device(s)        : R7F100GLGxFB
+* Description      : General header file for INTC peripheral.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 #ifndef INTC_H

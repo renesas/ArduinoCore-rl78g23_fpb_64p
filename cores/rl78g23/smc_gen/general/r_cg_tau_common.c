@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_tau_common.c
-* Version      : 1.0.1
-* Device(s)    : R7F100GLGxFB
-* Description  : None
-* Creation Date: 2021-05-14
+* File Name        : r_cg_tau_common.c
+* Version          : 1.0.11
+* Device(s)        : R7F100GLGxFB
+* Description      : None
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -35,10 +35,8 @@ Pragma directive
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-//#include "Config_TAU0_0.h"
-//#include "Config_TAU0_2.h"
-//#include "Config_TAU0_6.h"
-//#include "Config_TAU0_5.h"
+
+// #include "r_cg_tau_common.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -58,9 +56,6 @@ Global variables and functions
 void R_TAU0_Create(void)
 {
     TAU0EN = 1U;    /* start TAU0 clock */
-    /* Set TAU0 settings */
-//    R_Config_TAU0_0_Create();
-
 }
 
 /***********************************************************************************************************************

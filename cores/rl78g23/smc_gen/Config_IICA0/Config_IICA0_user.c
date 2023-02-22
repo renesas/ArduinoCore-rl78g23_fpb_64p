@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_IICA0_user.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_IICA0.
-* Creation Date: 2021-05-14
+* File Name        : Config_IICA0_user.c
+* Component Version: 1.3.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_IICA0.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -74,9 +74,7 @@ static void r_Config_IICA0_callback_master_sendend(void)
 {
     SPT0 = 1U;
 /* Start user code for r_Config_IICA0_callback_master_sendend. Do not edit comment generated here */
-
     g_iica0_master_status_flag |= _40_IICA_DATA_COMPLETE;
-
 /* End user code. Do not edit comment generated here */
 }
 
@@ -92,7 +90,6 @@ static void r_Config_IICA0_callback_master_receiveend(void)
 /* Start user code for r_Config_IICA0_callback_master_receiveend. Do not edit comment generated here */
 
     g_iica0_master_status_flag |= _40_IICA_DATA_COMPLETE;
-
 /* End user code. Do not edit comment generated here */
 }
 
@@ -108,7 +105,6 @@ static void r_Config_IICA0_callback_master_error(MD_STATUS flag)
     /* Start user code for r_Config_IICA0_callback_master_error. Do not edit comment generated here */
 
     g_iica0_master_status_flag = (g_iica0_master_status_flag & 0xF0U) | (flag & 0x0FU);
-
     /* End user code. Do not edit comment generated here */
 }
 
@@ -120,24 +116,24 @@ static void r_Config_IICA0_callback_master_error(MD_STATUS flag)
 ***********************************************************************************************************************/
 static void r_Config_IICA0_master_handler(void)
 {
-    /* Control for communication */
+    /* Detection of stop condition handling */
     if ((0U == IICBSY0) && (0U != g_iica0_tx_cnt))
     {
         r_Config_IICA0_callback_master_error(MD_SPT);
     }
-    /* Control for sended address */
     else
     {
+        /* Control for sended address */
         if (0U == (g_iica0_master_status_flag & _80_IICA_ADDRESS_COMPLETE))
         {
             if (1U == ACKD0)
             {
                 g_iica0_master_status_flag |= _80_IICA_ADDRESS_COMPLETE;
-                
+
                 if (1U == TRC0)
                 {
                     WTIM0 = 1U;
-                    
+
                     if (g_iica0_tx_cnt > 0U)
                     {
                         IICA0 = *gp_iica0_tx_address;

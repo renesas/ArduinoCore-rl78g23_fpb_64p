@@ -42,24 +42,24 @@
 
 #if BSP_CFG_USER_WARM_START_CALLBACK_PRE_INITC_ENABLED != 0
 /* If user is requesting warm start callback functions then these are the prototypes. */
-void BSP_CFG_USER_WARM_START_PRE_C_FUNCTION(void);
+void BSP_CFG_USER_WARM_START_PRE_C_FUNCTION (void);
 #endif
 
 #if BSP_CFG_USER_WARM_START_CALLBACK_POST_INITC_ENABLED != 0
 /* If user is requesting warm start callback functions then these are the prototypes. */
-void BSP_CFG_USER_WARM_START_POST_C_FUNCTION(void);
+void BSP_CFG_USER_WARM_START_POST_C_FUNCTION (void);
 #endif
 
 #if BSP_CFG_WDT_REFRESH_ENABLE == 2
 /* If user is requesting Watchdog Timer callback functions then these are the prototypes. */
-void BSP_CFG_USER_WDT_REFRESH_INIT_FUNCTION(void);
+void BSP_CFG_USER_WDT_REFRESH_INIT_FUNCTION (void);
 #endif
 
 /* This prototype is used to suppress the warning message of LLVM compiler. */
-void bsp_init_system(void);
+void bsp_init_system (void);
 
 /* This prototype is used to suppress the warning message of LLVM compiler. */
-void bsp_init_hardware(void);
+void bsp_init_hardware (void);
 
 /*************************************************
  * Private global variables and functions
@@ -78,7 +78,7 @@ void bsp_init_system(void)
 {
     /* Pin setting */
     PIOR = BSP_CFG_PIOR0 | (BSP_CFG_PIOR1 << 1U) | (BSP_CFG_PIOR2 << 2U) |
-          (BSP_CFG_PIOR3 << 3U) | (BSP_CFG_PIOR4 << 4U) | (BSP_CFG_PIOR5 << 5U);
+        (BSP_CFG_PIOR3 << 3U) | (BSP_CFG_PIOR4 << 4U) | (BSP_CFG_PIOR5 << 5U);
 
     /* If the window open period of watchdog timer is set to 50%, then call it. */
 #if BSP_CFG_WDT_REFRESH_ENABLE == 2
@@ -94,7 +94,7 @@ void bsp_init_system(void)
 #if BSP_CFG_USER_WARM_START_CALLBACK_PRE_INITC_ENABLED == 1
     BSP_CFG_USER_WARM_START_PRE_C_FUNCTION();
 #endif
-}
+} /* End of function bsp_init_system() */
 
 /*************************************************
  * Function name: bsp_init_hardware
@@ -111,5 +111,5 @@ void bsp_init_hardware(void)
 
     /* Peripheral function initialization */
     hdwinit();
-}
+} /* End of function bsp_init_hardware() */
 

@@ -144,7 +144,7 @@ const void *Vectors[] VECT_SECT = {
 /*
  * INT_TM00 (0x20)
  */
-	r_Config_TAU0_0_Mesure_Signal_interrupt,
+	r_Config_TAU0_0_Measure_Signal_interrupt,
 
 /*
  * INT_SRE0/INT_TM01H (0x22)
@@ -203,7 +203,7 @@ const void *Vectors[] VECT_SECT = {
 /*
  * INT_TM01 (0x2E)
  */
-	r_Config_TAU0_1_Mesure_Signal_interrupt,
+	r_Config_TAU0_1_Measure_Signal_interrupt,
 /* 1118 nhu add */
 
 /*
@@ -211,7 +211,7 @@ const void *Vectors[] VECT_SECT = {
  */
 //    r_Config_TAU0_2_channel2_interrupt,
 /* 1118 nhu add */
-	r_Config_TAU0_2_Mesure_Signal_interrupt,
+	r_Config_TAU0_2_Measure_Signal_interrupt,
 /* 1118 nhu add */
 
 /*
@@ -219,7 +219,7 @@ const void *Vectors[] VECT_SECT = {
  */
 //    INT_TM03,
 /* 1118 nhu add */
-	r_Config_TAU0_3_Mesure_Signal_interrupt,
+	r_Config_TAU0_3_Measure_Signal_interrupt,
 /* 1118 nhu add */
 /*
  * INT_AD (0x34)
@@ -265,7 +265,7 @@ const void *Vectors[] VECT_SECT = {
  */
 //    r_Config_TAU0_2_channel4_interrupt,
 /* 1118 nhu add */
-	r_Config_TAU0_4_Mesure_Signal_interrupt,
+	r_Config_TAU0_4_Measure_Signal_interrupt,
 /* 1118 nhu add */
 
 /*
@@ -273,7 +273,7 @@ const void *Vectors[] VECT_SECT = {
  */
 //    r_Config_TAU0_5_interrupt,
 /* 1118 nhu add */
-	r_Config_TAU0_5_Mesure_Signal_interrupt,
+	r_Config_TAU0_5_Measure_Signal_interrupt,
 /* 1118 nhu add */
 
 /*
@@ -281,7 +281,7 @@ const void *Vectors[] VECT_SECT = {
  */
 //    r_Config_TAU0_6_channel6_interrupt,
 /* 1118 nhu add */
-//	r_Config_TAU0_6_Mesure_Signal_interrupt,
+//	r_Config_TAU0_6_Measure_Signal_interrupt,
 	r_Config_TAU0_6_Micros_interrupt,
 /* 1118 nhu add */
 
@@ -290,7 +290,7 @@ const void *Vectors[] VECT_SECT = {
  */
 //    r_Config_TAU0_6_channel7_interrupt,
 /* 1118 nhu add */
-//	r_Config_TAU0_7_Mesure_Signal_interrupt,
+//	r_Config_TAU0_7_Measure_Signal_interrupt,
 /* 1118 nhu add */
 	// 20221006 KAD
 	r_Config_TAU0_7_MSTimer2_interrupt,

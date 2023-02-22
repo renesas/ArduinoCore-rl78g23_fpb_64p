@@ -28,6 +28,9 @@
 *                               - BSP_CFG_FIHWAITTIME
 *                               - BSP_CFG_FIMWAITTIME
 *                               - BSP_CFG_FILWAITTIME
+*         : 28.02.2022 1.20     Added the following function.
+*                               - change_clock_setting
+*                               Changed to enable/disable for each API function.
 
 ***********************************************************************************************************************/
 /*************************************************
@@ -45,15 +48,15 @@
 
 #if BSP_CFG_WDT_REFRESH_ENABLE == 2
 /* If user is requesting Watchdog Timer callback functions then these are the prototypes. */
-void BSP_CFG_USER_WDT_REFRESH_SETTING_FUNCTION(void);
+void BSP_CFG_USER_WDT_REFRESH_SETTING_FUNCTION (void);
 #endif
 
 /*************************************************
  * Private global variables and functions
  *************************************************/
 /* Frequency of the high-speed on-chip oscillator */
-#if BSP_CFG_API_FUNCTIONS_DISABLE == 0
-const uint32_t fIH_hz[] = {
+#if BSP_CFG_GET_FREQ_API_FUNCTIONS_DISABLE == 0
+const uint32_t g_fih_hz[] = {
     24000000,
     12000000,
     6000000,
@@ -74,8 +77,8 @@ const uint32_t fIH_hz[] = {
 #endif
 
 /* Frequency of Middle-speed on-chip oscillator */
-#if BSP_CFG_API_FUNCTIONS_DISABLE == 0
-const uint32_t fIM_hz[] = {
+#if BSP_CFG_GET_FREQ_API_FUNCTIONS_DISABLE == 0
+const uint32_t g_fim_hz[] = {
     4000000,
     2000000,
     1000000,
@@ -93,7 +96,7 @@ const uint32_t fIM_hz[] = {
  * Return value : BSP_OK if the specified clock is started.
  *                BSP_ARG_ERROR if the specified clock is incorrect.
 **************************************************/
-#if BSP_CFG_API_FUNCTIONS_DISABLE == 0
+#if BSP_CFG_CLOCK_OPERATION_API_FUNCTIONS_DISABLE == 0
 e_bsp_err_t start_clock(e_clock_mode_t mode)
 {
     e_bsp_err_t           status = BSP_OK;
@@ -117,7 +120,7 @@ e_bsp_err_t start_clock(e_clock_mode_t mode)
                 /* WAIT_LOOP */
                 do
                 {
-                    tmp_stab_wait = OSTC;
+                    tmp_stab_wait  = OSTC;
                     tmp_stab_wait &= tmp_stab_set;
                 }
                 while (tmp_stab_wait != tmp_stab_set);
@@ -188,8 +191,8 @@ e_bsp_err_t start_clock(e_clock_mode_t mode)
     }
 
     return status;
-}
-#endif
+} /* End of function start_clock() */
+#endif /* BSP_CFG_CLOCK_OPERATION_API_FUNCTIONS_DISABLE == 0 */
 
 /*************************************************
  * Function name: stop_clock
@@ -198,7 +201,7 @@ e_bsp_err_t start_clock(e_clock_mode_t mode)
  * Return value : BSP_OK if the specified clock is stopped.
  *                BSP_ARG_ERROR if the specified clock is incorrect.
 **************************************************/
-#if BSP_CFG_API_FUNCTIONS_DISABLE == 0
+#if BSP_CFG_CLOCK_OPERATION_API_FUNCTIONS_DISABLE == 0
 e_bsp_err_t stop_clock(e_clock_mode_t mode)
 {
     e_bsp_err_t    status = BSP_OK;
@@ -238,8 +241,8 @@ e_bsp_err_t stop_clock(e_clock_mode_t mode)
     }
 
     return status;
-}
-#endif
+} /* End of function stop_clock() */
+#endif /* BSP_CFG_CLOCK_OPERATION_API_FUNCTIONS_DISABLE == 0 */
 
 /*************************************************
  * Function name: set_fclk_clock_source
@@ -253,11 +256,11 @@ e_bsp_err_t stop_clock(e_clock_mode_t mode)
  *                BSP_ARG_ERROR An invalid argument was input.
  * Attention    : Start the clock to switch to before calling this function.
 **************************************************/
-#if BSP_CFG_API_FUNCTIONS_DISABLE == 0
+#if BSP_CFG_SET_CLOCK_SOURCE_API_FUNCTIONS_DISABLE == 0
 e_bsp_err_t set_fclk_clock_source(e_clock_mode_t mode)
 {
-    e_bsp_err_t            status = BSP_OK;
-    e_clock_mode_t         old_mode;
+    e_bsp_err_t          status = BSP_OK;
+    e_clock_mode_t       old_mode;
     volatile uint32_t    w_count;
 
     /* Get current clock source */
@@ -306,20 +309,20 @@ e_bsp_err_t set_fclk_clock_source(e_clock_mode_t mode)
                     status = BSP_ERROR1;
                 }
 #if BSP_CFG_PARAM_CHECKING_ENABLE == 1
-                else if ((CLS == 1U) && ((MCS != 0U) || (MCS1 != 0U)))
+                else if ((1U == CLS) && ((0U != MCS) || (0U != MCS1)))
                 {
-                    // Error if the high-speed on-chip oscillator is not selected.
+                    /* Error if the high-speed on-chip oscillator is not selected. */
                     status = BSP_ERROR2;
                 }
-                else if ((old_mode == SYSCLK) && (MCS1 != 0U))
+                else if ((SYSCLK == old_mode) && (0U != MCS1))
                 {
-                    // Error if the high-speed on-chip oscillator is not selected.
+                    /* Error if the high-speed on-chip oscillator is not selected. */
                     status = BSP_ERROR2;
                 }
 #endif
                 else
                 {
-                    CSS = 0U;
+                    CSS  = 0U;
                     MCM0 = 0U;
                     MCM1 = 0U;
                 }
@@ -337,25 +340,25 @@ e_bsp_err_t set_fclk_clock_source(e_clock_mode_t mode)
 #if BSP_CFG_MCU_PART_PIN_NUM <= 2
                 else if ((CMC & 0x48U) != 0x40U)
                 {
-                    // Error if the high-speed system clock is invalid.
+                    /* Error if the high-speed system clock is invalid. */
                     status = BSP_ERROR1;
                 }
 #else
                 else if ((CMC & 0x40U) != 0x40U)
                 {
-                    // Error if the high-speed system clock is invalid.
+                    /* Error if the high-speed system clock is invalid. */
                     status = BSP_ERROR1;
                 }
 #endif
-                else if ((CLS == 1U) && (MCS != 1U))
+                else if ((1U == CLS) && (1U != MCS))
                 {
-                    // Error if the high-speed system clock is not selected.
+                    /* Error if the high-speed system clock is not selected. */
                     status = BSP_ERROR2;
                 }
 #endif
                 else
                 {
-                    CSS = 0U;
+                    CSS  = 0U;
                     MCM0 = 1U;
                 }
 
@@ -365,24 +368,24 @@ e_bsp_err_t set_fclk_clock_source(e_clock_mode_t mode)
 
                 if (1U == XTSTOP)
                 {
-                    // Error if the subsystem clock is stopped.
+                    /* Error if the subsystem clock is stopped. */
                     status = BSP_ERROR1;
                 }
 #if BSP_CFG_PARAM_CHECKING_ENABLE == 1
 #if BSP_CFG_MCU_PART_PIN_NUM <= 2
                 else if ((CMC & 0x18U) != 0x18U)
                 {
-                    // Error if the subsystem clock is invalid.
+                    /* Error if the subsystem clock is invalid. */
                     status = BSP_ERROR1;
                 }
 #else
                 else if ((CMC & 0x10U) != 0x10U)
                 {
-                    // Error if the subsystem clock is invalid.
+                    /* Error if the subsystem clock is invalid. */
                     status = BSP_ERROR1;
                 }
 #endif
-                else if (old_mode == LOCLK)
+                else if (LOCLK == old_mode)
                 {
                     status = BSP_ERROR3;
                 }
@@ -390,7 +393,7 @@ e_bsp_err_t set_fclk_clock_source(e_clock_mode_t mode)
                 else
                 {
                     SELLOSC = 0U;
-                    CSS = 1U;
+                    CSS     = 1U;
                 }
 
                 break;
@@ -399,24 +402,24 @@ e_bsp_err_t set_fclk_clock_source(e_clock_mode_t mode)
 
                 if (0U == MIOEN)
                 {
-                    // Error if the middle-speed on-chip oscillator is stopped.
+                    /* Error if the middle-speed on-chip oscillator is stopped. */
                     status = BSP_ERROR1;
                 }
 #if BSP_CFG_PARAM_CHECKING_ENABLE == 1
-                else if ((CLS == 1U) && ((MCS != 0U) || (MCS1 != 1U)))
+                else if ((1U == CLS) && ((0U != MCS) || (1U != MCS1)))
                 {
-                    // Error if the middle-speed on-chip oscillator is not selected.
+                    /* Error if the middle-speed on-chip oscillator is not selected. */
                     status = BSP_ERROR2;
                 }
-                else if ((old_mode == SYSCLK) && (MCS1 != 1U))
+                else if ((SYSCLK == old_mode) && (1U != MCS1))
                 {
-                    // Error if the middle-speed on-chip oscillator is not selected.
+                    /* Error if the middle-speed on-chip oscillator is not selected. */
                     status = BSP_ERROR2;
                 }
 #endif
                 else
                 {
-                    CSS = 0U;
+                    CSS  = 0U;
                     MCM0 = 0U;
                     MCM1 = 1U;
                 }
@@ -426,11 +429,11 @@ e_bsp_err_t set_fclk_clock_source(e_clock_mode_t mode)
             case LOCLK:
 
 #if BSP_CFG_PARAM_CHECKING_ENABLE == 1
-                if (old_mode == SXCLK)
+                if (SXCLK == old_mode)
                 {
                     status = BSP_ERROR3;
                 }
-                else if ((old_mode == SYSCLK) && (XTSTOP == 0U))
+                else if ((SYSCLK == old_mode) && (0U == XTSTOP))
                 {
                     status = BSP_ERROR3;
                 }
@@ -438,6 +441,7 @@ e_bsp_err_t set_fclk_clock_source(e_clock_mode_t mode)
                 {
 #endif
                     SELLOSC = 1U;
+
                     /* WAIT_LOOP */
                     for (w_count = 0U; w_count <= BSP_CFG_FILWAITTIME; w_count++)
                     {
@@ -460,8 +464,8 @@ e_bsp_err_t set_fclk_clock_source(e_clock_mode_t mode)
     }
 
     return status;
-}
-#endif
+} /* End of function set_fclk_clock_source() */
+#endif /* BSP_CFG_SET_CLOCK_SOURCE_API_FUNCTIONS_DISABLE == 0 */
 
 /*************************************************
  * Function name: get_fclk_freq_hz
@@ -472,7 +476,7 @@ e_bsp_err_t set_fclk_clock_source(e_clock_mode_t mode)
  *                When fCLK is a high-speed on-chip oscillator, 0Hz is returned
  *                when the value of the register to which it refers is out of the allowable range.
 **************************************************/
-#if BSP_CFG_API_FUNCTIONS_DISABLE == 0
+#if BSP_CFG_GET_FREQ_API_FUNCTIONS_DISABLE == 0
 uint32_t get_fclk_freq_hz(void)
 {
     uint32_t    sys_clock_src_freq;
@@ -514,8 +518,10 @@ uint32_t get_fclk_freq_hz(void)
             /* fMX : High-speed system clock */
             /* fX  : X1 clock oscillation */
             uint8_t i;
+
             /* WAIT_LOOP */
             sys_clock_src_freq = BSP_CFG_FMX_HZ;
+
             for (i = MOSCDIV; i > 0U; i--)
             {
                 sys_clock_src_freq /= 2U;
@@ -531,24 +537,96 @@ uint32_t get_fclk_freq_hz(void)
             /* fIM  : Middle-speed on-chip oscillator clock */
             if (1U == MCS1)
             {
-                sys_clock_src_freq = fIM_hz[MOCODIV & 0x03U];
+                sys_clock_src_freq = g_fim_hz[MOCODIV & 0x03U];
             }
             /* fOCO clock source is fIH */
             /* fOCO : Main on-chip oscillator clock */
             /* fIH  : High-speed on-chip oscillator clock */
             else
             {
-                unsigned char temp1, temp2;
+                uint8_t temp1;
+                uint8_t temp2;
+
                 temp1 = OPTBYTE_C2;
                 temp2 = HOCODIV;
-                sys_clock_src_freq = fIH_hz[(temp1 & 0x08U) | (temp2 & 0x07U)];
+
+                sys_clock_src_freq = g_fih_hz[(temp1 & 0x08U) | (temp2 & 0x07U)];
             }
         }
     }
 
     return sys_clock_src_freq;
-}
-#endif
+} /* End of function get_fclk_freq_hz() */
+#endif /* BSP_CFG_GET_FREQ_API_FUNCTIONS_DISABLE == 0 */
+
+/**************************************************
+ * Function name: change_clock_setting
+ * Description  : Change the specified clock setting.
+ * Arguments    : Clock to change setting.
+ *              : Value to set for the specified clock.
+ * Return value : BSP_OK if the specified clock setting is changed.
+ *                BSP_ERROR1 When the specified clock is stopped.
+ *                BSP_ARG_ERROR An invalid argument was input.
+ * Attention    : Stop the specified clock before calling this function.
+**************************************************/
+#if BSP_CFG_CHANGE_CLOCK_SETTING_API_FUNCTIONS_DISABLE == 0
+e_bsp_err_t change_clock_setting(e_clock_mode_t mode, uint8_t * set_values)
+{
+    e_bsp_err_t    status = BSP_OK;
+
+    switch (mode)
+    {
+        case HIOCLK:
+
+            if (0U == HIOSTOP)
+            {
+                status = BSP_ERROR1;
+            }
+            else
+            {
+                HOCODIV = set_values[0];
+            }
+
+            break;
+
+        case MIOCLK:
+
+            if (1U == MIOEN)
+            {
+                status = BSP_ERROR1;
+            }
+            else
+            {
+                MOCODIV = set_values[0];
+            }
+
+            break;
+
+        case SYSCLK:
+
+            if (0U == MSTOP)
+            {
+                status = BSP_ERROR1;
+            }
+            else
+            {
+                MOSCDIV = set_values[0];
+            }
+
+            break;
+
+        default:
+
+            /* Setting prohibited */
+            status = BSP_ARG_ERROR;
+
+            break;
+
+    }
+
+    return status;
+} /* End of function change_clock_setting() */
+#endif /* BSP_CFG_CHANGE_CLOCK_SETTING_API_FUNCTIONS_DISABLE == 0 */
 
 /*************************************************
  * Function name: mcu_clock_setup
@@ -561,7 +639,8 @@ void mcu_clock_setup(void)
 {
     uint8_t cmc_tmp;
 
-#if BSP_CFG_MOCO_SOURCE == 1 || ((BSP_CFG_SUBCLK_OPERATION == 0) && (BSP_CFG_SUBCLK_SOURCE == 1)) || BSP_CFG_SUBSYSCLK_SOURCE == 1
+#if BSP_CFG_MOCO_SOURCE == 1 || ((BSP_CFG_SUBCLK_OPERATION == 0) && \
+    (BSP_CFG_SUBCLK_SOURCE == 1)) || BSP_CFG_SUBSYSCLK_SOURCE == 1
     volatile uint32_t w_count;
 #endif
 #if (BSP_CFG_HISYSCLK_OPERATION == 0) && (BSP_CFG_HISYSCLK_SOURCE == 1)
@@ -582,6 +661,7 @@ void mcu_clock_setup(void)
     /* fX(Crystal/ceramic resonator connection */
     /* High-speed system clock division register(MOSCDIV) setting */
     MOSCDIV = BSP_CFG_MOSC_DIVIDE;
+
     /* Control of X1 clock oscillation frequency(AMPH) setting */
 #if BSP_CFG_FMX_HZ >= 1000000 && BSP_CFG_FMX_HZ <= 10000000
         /* 1MHz <= fX <= 10MHz */
@@ -602,7 +682,7 @@ void mcu_clock_setup(void)
         /* 10MHz < fX <= 32MHz */
         cmc_tmp |= 0xC1U;
 #endif
-#endif
+#endif /* BSP_CFG_HISYSCLK_SOURCE == 0 */
 
     /* High-speed on-chip oscillator(fIH) setting */
     /* High-speed on-chip oscillator frequency select register(HOCODIV) setting */
@@ -647,7 +727,7 @@ void mcu_clock_setup(void)
     /* fEXS(External subsystem clock) */
     /* EXCLKS/OSCSELS setting */
     cmc_tmp |= 0x30U;
-#endif
+#endif /* BSP_CFG_SUBCLK_SOURCE == 0 */
     /* Clock operation mode control register(CMC) setting */
     CMC = cmc_tmp;
 
@@ -674,7 +754,7 @@ void mcu_clock_setup(void)
         /* WAIT_LOOP */
         do
         {
-            tmp_stab_wait = OSTC;
+            tmp_stab_wait  = OSTC;
             tmp_stab_wait &= tmp_stab_set;
         }
         while (tmp_stab_wait != tmp_stab_set);
@@ -790,6 +870,6 @@ void mcu_clock_setup(void)
 #else
     HIOSTOP = 1U;
 #endif
-}
-#endif    // BSP_CFG_STARTUP_DISABLE == 0
+} /* End of function mcu_clock_setup() */
+#endif /* BSP_CFG_STARTUP_DISABLE == 0 */
 

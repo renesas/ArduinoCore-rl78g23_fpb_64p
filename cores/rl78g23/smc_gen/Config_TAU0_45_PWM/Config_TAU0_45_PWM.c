@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_TAU0_45_PWM.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_TAU0_45_PWM.
-* Creation Date: 2021-10-07
+* File Name        : Config_TAU0_45_PWM.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_TAU0_45_PWM.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -61,6 +61,12 @@ void R_Config_TAU0_45_PWM_Create(void)
     TMIF04 = 0U;    /* clear INTTM04 interrupt flag */
     TMMK05 = 1U;    /* disable INTTM05 interrupt */
     TMIF05 = 0U;    /* clear INTTM05 interrupt flag */
+    /* Set INTTM04 low priority */
+//    TMPR104 = 1U;
+//    TMPR004 = 1U;
+    /* Set INTTM05 low priority */
+//    TMPR105 = 1U;
+//    TMPR005 = 1U;
     /* Channel 4 is used as master channel for PWM output function */
     TMR04 = _0000_TAU_CLOCK_SELECT_CKM0 | _0000_TAU_CLOCK_MODE_CKS | _0800_TAU_COMBINATION_MASTER | 
             _0000_TAU_TRIGGER_SOFTWARE | _0001_TAU_MODE_PWM_MASTER;
@@ -94,6 +100,10 @@ void R_Config_TAU0_45_PWM_Create(void)
 ***********************************************************************************************************************/
 void R_Config_TAU0_45_PWM_Start(void)
 {
+//    TMIF04 = 0U;    /* clear INTTM04 interrupt flag */
+//    TMMK04 = 0U;    /* enable INTTM04 interrupt */
+//    TMIF05 = 0U;    /* clear INTTM05 interrupt flag */
+//    TMMK05 = 0U;    /* enable INTTM05 interrupt */
     TOE0 |= _0020_TAU_CH5_OUTPUT_ENABLE;
     TS0 |= (_0020_TAU_CH5_START_TRG_ON | _0010_TAU_CH4_START_TRG_ON);
 }
@@ -108,6 +118,10 @@ void R_Config_TAU0_45_PWM_Stop(void)
 {
     TT0 |= (_0020_TAU_CH5_STOP_TRG_ON | _0010_TAU_CH4_STOP_TRG_ON);
     TOE0 &= (uint16_t)~_0020_TAU_CH5_OUTPUT_ENABLE;
+//    TMMK04 = 1U;    /* disable INTTM04 interrupt */
+//    TMIF04 = 0U;    /* clear INTTM04 interrupt flag */
+//    TMMK05 = 1U;    /* disable INTTM05 interrupt */
+//    TMIF05 = 0U;    /* clear INTTM05 interrupt flag */
 }
 
 /* Start user code for adding. Do not edit comment generated here */

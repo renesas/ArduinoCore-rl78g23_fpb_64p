@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_IICA0.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_IICA0.
-* Creation Date: 2021-05-14
+* File Name        : Config_IICA0.c
+* Component Version: 1.3.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_IICA0.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -40,7 +40,6 @@ Includes
 
 #include <math.h>
 #include "Arduino.h"
-
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
@@ -276,8 +275,8 @@ void R_Config_IICA0_Master_SetClock(uint32_t clock) {
     PM6 |= 0x03U;
     SMC0 = 0U;
 
-    IICWL0 = (uint8_t)(ceil((configCPU_CLOCK_HZ / 2 * coeffL) / clock));
-    IICWH0 = (uint8_t)(ceil((configCPU_CLOCK_HZ / 2 * coeffH) / clock));
+    IICWL0 = (uint8_t)(ceil((double)(configCPU_CLOCK_HZ / 2 * coeffL) / (double)clock));
+    IICWH0 = (uint8_t)(ceil((double)(configCPU_CLOCK_HZ / 2 * coeffH) / (double)clock));
 
     IICCTL01 |= _01_IICA_fCLK_HALF;
     SVA0 = _10_IICA0_MASTERADDRESS;
@@ -292,5 +291,4 @@ void R_Config_IICA0_Master_SetClock(uint32_t clock) {
     /* Set SCLA0, SDAA0 pin */
     PM6 &= 0xFCU;
 }
-
 /* End user code. Do not edit comment generated here */

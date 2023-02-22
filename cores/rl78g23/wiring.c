@@ -31,6 +31,7 @@
 #include "utilities.h"
 #include "r_smc_entry.h"
 #endif
+// #include "ArduinoClassics.h"
 
 #ifndef __RL78__
 // the prescaler is set so that timer0 ticks every 64 clock cycles, and the
@@ -223,7 +224,7 @@ void delay(unsigned long ms)
 	}
 #else /*__RL78__*/
 
-	volatile int lms = ms;
+	volatile unsigned long lms = ms;
     g_delay_cnt_flg = 1U;
     g_u32delay_timer = 0U;
     if (g_u8PowerManagementMode == PM_NORMAL_MODE)
@@ -248,7 +249,8 @@ void delay(unsigned long ms)
 }
 
 /* Delay for the given number of microseconds.  Assumes a 8 or 16 MHz clock. */
-void delayMicroseconds(unsigned long us)
+// void delayMicroseconds(unsigned long us)
+void delayMicroseconds(unsigned int us)
 {
 #ifndef __RL78__
 	// calling avrlib's delay_us() function with low values (e.g. 1 or
@@ -579,8 +581,6 @@ long set_endtime()
 	else{
 		ret = (long)val;
 	}
-
-ERR_END:
 
 	return ret;
 }

@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_TAU0_6_Servo.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_TAU0_6_Servo.
-* Creation Date: 
+* File Name        : Config_TAU0_6_Servo.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_TAU0_6_Servo.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -67,10 +67,10 @@ void R_Config_TAU0_6_Servo_Create(void)
     /* TAU06 used as square output function */
     TMR06 = _0000_TAU_CLOCK_SELECT_CKM0 | _0000_TAU_CLOCK_MODE_CKS | _0000_TAU_COMBINATION_SLAVE | 
             _0000_TAU_TRIGGER_SOFTWARE | _0000_TAU_MODE_INTERVAL_TIMER | _0000_TAU_START_INT_UNUSED;
-    TDR06 = _0897_TAU_TDR06_VALUE;
+    TDR06 = _257F_TAU_TDR06_VALUE;
     TOM0 &= (uint16_t)~_0040_TAU_CH6_SLAVE_OUTPUT;
     TOL0 &= (uint16_t)~_0040_TAU_CH6_OUTPUT_LEVEL_L;
-    TO0 |= (uint16_t)_0040_TAU_CH6_OUTPUT_VALUE_1;
+    TO0 &= (uint16_t)~_0040_TAU_CH6_OUTPUT_VALUE_1;
     TOE0 |= _0040_TAU_CH6_OUTPUT_ENABLE;
     /* Set TO06 pin */
     PMCT0 &= 0xBFU;

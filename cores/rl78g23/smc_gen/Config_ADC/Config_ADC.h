@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_ADC.h
-* Version      : 1.0.1
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_ADC.
-* Creation Date: 2021-05-14
+* File Name        : Config_ADC.h
+* Component Version: 1.1.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_ADC.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 #ifndef CFG_Config_ADC_H
@@ -44,15 +44,16 @@ Macro definitions
 #define _FF_AD_ADUL_VALUE               (0xFFU)
 /* Lower bound (ADLL) value */
 #define _00_AD_ADLL_VALUE               (0x00U)
+// #define AD_WAITTIME_B                   (8U)
 
 /***********************************************************************************************************************
 Typedef definitions
 ***********************************************************************************************************************/
 typedef enum
 {
-    ADCHANNEL0, ADCHANNEL1, ADCHANNEL2, ADCHANNEL3, ADCHANNEL4, ADCHANNEL5, 
-    ADCHANNEL6, ADCHANNEL7, ADCHANNEL16 = 16U, ADCHANNEL17, 
-    ADCHANNEL18, ADCHANNEL19,ADTEMPERSENSOR0 = 128U, ADINTERREFVOLT
+    ADCHANNEL0, ADCHANNEL1, ADCHANNEL2, ADCHANNEL3, ADCHANNEL4, ADCHANNEL5,
+    ADCHANNEL6, ADCHANNEL7, ADCHANNEL16 = 16U, ADCHANNEL17,
+    ADCHANNEL18, ADCHANNEL19, ADTSCAP = 30U, ADTEMPERSENSOR0 = 128U, ADINTERREFVOLT
 } e_ad_channel_t;
 typedef enum
 {
@@ -76,7 +77,6 @@ MD_STATUS R_Config_ADC_Set_ADChannel(e_ad_channel_t channel);
 MD_STATUS R_Config_ADC_Set_TestChannel(e_test_channel_t channel);
 void R_Config_ADC_Create_UserInit(void);
 /* Start user code for function. Do not edit comment generated here */
-/* 1006 Nhu add */
 #define AD_WAITTIME_DISCHARGE           (2U)
 #define AD_WAITTIME_A                   (13U)
 

@@ -25,6 +25,7 @@
 *         : 08.03.2021 1.00     First Release
 *         : 22.04.2021 1.10     Added "__far" to the address of the option byte.
 *         : 04.08.2021 1.12     Added include guard.
+*         : 28.02.2022 1.20     Added macro definition for option byte(000C4H).
 
 ***********************************************************************************************************************/
 
@@ -101,6 +102,18 @@
 #define OPTBYTE_C3    (*(volatile __far unsigned char *)0x000C3)
 #endif
 
+/* 000C4H or 040C4H
+ * Control of on-chip debug and flash serial programming security ID read
+ * - On-chip debug and flash serial programming security ID read are disabled or enabled.
+ */
+#if defined(__CCRL__)
+#define OPTBYTE_C4    (*(volatile __far unsigned char *)0x000C4)
+#elif defined(__ICCRL78__)
+#define OPTBYTE_C4    (*(volatile __far unsigned char *)0x000C4)
+#elif defined(__llvm__)
+#define OPTBYTE_C4    (*(volatile __far unsigned char *)0x000C4)
+#endif
+
 #if defined(__CCRL__)
 #define BSP_FAR_FUNC               __far
 #define BSP_NOP()                  __nop()    /* NOP instruction */
@@ -129,7 +142,8 @@
 /* ========== #pragma Directive ========== */
 #if defined(__CCRL__)
 #define R_BSP_PRAGMA(...)                                      _Pragma(#__VA_ARGS__)
-#define __R_BSP_ATTRIB_SECTION_CHANGE_F(type, section_name)    R_BSP_PRAGMA(section type section_name)
+/* Define __R_BSP_ATTRIB_SECTION_CHANGE_ */
+#define __R_BSP_ATTRIB_SECTION_CHANGE_F(type, section_name)    R_BSP_PRAGMA(section (type) (section_name))
 #define _R_BSP_ATTRIB_SECTION_CHANGE_text(section_tag)         __R_BSP_ATTRIB_SECTION_CHANGE_F(text, ##section_tag)
 #define _R_BSP_ATTRIB_SECTION_CHANGE_data(section_tag)         __R_BSP_ATTRIB_SECTION_CHANGE_F(data, ##section_tag)
 #define R_BSP_ATTRIB_SECTION_CHANGE(type, section_tag)         _R_BSP_ATTRIB_SECTION_CHANGE_##type(section_tag)
@@ -159,6 +173,7 @@
 #define R_BSP_ATTRIB_STATIC_INTERRUPT                           static __interrupt
 
 #elif defined(__llvm__)
+/* R_BSP_PRAGMA_INTERRUPT */
 #define R_BSP_PRAGMA_INTERRUPT(function_name, vector)           extern void function_name(void) __attribute__((interrupt(vect=vector), used));
 #define R_BSP_PRAGMA_STATIC_INTERRUPT(function_name, vector)    static void function_name(void) __attribute__((interrupt(vect=vector), used));
 #define R_BSP_ATTRIB_INTERRUPT                                  extern

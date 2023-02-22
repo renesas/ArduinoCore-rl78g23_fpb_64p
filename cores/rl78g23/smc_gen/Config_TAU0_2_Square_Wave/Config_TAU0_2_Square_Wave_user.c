@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_TAU0_2_Square_Wave_user.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxLA
-* Description  : This file implements device driver for Config_TAU0_2_Square_Wave.
-* Creation Date: 2021-11-12
+* File Name        : Config_TAU0_2_Square_Wave_user.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_TAU0_2_Square_Wave.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -67,7 +67,7 @@ void R_Config_TAU0_2_Square_Wave_Create_UserInit(void)
 void r_Config_TAU0_2_Square_Wave_interrupt(void)
 {
     /* Start user code for r_Config_TAU0_2_Square_Wave_interrupt. Do not edit comment generated here */
-	/* End user code. Do not edit comment generated here */
+    /* End user code. Do not edit comment generated here */
 }
 
 /* Start user code for adding. Do not edit comment generated here */

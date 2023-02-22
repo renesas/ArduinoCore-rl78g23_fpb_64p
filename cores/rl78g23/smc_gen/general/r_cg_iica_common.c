@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_iica_common.c
-* Version      : 1.0.1
-* Device(s)    : R7F100GLGxFB
-* Description  : None
-* Creation Date: 2021-05-14
+* File Name        : r_cg_iica_common.c
+* Version          : 1.0.11
+* Device(s)        : R7F100GLGxFB
+* Description      : None
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -35,6 +35,7 @@ Pragma directive
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
+#include "r_cg_iica_common.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -53,7 +54,7 @@ Global variables and functions
 ***********************************************************************************************************************/
 void R_IICA0_Set_PowerOn(void)
 {
-    IICA0EN = 1;    /* start IICA0 clock */
+    IICA0EN = 1U;    /* start IICA0 clock */
 }
 
 /***********************************************************************************************************************
@@ -64,7 +65,7 @@ void R_IICA0_Set_PowerOn(void)
 ***********************************************************************************************************************/
 void R_IICA0_Set_PowerOff(void)
 {
-    IICA0EN = 0;    /* stop IICA0 clock */
+    IICA0EN = 0U;    /* stop IICA0 clock */
 }
 
 /***********************************************************************************************************************
@@ -75,7 +76,7 @@ void R_IICA0_Set_PowerOff(void)
 ***********************************************************************************************************************/
 void R_IICA1_Set_PowerOn(void)
 {
-    IICA1EN = 1;    /* start IICA1 clock */
+    IICA1EN = 1U;    /* start IICA1 clock */
 }
 
 /***********************************************************************************************************************
@@ -86,7 +87,7 @@ void R_IICA1_Set_PowerOn(void)
 ***********************************************************************************************************************/
 void R_IICA1_Set_PowerOff(void)
 {
-    IICA1EN = 0;    /* stop IICA1 clock */
+    IICA1EN = 0U;    /* stop IICA1 clock */
 }
 
 /***********************************************************************************************************************
@@ -135,3 +136,4 @@ void R_IICA1_Release_Reset(void)
 
 /* Start user code for adding. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
+

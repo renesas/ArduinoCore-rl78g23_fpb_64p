@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_ITL000.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_ITL000.
-* Creation Date: 2021-05-14
+* File Name        : Config_ITL000.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_ITL000.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -58,7 +58,7 @@ void R_Config_ITL000_Create(void)
     ITLCTL0 = 0x00U;
     /* Mask INTITL interrupt */
     ITLMKF0 |= _01_ITL_CHANNEL0_COUNT_MATCH_MASK;
-    ITLS0 &= (uint16_t)~_01_ITL_CHANNEL0_COUNT_MATCH_DETECTE;
+    ITLS0 &= (uint8_t)~_01_ITL_CHANNEL0_COUNT_MATCH_DETECTE;
     ITLMK = 1U;    /* disable INTITL interrupt */
     ITLIF = 0U;    /* clear INTITL interrupt flag */
     /* Set INTITL low priority */
@@ -83,8 +83,8 @@ void R_Config_ITL000_Create(void)
 ***********************************************************************************************************************/
 void R_Config_ITL000_Start(void)
 {
-    ITLS0 &= (uint16_t)~_01_ITL_CHANNEL0_COUNT_MATCH_DETECTE;
-    ITLMKF0 &= (uint16_t)~_01_ITL_CHANNEL0_COUNT_MATCH_MASK;
+    ITLS0 &= (uint8_t)~_01_ITL_CHANNEL0_COUNT_MATCH_DETECTE;
+    ITLMKF0 &= (uint8_t)~_01_ITL_CHANNEL0_COUNT_MATCH_MASK;
     ITLEN00 = 1U;
 }
 
@@ -97,7 +97,7 @@ void R_Config_ITL000_Start(void)
 void R_Config_ITL000_Stop(void)
 {
     ITLMKF0 |= _01_ITL_CHANNEL0_COUNT_MATCH_MASK;
-    ITLS0 &= (uint16_t)~_01_ITL_CHANNEL0_COUNT_MATCH_DETECTE;
+    ITLS0 &= (uint8_t)~_01_ITL_CHANNEL0_COUNT_MATCH_DETECTE;
     ITLEN00 = 0U;
 }
 
@@ -110,7 +110,7 @@ void R_Config_ITL000_Stop(void)
 void R_Config_ITL000_Set_OperationMode(void)
 {
     ITLMKF0 |= _01_ITL_CHANNEL0_COUNT_MATCH_MASK;
-    ITLS0 &= (uint16_t)~_01_ITL_CHANNEL0_COUNT_MATCH_DETECTE;
+    ITLS0 &= (uint8_t)~_01_ITL_CHANNEL0_COUNT_MATCH_DETECTE;
     /* Stop 32-bit interval timer */
     ITLCTL0 &= 0xF0U;
 }
@@ -139,5 +139,4 @@ void R_Config_ITL000_SetCompareMatch(void)
     ITLCMP000 = _20_ITL_ITLCMP000_VALUE;
 
  }
-
 /* End user code. Do not edit comment generated here */

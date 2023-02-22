@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_CSI11.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_CSI11.
-* Creation Date: 2021-05-14
+* File Name        : Config_CSI11.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_CSI11.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -59,8 +59,7 @@ volatile uint16_t g_csi11_status_flag;
 void R_Config_CSI11_Create(void)
 {
     SPS0 &= _000F_SAU_CK01_CLEAR;
-//    SPS0 |= _0040_SAU_CK01_FCLK_4;
-	SPS0 |= _0000_SAU_CK01_FCLK_0;
+    SPS0 |= _0000_SAU_CK01_FCLK_0;
     /* Stop channel 3 */
     ST0 |= _0008_SAU_CH3_STOP_TRG_ON;
     /* Mask channel 3 interrupt */
@@ -72,7 +71,8 @@ void R_Config_CSI11_Create(void)
     SIR03 = _0004_SAU_SIRMN_FECTMN | _0002_SAU_SIRMN_PECTMN | _0001_SAU_SIRMN_OVCTMN;    /* clear error flag */
     SMR03 = _0020_SAU_SMRMN_INITIALVALUE | _8000_SAU_CLOCK_SELECT_CK01 | _0000_SAU_CLOCK_MODE_CKS | 
             _0000_SAU_TRIGGER_SOFTWARE | _0000_SAU_MODE_CSI | _0000_SAU_TRANSFER_END;
-    SCR03 = _C000_SAU_RECEPTION_TRANSMISSION | _0000_SAU_TIMING_1 | _0080_SAU_LSB | _0007_SAU_LENGTH_8;
+    SCR03 = _0004_SAU_SCRMN_INITIALVALUE | _C000_SAU_RECEPTION_TRANSMISSION | _0000_SAU_TIMING_1 | _0080_SAU_LSB | 
+            _0003_SAU_LENGTH_8;
     SDR03 = _0C00_SAU0_CH3_BAUDRATE_DIVISOR;
     SO0 |= _0800_SAU_CH3_CLOCK_OUTPUT_1;    /* CSI11 clock initial level */
     SO0 &= (uint16_t)~_0008_SAU_CH3_DATA_OUTPUT_1;    /* CSI11 SO initial level */
@@ -293,5 +293,4 @@ void R_Config_CSI11_SetClock(uint32_t clock) {
 
     R_Config_CSI11_SetClockDivider(clockDiv);
 }
-
 /* End user code. Do not edit comment generated here */

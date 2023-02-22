@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_TAU0_67_PWM.h
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_TAU0_67_PWM.
-* Creation Date: 2021-10-07
+* File Name        : Config_TAU0_67_PWM.h
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_TAU0_67_PWM.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 #ifndef CFG_Config_TAU0_67_PWM_H
@@ -40,8 +40,8 @@ Macro definitions (Register bit)
 /***********************************************************************************************************************
 Macro definitions
 ***********************************************************************************************************************/
-#define _F9FF_TAU_TDR06_VALUE                              (0xF9FFU)    /* 16-bit timer data register 06 (TDR06) */
-#define _7D00_TAU_TDR07_VALUE                              (0x7D00U)    /* 16-bit timer data register 07 (TDR07) */
+#define _0C7F_TAU_TDR06_VALUE                              (0x0C7FU)    /* 16-bit timer data register 06 (TDR06) */
+#define _0640_TAU_TDR07_VALUE                              (0x0640U)    /* 16-bit timer data register 07 (TDR07) */
 
 /***********************************************************************************************************************
 Typedef definitions

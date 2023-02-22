@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_RTC_user.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_RTC.
-* Creation Date: 
+* File Name        : Config_RTC_user.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_RTC.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -62,6 +62,7 @@ void R_Config_RTC_Create_UserInit(void)
     /* End user code. Do not edit comment generated here */
 }
 
+/* Start user code for adding. Do not edit comment generated here */
 /***********************************************************************************************************************
 * Function Name: r_Config_RTC_callback_alarm
 * Description  : This function is alarm interrupt service handler.
@@ -115,6 +116,3 @@ void r_Config_RTC_interrupt(void)
         r_Config_RTC_callback_constperiod();
     }
 }
-
-/* Start user code for adding. Do not edit comment generated here */
-/* End user code. Do not edit comment generated here */

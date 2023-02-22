@@ -2,7 +2,7 @@
 #ifndef UTILITIES_H_
 #define UTILITIES_H_
 #include <stdint.h>
-
+#include <stdbool.h>
 
 /* Power Management Mode. */
 #define PM_NORMAL_MODE	0

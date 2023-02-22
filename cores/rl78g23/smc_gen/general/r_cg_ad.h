@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_ad.h
-* Version      : 1.0.1
-* Device(s)    : R7F100GLGxFB
-* Description  : General header file for ADC peripheral.
-* Creation Date: 2021-05-14
+* File Name        : r_cg_ad.h
+* Version          : 1.0.11
+* Device(s)        : R7F100GLGxFB
+* Description      : General header file for ADC peripheral.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 #ifndef ADC_H
@@ -100,6 +100,7 @@ Macro definitions (Register bit)
 #define _18_AD_INPUT_CHANNEL_24                (0x18U)    /* ANI24 */
 #define _19_AD_INPUT_CHANNEL_25                (0x19U)    /* ANI25 */
 #define _1A_AD_INPUT_CHANNEL_26                (0x1AU)    /* ANI26 */
+#define _1E_AD_INPUT_CTSUTSCAP                 (0x1EU)    /* voltage on the TSCAP pin of the CTSU */
 #define _80_AD_INPUT_TEMPERSENSOR_0            (0x80U)    /* temperature sensor 0 output is used to be the input channel */
 #define _81_AD_INPUT_INTERREFVOLT              (0x81U)    /* internal reference voltage output is used to be the input channel */
 /* Scan mode */

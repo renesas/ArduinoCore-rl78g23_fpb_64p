@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_itl_common_user.c
-* Version      : 1.0.1
-* Device(s)    : R7F100GLGxFB
-* Description  : None
-* Creation Date: 2021-05-14
+* File Name        : r_cg_itl_common_user.c
+* Version          : 1.0.11
+* Device(s)        : R7F100GLGxFB
+* Description      : None
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -38,7 +38,6 @@ Includes
 #include "Config_ITL000.h"
 #include "Config_ITL001.h"
 #include "Config_ITL012.h"
-// Add 20221005
 #include "Config_ITL013.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
@@ -60,23 +59,22 @@ void r_itl_interrupt(void)
 {
     if (_01_ITL_CHANNEL0_COUNT_MATCH_DETECTE == (ITLS0 & _01_ITL_CHANNEL0_COUNT_MATCH_DETECTE))
     {
-        ITLS0 &= (uint16_t)~_01_ITL_CHANNEL0_COUNT_MATCH_DETECTE;
+        ITLS0 &= (uint8_t)~_01_ITL_CHANNEL0_COUNT_MATCH_DETECTE;
         R_Config_ITL000_Callback_Shared_Interrupt();
     }
     if (_02_ITL_CHANNEL1_COUNT_MATCH_DETECTE == (ITLS0 & _02_ITL_CHANNEL1_COUNT_MATCH_DETECTE))
     {
-        ITLS0 &= (uint16_t)~_02_ITL_CHANNEL1_COUNT_MATCH_DETECTE;
+        ITLS0 &= (uint8_t)~_02_ITL_CHANNEL1_COUNT_MATCH_DETECTE;
         R_Config_ITL001_Callback_Shared_Interrupt();
     }
     if (_04_ITL_CHANNEL2_COUNT_MATCH_DETECTE == (ITLS0 & _04_ITL_CHANNEL2_COUNT_MATCH_DETECTE))
     {
-        ITLS0 &= (uint16_t)~_04_ITL_CHANNEL2_COUNT_MATCH_DETECTE;
+        ITLS0 &= (uint8_t)~_04_ITL_CHANNEL2_COUNT_MATCH_DETECTE;
         R_Config_ITL012_Callback_Shared_Interrupt();
     }
-// Add 20221005
     if (_08_ITL_CHANNEL3_COUNT_MATCH_DETECTE == (ITLS0 & _08_ITL_CHANNEL3_COUNT_MATCH_DETECTE))
     {
-        ITLS0 &= (uint16_t)~_08_ITL_CHANNEL3_COUNT_MATCH_DETECTE;
+        ITLS0 &= (uint8_t)~_08_ITL_CHANNEL3_COUNT_MATCH_DETECTE;
         R_Config_ITL013_Callback_Shared_Interrupt();
     }
 }

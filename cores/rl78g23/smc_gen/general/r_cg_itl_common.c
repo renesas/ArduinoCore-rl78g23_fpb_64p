@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_itl_common.c
-* Version      : 1.0.1
-* Device(s)    : R7F100GLGxFB
-* Description  : None
-* Creation Date: 2021-05-14
+* File Name        : r_cg_itl_common.c
+* Version          : 1.0.11
+* Device(s)        : R7F100GLGxFB
+* Description      : None
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -36,8 +36,10 @@ Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
 #include "Config_ITL000.h"
-//#include "Config_ITL001.h"
+#include "Config_ITL001.h"
 #include "Config_ITL012.h"
+#include "Config_ITL013.h"
+#include "r_cg_itl_common.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -61,6 +63,7 @@ void R_ITL_Create(void)
     R_Config_ITL000_Create();
 //    R_Config_ITL001_Create();
     R_Config_ITL012_Create();
+//    R_Config_ITL013_Create();
 }
 
 /***********************************************************************************************************************

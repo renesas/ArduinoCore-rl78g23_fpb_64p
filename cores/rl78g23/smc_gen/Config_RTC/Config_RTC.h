@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_RTC.h
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_RTC.
-* Creation Date: 
+* File Name        : Config_RTC.h
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_RTC.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 #ifndef CFG_Config_RTC_H
@@ -43,13 +43,13 @@ Macro definitions
 #define _00_RTC_COUNTER_SEC                  (0x00U)
 #define _00_RTC_COUNTER_MIN                  (0x00U)
 #define _00_RTC_COUNTER_HOUR                 (0x00U)
-#define _01_RTC_COUNTER_WEEK                 (0x01U)
+#define _06_RTC_COUNTER_WEEK                 (0x06U)
 #define _01_RTC_COUNTER_DAY                  (0x01U)
 #define _01_RTC_COUNTER_MONTH                (0x01U)
-#define _01_RTC_COUNTER_YEAR                 (0x01U)
+#define _00_RTC_COUNTER_YEAR                 (0x00U)
 #define _00_RTC_ALARM_MIN                    (0x00U)
 #define _00_RTC_ALARM_HOUR                   (0x00U)
-#define _01_RTC_ALARM_WEEK                   (0x01U)
+#define _02_RTC_ALARM_WEEK                   (0x02U)
 #define RTC_WAITTIME_2CYCLE                  (163U)
 
 /***********************************************************************************************************************

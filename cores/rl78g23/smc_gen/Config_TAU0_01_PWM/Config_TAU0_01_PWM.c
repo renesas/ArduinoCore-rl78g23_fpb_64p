@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_TAU0_01_PWM.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_TAU0_01_PWM.
-* Creation Date: 2021-10-07
+* File Name        : Config_TAU0_01_PWM.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_TAU0_01_PWM.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -61,6 +61,12 @@ void R_Config_TAU0_01_PWM_Create(void)
     TMIF00 = 0U;    /* clear INTTM00 interrupt flag */
     TMMK01 = 1U;    /* disable INTTM01 interrupt */
     TMIF01 = 0U;    /* clear INTTM01 interrupt flag */
+    /* Set INTTM00 low priority */
+//    TMPR100 = 1U;
+//    TMPR000 = 1U;
+    /* Set INTTM01 low priority */
+//    TMPR101 = 1U;
+//    TMPR001 = 1U;
     /* Channel 0 is used as master channel for PWM output function */
     TMR00 = _0000_TAU_CLOCK_SELECT_CKM0 | _0000_TAU_CLOCK_MODE_CKS | _0000_TAU_TRIGGER_SOFTWARE | 
             _0001_TAU_MODE_PWM_MASTER;
@@ -93,6 +99,10 @@ void R_Config_TAU0_01_PWM_Create(void)
 ***********************************************************************************************************************/
 void R_Config_TAU0_01_PWM_Start(void)
 {
+//    TMIF00 = 0U;    /* clear INTTM00 interrupt flag */
+//    TMMK00 = 0U;    /* enable INTTM00 interrupt */
+//    TMIF01 = 0U;    /* clear INTTM01 interrupt flag */
+//    TMMK01 = 0U;    /* enable INTTM01 interrupt */
     TOE0 |= _0002_TAU_CH1_OUTPUT_ENABLE;
     TS0 |= (_0002_TAU_CH1_START_TRG_ON | _0001_TAU_CH0_START_TRG_ON);
 }
@@ -107,6 +117,10 @@ void R_Config_TAU0_01_PWM_Stop(void)
 {
     TT0 |= (_0002_TAU_CH1_STOP_TRG_ON | _0001_TAU_CH0_STOP_TRG_ON);
     TOE0 &= (uint16_t)~_0002_TAU_CH1_OUTPUT_ENABLE;
+//    TMMK00 = 1U;    /* disable INTTM00 interrupt */
+//    TMIF00 = 0U;    /* clear INTTM00 interrupt flag */
+//    TMMK01 = 1U;    /* disable INTTM01 interrupt */
+//    TMIF01 = 0U;    /* clear INTTM01 interrupt flag */
 }
 
 /* Start user code for adding. Do not edit comment generated here */

@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_INTC.h
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_INTC.
-* Creation Date: 2021-11-04
+* File Name        : Config_INTC.h
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_INTC.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 #ifndef CFG_Config_INTC_H
@@ -49,6 +49,8 @@ Typedef definitions
 Global functions
 ***********************************************************************************************************************/
 void R_Config_INTC_Create(void);
+void R_Config_INTC_INTP0_Start(void);
+void R_Config_INTC_INTP0_Stop(void);
 void R_Config_INTC_INTP1_Start(void);
 void R_Config_INTC_INTP1_Stop(void);
 void R_Config_INTC_INTP2_Start(void);
@@ -63,10 +65,8 @@ void R_Config_INTC_INTP11_Start(void);
 void R_Config_INTC_INTP11_Stop(void);
 void R_Config_INTC_Create_UserInit(void);
 /* Start user code for function. Do not edit comment generated here */
-/* 1104 Ueeda add */
-void R_Config_INTC_Create_Mode(uint8_t interruptNum, int mode);
+void R_Config_INTC_Create_Mode(uint8_t interruptNum, PinStatus mode);
 void R_Config_INTC_INTP_Start(void);
 void R_Config_INTC_INTP_Stop(uint8_t interruptNum);
-/* 1104 Ueeda add */
 /* End user code. Do not edit comment generated here */
 #endif

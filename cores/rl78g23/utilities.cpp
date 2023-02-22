@@ -1,7 +1,6 @@
 #include "wiring_private.h"
 #include "pins_arduino.h"
 #include "pintable.h"
-//#include "rl78/interrupt_handlers.h"
 #include "r_cg_interrupt_handlers.h"
 //extern "C"
 //#include "r_cg_timer.h"
@@ -18,7 +17,7 @@ extern uint8_t g_u8PowerManagementMode;
 extern uint8_t g_u8OperationClockMode;
 extern volatile unsigned long g_u32delay_timer;
 // extern volatile unsigned long g_timer05_overflow_count;
-extern volatile unsigned long g_timer06_overflow_count;
+// extern volatile unsigned long g_timer06_overflow_count;
 extern uint8_t g_delay_cnt_flg;
 extern uint8_t g_delay_cnt_micros_flg;
 extern volatile unsigned long g_u32delay_micros_timer;
@@ -36,7 +35,7 @@ volatile unsigned long g_u32microtimer_periodic = 0u;	// us周期処理用イン
 
 extern "C" {
 #include "r_smc_entry.h"
-#include "Config_TAU0_7_MSTimer2.h"
+// #include "Config_TAU0_7_MSTimer2.h"
 }
 
 
@@ -677,9 +676,9 @@ void attachMicroIntervalTimerHandler(void (*fFunction)(void), uint16_t interval)
 {
 	g_fMicroInterruptFunc = fFunction;
 
-    R_Config_TAU0_7_MSTimer2_Create();
-	R_Config_TAU0_7_MSTimer2_SetPeriod(interval);
-	R_Config_TAU0_7_MSTimer2_Start();
+//    R_Config_TAU0_7_MSTimer2_Create();
+//	R_Config_TAU0_7_MSTimer2_SetPeriod(interval);
+//	R_Config_TAU0_7_MSTimer2_Start();
 }
 
 
@@ -730,7 +729,6 @@ void detachCyclicHandler(uint8_t u8HandlerNumber)
 
 
 extern "C" {
-/// @cond
 /**
  * 周期起動コールバック関数を起動します。
  *
@@ -756,7 +754,7 @@ void execCyclicHandler(void)
 		}
 	}
 }
-/// @endcond
+
 }
 
 

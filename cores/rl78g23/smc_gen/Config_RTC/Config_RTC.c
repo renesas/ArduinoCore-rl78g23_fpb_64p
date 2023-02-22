@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_RTC.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_RTC.
-* Creation Date: 
+* File Name        : Config_RTC.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_RTC.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -68,22 +68,22 @@ void R_Config_RTC_Create(void)
     /* Set fRTCCK */
     RTCC0 = _00_RTC_CLK_32KHZ;
     /* Set 12-/24-hour system and period of Constant-period interrupt (INTRTC) */
-    RTCC0 |= (_00_RTC_RTC1HZ_DISABLE | _08_RTC_24HOUR_MODE | _02_RTC_INTRTC_CLOCK_1SEC);
+    RTCC0 |= (_00_RTC_RTC1HZ_DISABLE | _08_RTC_24HOUR_MODE | _00_RTC_INTRTC_NOT_GENERATE);
     /* Set real-time clock initial value */
     SEC = _00_RTC_COUNTER_SEC;
     MIN = _00_RTC_COUNTER_MIN;
     HOUR = _00_RTC_COUNTER_HOUR;
-    WEEK = _01_RTC_COUNTER_WEEK;
+    WEEK = _06_RTC_COUNTER_WEEK;
     DAY = _01_RTC_COUNTER_DAY;
     MONTH = _01_RTC_COUNTER_MONTH;
-    YEAR = _01_RTC_COUNTER_YEAR;
+    YEAR = _00_RTC_COUNTER_YEAR;
     /* Set alarm detect function */
     WALE = 0U;
-    WALIE = 1U;
+    WALIE = 0U;
     /* Alarm function setting */
     ALARMWM = _00_RTC_ALARM_MIN;
     ALARMWH = _00_RTC_ALARM_HOUR;
-    ALARMWW = _01_RTC_ALARM_WEEK;
+    ALARMWW = _02_RTC_ALARM_WEEK;
 
     R_Config_RTC_Create_UserInit();
 }
@@ -439,7 +439,7 @@ MD_STATUS R_Config_RTC_Set_ConstPeriodInterruptOn(e_rtc_int_period_t period)
     {
         /* Disable INTRTC */
         RTCMK = 1U;
-        RTCC0 = (RTCC0 & _F8_RTC_INTRTC_CLEAR) | period;
+        RTCC0 = (RTCC0 & _F8_RTC_INTRTC_CLEAR) | (uint8_t)period;
         RTCC1 &= (uint8_t)~_08_RTC_INTC_GENERATE_FLAG;
         /* Clear INTRTC interrupt flag */
         RTCIF = 0U;

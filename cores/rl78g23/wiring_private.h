@@ -37,6 +37,8 @@
 #include <stdarg.h>
 
 #include "Arduino.h"
+// 2023/02/13
+#include "utilities.h"
 
 #ifdef __cplusplus
 extern "C"{
@@ -159,7 +161,8 @@ int8_t get_pulse_in_channel(uint8_t pulse_in_num);
 
 #endif/*__RL78__*/
 
-typedef void (*voidFuncPtr)(void);
+// 2023/02/14
+// typedef void (*voidFuncPtr)(void);
 
 #ifdef __cplusplus
 } // extern "C"

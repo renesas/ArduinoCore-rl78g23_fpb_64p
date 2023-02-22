@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_ADC_user.c
-* Version      : 1.0.1
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_ADC.
-* Creation Date: 2021-05-14
+* File Name        : Config_ADC_user.c
+* Component Version: 1.1.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_ADC.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -68,8 +68,8 @@ void R_Config_ADC_Create_UserInit(void)
 void r_Config_ADC_interrupt(void)
 {
     /* Start user code for r_Config_ADC_interrupt. Do not edit comment generated here */
-	g_adc_int_flg=1;
-	/* End user code. Do not edit comment generated here */
+    g_adc_int_flg=1;
+    /* End user code. Do not edit comment generated here */
 }
 
 /* Start user code for adding. Do not edit comment generated here */

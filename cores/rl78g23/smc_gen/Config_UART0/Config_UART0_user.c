@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_UART0_user.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_UART0.
-* Creation Date: 2021-05-14
+* File Name        : Config_UART0_user.c
+* Component Version: 1.3.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_UART0.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -39,6 +39,7 @@ Includes
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
+#include "utilities.h"
 
 /***********************************************************************************************************************
 Global variables and functions
@@ -77,12 +78,10 @@ static void r_Config_UART0_callback_sendend(void)
 {
     /* Start user code for r_Config_UART0_callback_sendend. Do not edit comment generated here */
     Set_Char_Serial_from_buf(0);
-//    (*uart_transmit_callback_table[0])();
     if(0 != uart_transmit_callback_table[0])
     {
         (*uart_transmit_callback_table[0])();
     }
-
     /* End user code. Do not edit comment generated here */
 }
 
@@ -96,12 +95,10 @@ static void r_Config_UART0_callback_receiveend(void)
 {
     /* Start user code for r_Config_UART0_callback_receiveend. Do not edit comment generated here */
     Set_Char_Serial_to_buf(0);
-//    (*uart_receive_callback_table[0])();
     if(0 != uart_receive_callback_table[0])
     {
         (*uart_receive_callback_table[0])();
     }
-
     /* End user code. Do not edit comment generated here */
 }
 

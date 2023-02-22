@@ -18,6 +18,7 @@
 */
 
 #include <Arduino.h>
+// #include "ArduinoClassics.h"
 #ifdef __RL78__
 #include "utilities.h"
 #endif
@@ -29,7 +30,7 @@ extern "C" {
 #endif
 
 extern "C" {
-    #include "Config_ITL013.h"
+    #include "Config_CSI11.h"
 }
 //#include <Wire.h>
 
@@ -50,6 +51,11 @@ void setupUSB() __attribute__((weak));
 void setupUSB() { }
 #endif /* defined(USBCON) */
 
+/* This declaration is used to force the constant in
+ * r_cg_vect_table.c to be linked to the static library (*.a). */
+extern const unsigned char Option_Bytes[];
+void * p_force_link = (void * )Option_Bytes;
+
 int main(void)
 {
 /******************************************************/
@@ -66,7 +72,7 @@ int main(void)
     R_Config_TAU0_6_Micros_Start();
 
     /* Start RTC Timer */
-    R_Config_RTC_Start();    /*//KAD Start RTC Timer */
+//    R_Config_RTC_Start();    /*//KAD Start RTC Timer */
 
 // Add 20221005 never call Create function
 //    R_Config_ITL013_Create();
