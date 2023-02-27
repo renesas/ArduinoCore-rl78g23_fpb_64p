@@ -1,10 +1,9 @@
 # ArduinoCore-rl78g23_fpb_64p
 * ArduinoCore-rl78g23_fpb_64p for https://github.com/renesas/Arduino/tree/master/hardware
 
-# Bugs or Issues
+# Support
 If you find a bug you can submit an issue here on Renesas site:  
-http://www.renesas.com/contact   
-Before posting a new issue, please check if the same problem has been already reported by someone else to avoid duplicates.
+http://www.renesas.com/contact 
 
 # Notes
 * This repository is a technical preview version.
