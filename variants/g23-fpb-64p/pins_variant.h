@@ -16,8 +16,8 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _VARIANT_H_
-#define _VARIANT_H_
+#ifndef _PINS_VARIANT_H_
+#define _PINS_VARIANT_H_
 
 /*----------------------------------------------------------------------------
  *        Definitions
@@ -29,16 +29,77 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#ifdef __cplusplus
-#endif // __cplusplus
+// 2023/03/02 moved from Arduino.h
+// Arduino.h should not be board specific
+#ifndef configCPU_CLOCK_HZ
+#define configCPU_CLOCK_HZ 					(32000000)	//!< CPUの動作周波数（RTOS未使用時に定義）
+#endif
+
+#define F_CPU (32 * 1000 * 1000L)
+
+#define UART_CHANNEL 		0		// UART0(Serial0)
+#define UART1_CHANNEL       1       // UART1(Serial1)
+#define UART2_CHANNEL       2       // UART2(Serial2)
+
+/* SPI(CSI) Definition */
+#define USE_CSI      (1) // Set to '1' when Use SPI Hardware.
+
+#if defined(USE_CSI) && USE_CSI
+
+// #define CSI_CHANNEL0 (0) // USE CSI00 for SPI
+// #define CSI_CHANNEL1 (1) // USE CSI01 for SPI
+// #define CSI_CHANNEL2 (2) // USE CSI10 for SPI
+#define CSI_CHANNEL3 (3) // USE CSI11 for SPI
+// #define CSI_CHANNEL4 (4) // USE CSI20 for SPI
+// #define CSI_CHANNEL5 (5) // USE CSI21 for SPI
+// #define CSI_CHANNEL6 (6) // USE CSI30 for SPI
+// #define CSI_CHANNEL7 (7) // USE CSI31 for SPI
+
+#endif /* defined(USE_CSI) && USE_CSI */
+
+/* IIC Definition */
+#define IIC_CHANNEL0 (0)
+#define IIC_CHANNEL1 (1)
+
+#define CHECK_OUTPUT_INHIBIT_RL78(p) ((p) == 27 || (p) == 28 || (p) == 41)
+
+// 2023/03/02 end of copy from Arduino.h
 
 #ifdef __cplusplus
 extern "C"
 {
 
+// moved from wiring_private.h
+#define FREQUENCY_MIN_VAL	(500)
+#define FREQUENCY_MAX_VAL	(8000000)
+
+#define TONE_CH_NUM				(7)
+
+#define TAU_OPERATION_CLOCK		(0xC000U)    /* operation clock set by PRS register */
+#define CK00_CK01_OPERATION		(0x000F)	/* Selection of operation clock CK00, CK01 */
+#define CK02_OPERATION			(0x0300)	/* Selection of operation clock CK02 */
+#define CK03_OPERATION			(0x3000)	/* Selection of operation clock CK03 */
+#define TIMEOUT_MAX_VAL			(65535)
+#define PULSE_INTERUPT			(1)
+
+#define _4000_TAU_CLOCK_SELECT_CKM2       (0x4000U)    /* operation clock CK2 set by PRS register */
+#define _0000_TAU_CKM2_FCLK_1             (0x0000U)    /* ckm2 - fCLK/2^1 */
+#define _C000_TAU_CLOCK_SELECT_CKM3       (0xC000U)    /* operation clock CK3 set by PRS register */
+
 }
 #endif // __cplusplus
 
+// tone_func
+
+#define PULSE_IN_CH_NUM			(4)
+int8_t get_tone_channel(uint8_t tone_num);
+
+typedef struct {
+    void (*open)();
+	void (*start)();
+	void (*stop)();
+	void (*get_width)(uint32_t * const width);
+} pulse_in_func;
 /*----------------------------------------------------------------------------
  *        Pins
  *----------------------------------------------------------------------------*/
@@ -62,16 +123,7 @@ extern "C"
 #define PIN_SPI3_MISO  (12)
 #define PIN_SPI3_SCK   (13)
 
-#define PIN_SPI4_SS    (27)
-#define PIN_SPI4_MOSI  (35)
-#define PIN_SPI4_MISO  (34)
-#define PIN_SPI4_SCK   (33)
 
-#define PIN_SPI5_SS    (27)
-#define PIN_SPI5_MOSI  (21)
-#define PIN_SPI5_MISO  (20)
-#define PIN_SPI5_SCK   (19)
-// 2023/02/20
 extern const uint8_t SS;
 extern const uint8_t MOSI;
 extern const uint8_t MISO;

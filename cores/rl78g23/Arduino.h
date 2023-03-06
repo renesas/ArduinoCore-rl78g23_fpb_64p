@@ -21,18 +21,10 @@
 #define Arduino_h
 
 #include "api/ArduinoAPI.h"
-
 #include <stdbool.h>
-
-// #include "platform.h"
 #include "utilities.h"
 #include "r_cg_macrodriver.h"
-
 #include "pintable.h"
-
-#define RAMSTART (HMCRAMC0_ADDR)
-#define RAMSIZE  (HMCRAMC0_SIZE)
-#define RAMEND   (RAMSTART + RAMSIZE - 1)
 
 #define RLDUINO78_VERSION 0x0203
 #define INTERRUPT
@@ -41,30 +33,14 @@
 #define _STOP()		asm("stop;");
 
 /* Software PWM 定義 */
-#define SOFTWARE_PWM		0xF0
 #define SW_PWM_TIMER        6
 #define SWPWM_MIN           1024
-
-#ifndef configCPU_CLOCK_HZ
-#define configCPU_CLOCK_HZ 					(32000000)	//!< CPUの動作周波数（RTOS未使用時に定義）
-#endif
 
 #define clockCyclesPerMicrosecond()			(configCPU_CLOCK_HZ / 1000000)				//!< CPUの動作周波数を1000000で割ったもの
 #define clockCyclesToMicroseconds(cycle)	((cycle) / clockCyclesPerMicrosecond())		//!< サイクルあたりの時間[us]
 #define microsecondsToClockCycles(us)		((us) * clockCyclesPerMicrosecond())		//!< 時間当たりのサイクル数
 
-#define ANALOG_PIN_0		2		// ANI2
-#define ANALOG_PIN_1		3		// ANI3
-#define ANALOG_PIN_2		4		// ANI4
-#define ANALOG_PIN_3		5		// ANI5
-#define ANALOG_PIN_4		6		// ANI6
-#define ANALOG_PIN_5		7		// ANI7
-//#define ANALOG_PIN_6		18		// ANI18
-//#define ANALOG_PIN_7		19		// ANI19
 
-#define UART_CHANNEL 		0		// UART0(Serial0)
-#define UART1_CHANNEL       1       // UART1(Serial1)
-#define UART2_CHANNEL       2       // UART2(Serial2)
 #define HOOK_TIMER_CHANNEL  7
 
 #define MICROSECONDS_PER_TIMER05_OVERFLOW 0xffff //1us * 2 ^ 16
@@ -74,14 +50,12 @@
 /* Serial define */
 #define USE_SMART_CONFIGRATOR (1)
 
-
 #ifdef __cplusplus
 
 using namespace arduino;
 
 #include "api/WCharacter.h"
-#include "WString.h"
-#include "HardwareSerial.h"
+#include "api/HardwareSerial.h"
 #include "HardwareUart.h"
 
 
@@ -91,7 +65,7 @@ extern "C"{
 // Include Atmel headers
 #undef LITTLE_ENDIAN
 
-#include "WVariant.h"
+// #include "WVariant.h"
 
 #define INPUT_TTL	0x5
 #define INPUT_TTL_PULLUP	0x6
@@ -110,12 +84,9 @@ extern "C"{
 
 #define PWM_DEFAULT_FREQ    (490)       // 490Hz
 #define PWM_TDR00           (PWM_MASTER_CLOCK / PWM_DEFAULT_FREQ - 1)
-// 2023/02/17
 
 #define interrupts()  EI()
 #define noInterrupts()  DI()
-
-#define F_CPU (32 * 1000 * 1000L)
 
 // avr-libc defines _NOP() since 1.6.2
 #ifndef _NOP
@@ -152,7 +123,7 @@ void loop();
 #endif
 
 // Include board variant
-#include "variant.h"
+#include "pins_variant.h"
 
 // undefine stdlib's abs if encountered
 #ifdef abs
@@ -160,10 +131,6 @@ void loop();
 #endif // abs
 
 #define abs(x) ((x)>0?(x):-(x))
-
-#define UART_CHANNEL 		0		// UART0(Serial0)
-#define UART1_CHANNEL       1       // UART1(Serial1)
-#define UART2_CHANNEL       2       // UART2(Serial2)
 
 
 #include "api/itoa.h"
@@ -180,26 +147,6 @@ void loop();
 #define PM_STOP_MODE	2
 #define PM_SNOOZE_MODE	3
 
-
-/* SPI(CSI) Definition */
-#define USE_CSI      (1) // Set to '1' when Use SPI Hardware.
-
-#if defined(USE_CSI) && USE_CSI
-
-//#define CSI_CHANNEL0 (0) // USE CSI00 for SPI
-//#define CSI_CHANNEL1 (1) // USE CSI01 for SPI
-//#define CSI_CHANNEL2 (2) // USE CSI10 for SPI
-  #define CSI_CHANNEL3 (3) // USE CSI11 for SPI
-//#define CSI_CHANNEL4 (4) // USE CSI20 for SPI
-//#define CSI_CHANNEL5 (5) // USE CSI21 for SPI
-//#define CSI_CHANNEL6 (6) // USE CSI30 for SPI
-//#define CSI_CHANNEL7 (7) // USE CSI31 for SPI
-
-#endif /* defined(USE_CSI) && USE_CSI */
-
-/* IIC Definition */
-#define IIC_CHANNEL0 (0)
-#define IIC_CHANNEL1 (1)
 
 #ifdef __RL78__
 #define ISP_LEVEL_3 (3)

@@ -19,14 +19,9 @@
 #ifndef _PINTABLE_H_
 #define _PINTABLE_H_
 
-//#include <pins_arduino.h>
-//#include "pins_arduino_classics.h"
-// #include "variant.h"
-
 #include <stdio.h>
 #include <stdlib.h>
-// 2023/02/10 temporary removal by KAD
-// #include <math.h>
+
 
 #ifdef __cplusplus
 extern "C" {

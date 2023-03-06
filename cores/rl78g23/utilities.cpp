@@ -1,9 +1,8 @@
 #include "wiring_private.h"
+#include "wiring_variant.h"
 #include "pins_arduino.h"
 #include "pintable.h"
 #include "r_cg_interrupt_handlers.h"
-//extern "C"
-//#include "r_cg_timer.h"
 
 #define	ADS_TEMP_SENSOR			(0x80)
 #define	ADS_REF_VOLTAGE			(0x81)
@@ -16,14 +15,11 @@ extern uint8_t g_u8ResetFlag;
 extern uint8_t g_u8PowerManagementMode;
 extern uint8_t g_u8OperationClockMode;
 extern volatile unsigned long g_u32delay_timer;
-// extern volatile unsigned long g_timer05_overflow_count;
-// extern volatile unsigned long g_timer06_overflow_count;
+
 extern uint8_t g_delay_cnt_flg;
 extern uint8_t g_delay_cnt_micros_flg;
 extern volatile unsigned long g_u32delay_micros_timer;
 
-// extern uint8_t g_u8ADUL;
-// extern uint8_t g_u8ADLL;
 extern uint16_t g_u16ADUL;
 extern uint16_t g_u16ADLL;
 
@@ -52,130 +48,6 @@ fITInterruptFunc_t	g_fITInterruptFunc = NULL;	//!< ユーザー定義インタ�
 
 fInterruptFunc_t g_fMicroInterruptFunc = NULL;
 
-// 2022/10/07 comment out by KAD
-/*
-extern volatile unsigned long g_u32timer_periodic;
-
-static void PeriodicMillisIntervalFunc()
-{
-    if (g_u32timer_periodic > 0) {
-        if (g_fITInterruptFunc) {
-        	g_fITInterruptFunc(g_u32timer_periodic);
-        }
-        g_u32timer_periodic = 0;
-    }
-}
-*/
-
-#if !defined(G23_FPB)
-/**
- * タイマーアレイユニットの開始
- *
- * @param[in] u8TimerCloc タイマクロックを指定してください。
- *
- * @return なし
- *
- * @attention なし
- ***************************************************************************/
-void _startTAU0(uint16_t u16TimerClock)
-{
-//	R_Config_TAU0_Create(u16TimerClock);
-}
-
-void _startTAU1(uint16_t u16TimerClock)
-{
-//	R_Config_TAU1_Create(u16TimerClock);
-}
-#endif
-/**
- * タイマーチャンネルの開始
- *
- * @param[in] u8Timer 開始するタイマ番号
- *
- * @return なし
- *
- * @attention なし
- ***************************************************************************/
-#if !defined(G23_FPB)
-void _startTimerChannel(uint8_t u8TimerChannel, uint16_t u16TimerMode, uint16_t u16Interval, bool bPWM, bool bInterrupt)
-{
-	if(bPWM==true)
-	{
-		if (u8TimerChannel < 8)
-		{
-//			R_Config_TAU0_Set_Timer_Channel(u8TimerChannel,u16TimerMode,u16Interval,1);
-		}
-		else
-		{
-//			R_Config_TAU1_Set_Timer_Channel(u8TimerChannel,u16TimerMode,u16Interval,1);
-		}
-	}
-	else
-	{
-		if (u8TimerChannel < 8)
-		{
-//			R_Config_TAU0_Set_Timer_Channel(u8TimerChannel,u16TimerMode,u16Interval,0);
-		}
-		else
-		{
-//			R_Config_TAU1_Set_Timer_Channel(u8TimerChannel,u16TimerMode,u16Interval,0);
-		}
-	}
-	switch (u8TimerChannel)
-	{
-		case 0:
-//			R_Config_TAU0_0_Start();
-			break;
-		case 1:
-//			R_Config_TAU0_1_Start();
-			break;
-		case 2:
-//			R_Config_TAU0_2_Start();
-			break;
-		case 3:
-//			R_Config_TAU0_3_Start();
-			break;
-		case 4:
-//			R_Config_TAU0_4_Start();
-			break;
-		case 5:
-//			R_Config_TAU0_5_Start();
-			break;
-		case 6:
-//			R_Config_TAU0_6_Start();
-			break;
-		case 7:
-//			R_Config_TAU0_7_Start();
-			break;
-
-//		case 8:
-//			R_Config_TAU1_0_Start();
-//			break;
-//		case 9:
-//			R_Config_TAU1_1_Start();
-//			break;
-//		case 10:
-//			R_Config_TAU1_2_Start();
-//			break;
-//		case 11:
-//			R_Config_TAU1_3_Start();
-//			break;
-//		case 12:
-//			R_Config_TAU1_4_Start();
-//			break;
-//		case 13:
-//			R_Config_TAU1_5_Start();
-//			break;
-//		case 14:
-//			R_Config_TAU1_6_Start();
-//			break;
-//		case 15:
-//			R_Config_TAU1_7_Start();
-//			break;
-	}
-
-}
-#endif
 
 /**
  * タイマーアレイユニットの停止
@@ -252,37 +124,6 @@ void _modifyTimerPeriodic(uint8_t u8TimerChannel, uint16_t u16Interval)
  ***************************************************************************/
 void _stopTimerChannel(uint8_t u8TimerChannel)
 {
-#ifdef WORKAROUND_READ_MODIFY_WRITE
-	TT0   |=  (1 << u8TimerChannel);	// タイマ動作停止
-	TOE0 &=  ~(1 << u8TimerChannel);	// タイマ出力禁止の設定
-	TO0   &= ~(1 << u8TimerChannel);	// タイマ出力の設定
-
-	switch (u8TimerChannel) {
-	case 1:	SBI(SFR_MK1L,    5);// 割り込みマスクを禁止に設定
-		break;
-
-	case 2:	SBI(SFR_MK1L,    6);// 割り込みマスクを禁止に設定
-		break;
-
-	case 3:	SBI(SFR_MK1L,    7);// 割り込みマスクを禁止に設定
-		break;
-
-	case 4:	SBI(SFR_MK1H,    7);// 割り込みマスクを禁止に設定
-		break;
-
-	case 5: SBI(SFR_MK2L,    0);// 割り込みマスクを禁止に設定
-		break;
-
-	case 6:	SBI(SFR_MK2L,    1);// 割り込みマスクを禁止に設定
-		break;
-
-	case 7:	SBI(SFR_MK2L,    2);// 割り込みマスクを禁止に設定
-		break;
-	}
-	if (!(TE0 & 0x009E)) {
-		TT0 |= 0x0001;		// Master チャンネルの停止
-	}
-#else /* WORKAROUND_READ_MODIFY_WRITE */
 	TT0   |=  (1 << u8TimerChannel);	// タイマ動作停止
 	TOE0 &=  ~(1 << u8TimerChannel);	// タイマ出力禁止の設定
 	TO0   &= ~(1 << u8TimerChannel);	// タイマ出力の設定
@@ -299,7 +140,6 @@ void _stopTimerChannel(uint8_t u8TimerChannel)
 	if (!(TE0 & 0x009E)) {
 		TT0 |= 0x0001;		// Master チャンネルの停止
 	}
-#endif
 }
 
 /**
@@ -355,7 +195,6 @@ uint16_t getVersion()
 
 #if USE_POWER_MANAGEMENT == 1
 /** @} group14 その他 */
-
 
 /** ************************************************************************
  * @defgroup group15 パワーマネージメント/クロック制御関数
@@ -446,7 +285,6 @@ void setPowerManagementMode(uint8_t u8PowerManagementMode, uint16_t u16ADLL, uin
 	default:
 		break;
 	}
-
 }
 
 
@@ -492,41 +330,7 @@ uint8_t getOperationClockMode()
  ***************************************************************************/
 void setOperationClockMode(uint8_t u8ClockMode)
 {
-#if !defined(G23_FPB)
-	if (u8ClockMode == CLK_HIGH_SPEED_MODE) {
-		// 動作クロックの変更
-		if (HIOSTOP == 1) {
-			HIOSTOP = 0;	// 高速オンチップ・オシレータの動作開始
-			CSS     = 0;	// CPU/周辺ハードウェア・クロックににメイン・システム・クロックを選択
-			while (CLS != 0);
-	#if (RTC_CLK_SOURCE == CLK_SOURCE_FIL)
-			XTSTOP  = 1;	// XT1発信回路の発振停止
-			CMC.cmc = 0x00;	// XT1発信回路の動作停止
-	#endif
-		}
-		g_u8OperationClockMode = CLK_HIGH_SPEED_MODE;
-	} else if (u8ClockMode == CLK_LOW_SPEED_MODE) {
-		if ((g_u8PowerManagementMode != PM_STOP_MODE) &&
-			(g_u8PowerManagementMode != PM_SNOOZE_MODE)) {
-			// 動作クロックの変更
-			if (CLS == 0) {
-		#if (RTC_CLK_SOURCE == CLK_SOURCE_FIL)
-				unsigned long i;
-				CMC.cmc  = 0x10;// XT1発振回路の発振開始
-				XTSTOP  = 0;	// XT1発信回路の発振開始
-				for (i = 0; i < WAIT_XT1_CLOCK; i++) {
-					NOP();		// 1秒以上のwait
-				}
-		#endif
-				CSS     = 1;	// CPU/周辺ハードウェア・クロックににサブシステム・クロックを選択
-				while (CLS != 1);
-				HIOSTOP = 1;	// 高速オンチップ・オシレータの動作停止
-			}
-			g_u8OperationClockMode = CLK_LOW_SPEED_MODE;
-		}
-	}
-#else // !defined(G23_FPB)
-    if (g_u8OperationClockMode == u8ClockMode)
+	if (g_u8OperationClockMode == u8ClockMode)
     {
         // If there is no change from the existing mode, it will not be processed.
         return;
@@ -561,7 +365,7 @@ void setOperationClockMode(uint8_t u8ClockMode)
             /* not implementation */
         }
     }
-#endif
+
 }
 /** @} group15 パワーマネージメント/クロック制御関数 */
 #endif // USE_POWER_MANAGEMENT == 1
@@ -612,71 +416,10 @@ void detachIntervalTimerHandler()
 	g_fITInterruptFunc = NULL;
 }
 
-#if 0
-/**
- * インターバル・タイマ割り込みハンドラ内から実行するコールバック関数を登録します。
- *
- * コールバック関数を登録すると引数[us]で指定したインターバル・タイマ割り込み毎に登録した
- * コールバック関数が呼び出されます。
- *
- * @param[in] fFunction インターバル・タイマ割り込み時に実行するハンドラを指定します。
- * @param[in] interval  インターバルの時間を指定します。[us]
- *
- * @return なし
- *
- * @attention
- * - コールバック関数内では時間のかかる処理は行わないでください。
- * - コールバック関数内では以下の関数が呼び出し可能です。
- * - コールバック関数を登録するとtone()が使用できなくなります。（デフォルト）
- * - tone()から変更する場合は、HOOK_TIMER_CHANNELを変更してください。
- *
- * pinMode()、 digitalWrite()、 digitalRead()、 millis()、 micros()、 delayMicroseconds()、
- * min()、 max()、 constrain()、 map()、 lowByte()、 highByte()、 bitRead()、 bitWrite()、
- * bitSet()、 bitClear()、 bit()、 randomSeed()、 random()
- * - pinMode()関数と digitalWrite()関数は、 loop()関数内とコールバック関数内で同じピン
- * 番号を指定すると誤動作する可能性があります。
- ***************************************************************************/
-void attachMicroIntervalTimerHandler(void (*fFunction)(void), uint16_t interval)
-{
-	if((uint8_t)HOOK_TIMER_CHANNEL < 8)
-	{
-		_startTAU0(TIMER_CLOCK);
-	}
-	else if((uint8_t)HOOK_TIMER_CHANNEL < 16)
-	{
-		_startTAU1(TIMER_CLOCK);
-	}
-	_startTimerChannel( HOOK_TIMER_CHANNEL, INTERVAL_MICRO_MODE, interval - 1, false, true );
-	INT_TM_HOOK  = fFunction;
-}
-
-void attachClockIntervalTimerHandler(void (*fFunction)(void), uint16_t interval)
-{
-	_startTimerChannel( HOOK_TIMER_CHANNEL, INTERVAL_FCLK_MODE, interval - 1, false, true );
-	INT_TM_HOOK  = fFunction;
-}
-
-
-/**
- * インターバル・タイマ割り込みハンドラ内から実行するコールバック関数の登録を解除します。
- *
- * @return なし
- *
- * @attention なし
- ***************************************************************************/
-void detachMicroIntervalTimerHandler()
-{
-	_stopTimerChannel(SW_PWM_TIMER);
-	INT_TM_HOOK  = NULL;
-}
-#endif
-
-// Add 2022/10/07 KAD
 void attachMicroIntervalTimerHandler(void (*fFunction)(void), uint16_t interval)
 {
 	g_fMicroInterruptFunc = fFunction;
-
-//    R_Config_TAU0_7_MSTimer2_Create();
+//  R_Config_TAU0_7_MSTimer2_Create();
 //	R_Config_TAU0_7_MSTimer2_SetPeriod(interval);
 //	R_Config_TAU0_7_MSTimer2_Start();
 }
@@ -727,7 +470,6 @@ void detachCyclicHandler(uint8_t u8HandlerNumber)
 	}
 }
 
-
 extern "C" {
 /**
  * 周期起動コールバック関数を起動します。
@@ -757,67 +499,6 @@ void execCyclicHandler(void)
 
 }
 
-
-/** @} group16 割込みハンドラ/周期起動関数 */
-
-#if !defined(G23_FPB)
-/** ************************************************************************
- * @addtogroup group14
- *
- * @{
- ***************************************************************************/
-/**
- * 指定したピンからクロックを出力します。
- *
- * 他のデバイスに任意のクロックを供給することができます。例えば、Smart Analogの
- * フィルタ（LPF/HPF）の外部クロック入力に指定したピンを接続して任意のカットオフ
- * 周波数を得ることができます。
- *
- * @param[in] u8Pin        ピン番号を指定します。
- * @param[in] u32Frequency 出力するクロック（ 244 Hz ～ 32 MHz）を指定します。
- *                         0を指定した場合はクロックの出力を停止します。
- *
- * @return なし
- *
- * @attention ピン番号にはデジタルピンのD3、D5、D6、D9、D10を指定してください。
- ***************************************************************************/
-void outputClock(uint8_t u8Pin, uint32_t u32Frequency)
-{
-	uint8_t u8Timer;
-	uint16_t u16Interval;
-
-	if ((u8Pin < NUM_DIGITAL_PINS) &&
-		((u32Frequency == 0) ||
-		((OUTPUT_CLOCK_MIN <= u32Frequency) && (u32Frequency <= OUTPUT_CLOCK_MAX)))) {
-//		u8Timer = getPinTable(u8Pin)->timer;
-		if (u8Timer != SWPWM_PIN) {
-			// 出力モードに設定
-			pinMode(u8Pin, OUTPUT);
-
-			if (u32Frequency != 0) {
-				// タイマーアレイユニットの開始
-				_startTAU0(TIMER_CLOCK);
-
-				// タイマーの開始
-				u16Interval = (uint16_t)(OUTPUT_CLOCK_CKx / (u32Frequency * 2) - 1);
-				_startTimerChannel(u8Timer, OUTPUT_CLOCK_MODE, u16Interval, false, false);
-			}
-			else {
-				// タイマーの停止
-				_stopTimerChannel(u8Timer);
-
-				// タイマーアレイユニットの停止
-				_stopTAU0();
-
-			}
-		}
-	}
-
-}
-#endif
-
-
-//#if 1
 /**
  * MCUに内蔵されている温度センサから温度（摂氏/華氏）を取得します。
  *
@@ -830,78 +511,6 @@ void outputClock(uint8_t u8Pin, uint32_t u32Frequency)
  ***************************************************************************/
 int getTemperature(uint8_t u8Mode)
 {
-#if 0
-	int s16Result1, s16Result2;
-	float fResult;
-
-	FUNC_MUTEX_LOCK;
-
-	s16Result1 = _analogRead(ADS_TEMP_SENSOR);
-	s16Result2 = _analogRead(ADS_REF_VOLTAGE);
-
-	fResult = (1450 * (float)s16Result1 / (float)s16Result2 - 1050) / -3.6 + 25;
-	if (u8Mode == TEMP_MODE_FAHRENHEIT) {
-		// 摂氏を華氏へ変換
-		fResult = 1.8 * fResult + 32;
-	}
-
-	FUNC_MUTEX_UNLOCK;
-
-	return (int)fResult;
-#elif 0
-	int s16Result1, s16Result2;
-	long s32Temp;
-	int s16Result;
-
-	ADM0 = 0x00;	// A/Dコンバータの動作停止、fclk/64、ノーマル1モードに設定
-	ADM1 = 0x20;	// ソフトウェア・トリガ・モード、ワンショットに設定
-	ADM2 = 0x00;	// Vddリファレンスに設定
-	ADUL = 0xff;
-	ADLL = 0;
-	SBI(SFR_MK1H, 0);	// INTADの割り込み禁止
-	CBI(SFR_IF1H, 0);	// INTADの割り込みフラグのクリア
-	ADS = ADS_TEMP_SENSOR;		// アナログチャンネルの設定
-	SBI(SFR_ADM0, SFR_BIT_ADCE);	// A/Dコンパレータを有効に設定
-	CBI(SFR_IF1H, 0);	// INTADの割り込みフラグのクリア
-	SBI(SFR_ADM0, SFR_BIT_ADCS);	// A/Dコンバータの開始
-	while (ADIF == 0);	// A/Dコンバート待ち
-	CBI(SFR_IF1H, 0);	// INTADの割り込みフラグのクリア
-	SBI(SFR_ADM0, SFR_BIT_ADCS);// A/Dコンバータの開始
-	while (ADIF == 0);	// A/Dコンバート待ち
-	s16Result1 = (ADCR >> 6);// A/Dコンバート結果の取得
-	CBI(SFR_ADM0, SFR_BIT_ADCE);		// A/Dコンパレータを無効に設定
-
-	ADM0 = 0x00;	// A/Dコンバータの動作停止、fclk/64、ノーマル1モードに設定
-	ADM2 = 0x00;	// Vddリファレンスに設定
-	CBI(SFR_IF1H, 0);		// INTADの割り込みフラグのクリア
-	ADS = ADS_REF_VOLTAGE;		// アナログチャンネルの設定
-	SBI(SFR_ADM0, SFR_BIT_ADCE);	// A/Dコンパレータを有効に設定
-	CBI(SFR_IF1H, 0);	// INTADの割り込みフラグのクリア
-	SBI(SFR_ADM0, SFR_BIT_ADCS);	// A/Dコンバータの開始
-	while (ADIF == 0);	// A/Dコンバート待ち
-	CBI(SFR_IF1H, 0);		// INTADの割り込みフラグのクリア
-	SBI(SFR_ADM0, SFR_BIT_ADCS);// A/Dコンバータの開始
-	while (ADIF == 0);	// A/Dコンバート待ち
-	s16Result2 = (ADCR >> 6);// A/Dコンバート結果の取得
-	CBI(SFR_IF1H, 0);		// INTADの割り込みフラグのクリア
-	CBI(SFR_ADM0, SFR_BIT_ADCE);		// A/Dコンパレータを無効に設定
-
-	if (s16Result2 == 0) {
-		s16Result2 = 1;
-	}
-
-	volatile long n14500L = 14500L;
-	s32Temp = n14500L * s16Result1 / s16Result2 - 10500L;
-	if (u8Mode == TEMP_MODE_FAHRENHEIT) {
-		s16Result = s32Temp / -20;
-		s16Result += 77;
-	} else {
-		s16Result = s32Temp / -36;
-		s16Result += 25;
-	}
-
-	return s16Result;
-#else
 	extern uint8_t  g_adc_int_flg;
     uint8_t u8count;
     uint16_t u16temp;
@@ -971,47 +580,10 @@ int getTemperature(uint8_t u8Mode)
 	return s16Result;
 
 }
-#endif
-
 
 void enterPowerManagementMode(unsigned long u32ms)
 {
-#if !defined(G23_FPB)
-	uint8_t  u8PMmode;
-
-
-    // 設定された省電力モードとRL78の状態をチェックし、実際に発行できる命令を決定する。
-    if (TE0 & 0x00DE) {
-        u8PMmode = PM_HALT_MODE;
-    } else {
-        u8PMmode = PM_STOP_MODE;
-    }
-
-
-	if (u32ms == 0xFFFFFFFF) {
-		ITLMK       = 1;			// Mask Interval Timer
-		_STOP();
-		ITLMK       = 0;			// Unmask Interval Timer
-	}
-	else {
-		g_u32delay_timer = u32ms;
-		TMMK05     = 1;
-		//Note: TM05 stops during STOP, overflow count should be adjusted.
-		//    : have a margin of error of approx. 50ms.
-		g_timer05_overflow_count = g_timer05_overflow_count + (u32ms / MILLISECONDS_PER_TIMER05_OVERFLOW);
-		do {
-            if (u8PMmode == PM_STOP_MODE) {
-                _STOP();
-            }
-            else {
-                _HALT();
-            }
-		} while (g_u32delay_timer  != 0);
-		TMMK05     = 0;
-
-	}
-#else
-    uint8_t u8PMmode;
+	uint8_t u8PMmode;
 
     /* Check the set power saving mode and the status of RL78,
        and determine the instruction that can be actually issued.
@@ -1062,8 +634,6 @@ void enterPowerManagementMode(unsigned long u32ms)
             }
         }
     }
-
-#endif
 }
 
 /* リセット要因の読み出し */

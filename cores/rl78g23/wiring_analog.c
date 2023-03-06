@@ -27,12 +27,10 @@
  * Modified  4 Mar  2017 by Yuuki Okamiya for RL78/G13
  */
 #include "wiring_private.h"
-//#include "pins_arduino_classics.h"
-#include "variant.h"
-
+#include "wiring_variant.h"
+#include "pins_variant.h"
 #include "pintable.h"
 #include "r_smc_entry.h"
-// #include "ArduinoClassics.h"
 
 extern const PinTableType * pinTablelist[NUM_DIGITAL_PINS];
 extern uint8_t g_adc_int_flg;
@@ -43,40 +41,31 @@ uint16_t g_u16ADLL;
 extern uint32_t R_BSP_GetFclkFreqHz(void);
 
 /* Match to the value of PWM_PIN */
-volatile unsigned short *g_timer_period_reg[PWM_CH_NUM] = {&TDR00,&TDR02,&TDR04,&TDR06};
-volatile unsigned short *g_timer_duty_reg[PWM_CH_NUM]   = {&TDR01,&TDR03,&TDR05,&TDR07};
-volatile unsigned short *g_timer_analog_mode_reg[PWM_CH_NUM] = {&TMR01,&TMR03,&TMR05,&TMR07};
-volatile unsigned short *g_timer_analog_clock_select_reg = &TPS0;
-const uint8_t  pwm_channel_table[PWM_CH_NUM]  = {PWM_PIN_32,PWM_PIN_6,PWM_PIN_10,PWM_PIN_5};
+extern volatile unsigned short *g_timer_period_reg[PWM_CH_NUM];
+extern volatile unsigned short *g_timer_duty_reg[PWM_CH_NUM];
+extern volatile unsigned short *g_timer_analog_mode_reg[PWM_CH_NUM];
+extern volatile unsigned short *g_timer_analog_clock_select_reg;
+extern const uint8_t  pwm_channel_table[PWM_CH_NUM];
+extern Pwm_func pwm_ch[PWM_CH_NUM];
+extern const uint8_t g_au8AnalogPinTable[NUM_ANALOG_INPUTS];
+extern const uint8_t g_analog_pin_input[NUM_ANALOG_INPUTS];
 
 static void _analogPinRead(uint8_t pin);
 static int _analogRead(uint8_t u8ADS);
 static int _analogDuty(int val, uint16_t frequency);
 static uint16_t _analogFrequency (uint8_t pin, uint32_t u32Hz);
 
-Pwm_func pwm_ch[PWM_CH_NUM] =
-{
-    {
-        .open  = (void*)R_Config_TAU0_01_PWM_Create,
-        .start = (void*)R_Config_TAU0_01_PWM_Start,
-        .cycle = CYCLE_VALUE,
-    },
-    {
-        .open  = (void*)R_Config_TAU0_23_PWM_Create,
-        .start = (void*)R_Config_TAU0_23_PWM_Start,
-        .cycle = CYCLE_VALUE,
-    },
-    {
-        .open  = (void*)R_Config_TAU0_45_PWM_Create,
-        .start = (void*)R_Config_TAU0_45_PWM_Start,
-        .cycle = CYCLE_VALUE,
-    },
-    {
-        .open  = (void*)R_Config_TAU0_67_PWM_Create,
-        .start = (void*)R_Config_TAU0_67_PWM_Start,
-        .cycle = CYCLE_VALUE,
-    }
-};
+volatile SwPwm g_SwPwm[NUM_SWPWM_PINS] = { { 0, 0, 0, 0, 0, 0 }, };
+bool g_u8AnalogReadAvailableTable[NUM_ANALOG_INPUTS] = { 0 };
+bool g_u8AnalogWriteAvailableTable[NUM_DIGITAL_PINS] = {
+false, false, false, false,
+false, false, false, false,
+false, false, false, false,
+false, false, false, false,
+false, false, false, false,
+false, false, false, false,
+false, };
+
 
 int8_t get_pwm_channel(uint8_t pwm_num)
 {
@@ -110,24 +99,6 @@ void analogReference(uint8_t mode)
     g_u8AnalogReference = mode;
 }
 
-bool g_u8AnalogWriteAvailableTable[NUM_DIGITAL_PINS] = {
-false, false, false, false,
-false, false, false, false,
-false, false, false, false,
-false, false, false, false,
-false, false, false, false,
-false, false, false, false,
-false, };
-const uint8_t g_au8AnalogPinTable[NUM_ANALOG_INPUTS] = {
-ANALOG_PIN_0, ANALOG_PIN_1, ANALOG_PIN_2, ANALOG_PIN_3,
-ANALOG_PIN_4, ANALOG_PIN_5, ANALOG_PIN_6, ANALOG_PIN_7,
-ANALOG_PIN_8, ANALOG_PIN_9};
-
-volatile SwPwm g_SwPwm[NUM_SWPWM_PINS] = { { 0, 0, 0, 0, 0, 0 }, };
-
-bool g_u8AnalogReadAvailableTable[NUM_ANALOG_INPUTS] = { 0 };
-
-const uint8_t g_analog_pin_input[NUM_ANALOG_INPUTS] = {PIN_A0, PIN_A1, PIN_A2, PIN_A3, PIN_A4, PIN_A5, PIN_A6, PIN_A7, PIN_A8, PIN_A9};
 int8_t get_analog_channel(uint8_t analog_num)
 {
     int8_t analog_cnt;
@@ -231,13 +202,10 @@ void analogWrite(uint8_t pin, int value) {
             }
             else
             {
-// 2023/02/15 cast(uint32_t*) is removed by KAD
-//                *((uint32_t*)g_timer_period_reg[pwm_channel]) = pwm_ch[pwm_channel].cycle;
                 *(g_timer_period_reg[pwm_channel]) = pwm_ch[pwm_channel].cycle;
 
             }
             /* Duty set */
-//            *((uint32_t*)g_timer_duty_reg[pwm_channel])   = _analogDuty(value, pwm_ch[pwm_channel].cycle);
             *(g_timer_duty_reg[pwm_channel])   = (uint16_t)_analogDuty(value, pwm_ch[pwm_channel].cycle);
             pwm_ch[pwm_channel].start();
             }
@@ -251,18 +219,24 @@ void analogWrite(uint8_t pin, int value) {
 * Arguments    : Hz: cycle
 * Return Value : None
 ***********************************************************************************************************************/
+/*
 void analogWriteFrequency(uint32_t Hz) {
-    /* PWM output pulse cycle setting
-    Pulse period = (TDR00 setting value + 1) x count clock period
-    Example) When the pulse period is 2 [ms]
-    2 [ms] = 1/32 [MHz] x (TDR00 setting + 1)
-    TDR00 setting value = 63999 */
+//  PWM output pulse cycle setting
+//    Pulse period = (TDR00 setting value + 1) x count clock period
+//    Example) When the pulse period is 2 [ms]
+//    2 [ms] = 1/32 [MHz] x (TDR00 setting + 1)
+//    TDR00 setting value = 63999
+    pwm_ch[0].cycle = _analogFrequency(PWM_PIN_10,Hz);
+    pwm_ch[1].cycle = _analogFrequency(PWM_PIN_3,Hz);
+    pwm_ch[2].cycle = _analogFrequency(PWM_PIN_5,Hz);
+}
+*/
 
-    pwm_ch[0].cycle = _analogFrequency(PWM_PIN_32,Hz);
-    pwm_ch[1].cycle = _analogFrequency(PWM_PIN_6,Hz);
-    pwm_ch[2].cycle = _analogFrequency(PWM_PIN_10,Hz);
-    pwm_ch[3].cycle = _analogFrequency(PWM_PIN_5,Hz);
-
+void analogWriteFrequency(uint32_t Hz) {
+	for(int i = 0;i<PWM_CH_NUM;i++)
+	{
+		pwm_ch[i].cycle = _analogFrequency(pwm_channel_table[i],Hz);
+	}
 }
 
 /***********************************************************************************************************************
@@ -272,7 +246,6 @@ void analogWriteFrequency(uint32_t Hz) {
 *                Hz - cycle
 * Return Value : None
 ***********************************************************************************************************************/
-/* 1011 Nhu add */
 void analogWritePinFrequency(uint8_t pin, uint32_t Hz) {
     /* PWM output pulse cycle setting
     Pulse period = (TDR00 setting value + 1) x count clock period
@@ -371,7 +344,7 @@ static void _analogPinRead (uint8_t pin)
     }
     if (g_u8AnalogReadAvailableTable[pin_index] == false) {
         const PinTableType ** pp;
-        const PinTableType * p;
+        PinTableType * p;
         pp = &pinTablelist[pin];
         p = (PinTableType *)*pp;
         if (0!=p->pmca)

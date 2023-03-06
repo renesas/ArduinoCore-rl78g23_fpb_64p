@@ -6,90 +6,14 @@
  */
 
 //#include "pins_arduino_classics.h"
-#include "variant.h"
-
-#include "wiring_private_tone.h"
+#include "pins_variant.h"
 #include "iodefine.h"
 #include "iodefine_ext.h"
 #include "api/Common.h"
+#include "wiring_private_tone.h"
 
-//#include "Config_TAU0_1_Square_Wave.h"
-extern "C"{
-void R_Config_TAU0_1_Square_Wave_Create(void);
-void R_Config_TAU0_1_Square_Wave_Start(void);
-void R_Config_TAU0_1_Square_Wave_Stop(void);
-void R_Config_TAU0_1_Square_Wave_Create_UserInit(void);
-void R_Config_TAU0_2_Square_Wave_Create(void);
-void R_Config_TAU0_2_Square_Wave_Start(void);
-void R_Config_TAU0_2_Square_Wave_Stop(void);
-void R_Config_TAU0_2_Square_Wave_Create_UserInit(void);
-void R_Config_TAU0_3_Square_Wave_Create(void);
-void R_Config_TAU0_3_Square_Wave_Start(void);
-void R_Config_TAU0_3_Square_Wave_Stop(void);
-void R_Config_TAU0_3_Square_Wave_Create_UserInit(void);
-void R_Config_TAU0_4_Square_Wave_Create(void);
-void R_Config_TAU0_4_Square_Wave_Start(void);
-void R_Config_TAU0_4_Square_Wave_Stop(void);
-void R_Config_TAU0_4_Square_Wave_Create_UserInit(void);
-void R_Config_TAU0_5_Square_Wave_Create(void);
-void R_Config_TAU0_5_Square_Wave_Start(void);
-void R_Config_TAU0_5_Square_Wave_Stop(void);
-void R_Config_TAU0_5_Square_Wave_Create_UserInit(void);
-void R_Config_TAU0_6_Square_Wave_Create(void);
-void R_Config_TAU0_6_Square_Wave_Start(void);
-void R_Config_TAU0_6_Square_Wave_Stop(void);
-void R_Config_TAU0_6_Square_Wave_Create_UserInit(void);
-void R_Config_TAU0_7_Square_Wave_Create(void);
-void R_Config_TAU0_7_Square_Wave_Start(void);
-void R_Config_TAU0_7_Square_Wave_Stop(void);
-void R_Config_TAU0_7_Square_Wave_Create_UserInit(void);
-}
 
 extern "C" uint32_t R_BSP_GetFclkFreqHz(void);
-
-/* tone pin set */
-volatile unsigned short *g_tone_period_reg[TONE_CH_NUM] = {&TDR01,&TDR02,&TDR03,&TDR04,&TDR05,&TDR06,&TDR07};
-volatile unsigned short *g_timer_tone_mode_reg[TONE_CH_NUM] = {&TMR01,&TMR02,&TMR03,&TMR04,&TMR05,&TMR06,&TMR07};
-volatile unsigned short *g_timer_tone_clock_select_reg = &TPS0;
-const uint8_t  tone_channel_table[TONE_CH_NUM]  = {PWM_PIN_32,PWM_PIN_31,PWM_PIN_6,PWM_PIN_3,PWM_PIN_10,PWM_PIN_9,PWM_PIN_5};
-tone_func tone_ch[TONE_CH_NUM] =
-{
-	{
-		.open  = R_Config_TAU0_1_Square_Wave_Create,
-		.start = R_Config_TAU0_1_Square_Wave_Start,
-		.stop = R_Config_TAU0_1_Square_Wave_Stop
-	},
-	{
-		.open  = R_Config_TAU0_2_Square_Wave_Create,
-		.start = R_Config_TAU0_2_Square_Wave_Start,
-		.stop = R_Config_TAU0_2_Square_Wave_Stop
-	},
-	{
-		.open  = R_Config_TAU0_3_Square_Wave_Create,
-		.start = R_Config_TAU0_3_Square_Wave_Start,
-		.stop = R_Config_TAU0_3_Square_Wave_Stop
-	},
-	{
-		.open  = R_Config_TAU0_4_Square_Wave_Create,
-		.start = R_Config_TAU0_4_Square_Wave_Start,
-		.stop = R_Config_TAU0_4_Square_Wave_Stop
-	},
-	{
-		.open  = R_Config_TAU0_5_Square_Wave_Create,
-		.start = R_Config_TAU0_5_Square_Wave_Start,
-		.stop = R_Config_TAU0_5_Square_Wave_Stop
-	},
-	{
-		.open  = R_Config_TAU0_6_Square_Wave_Create,
-		.start = R_Config_TAU0_6_Square_Wave_Start,
-		.stop = R_Config_TAU0_6_Square_Wave_Stop
-	},
-	{
-		.open  = R_Config_TAU0_7_Square_Wave_Create,
-		.start = R_Config_TAU0_7_Square_Wave_Start,
-		.stop = R_Config_TAU0_7_Square_Wave_Stop
-	}
-};
 
 int8_t get_tone_channel(uint8_t tone_num)
 {

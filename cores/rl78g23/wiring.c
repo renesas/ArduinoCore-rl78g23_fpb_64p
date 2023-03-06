@@ -49,6 +49,7 @@
 #else  /*__RL78__*/
 volatile unsigned long g_u32timer_millis = 0u;	//!< インターバルタイマ変数
 volatile unsigned long g_u32delay_timer  = 0u;	//!< delay() 用タイマ変数
+
 volatile unsigned long g_timer06_overflow_count = 0;//
 uint8_t g_delay_cnt_flg = 0;
 uint8_t g_delay_cnt_micros_flg = 0;

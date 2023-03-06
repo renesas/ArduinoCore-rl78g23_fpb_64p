@@ -37,8 +37,7 @@ Includes
 #include "r_cg_macrodriver.h"
 
 /* Start user code for include. Do not edit comment generated here */
-#include "wiring_private.h"
-#include "api/Common.h"
+#include "wiring_variant.h"
 #include "Config_INTC.h"
 
 #include <stdio.h>

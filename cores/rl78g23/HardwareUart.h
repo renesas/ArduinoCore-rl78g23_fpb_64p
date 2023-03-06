@@ -19,8 +19,7 @@
 #pragma once
 
 // #include "api/HardwareSerial.h"
-#include "HardwareSerial.h"
-#include "SafeRingBuffer.h"
+#include "api/HardwareSerial.h"
 
 #ifdef SERIAL_BUFFER_SIZE
 #undef SERIAL_BUFFER_SIZE

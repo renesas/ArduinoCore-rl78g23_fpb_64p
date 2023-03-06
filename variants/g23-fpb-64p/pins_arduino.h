@@ -17,5 +17,5 @@
 */
 
 // API compatibility
-#include "variant.h"
+#include "pins_variant.h"
 

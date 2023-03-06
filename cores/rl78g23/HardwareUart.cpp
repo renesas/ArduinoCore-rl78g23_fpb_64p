@@ -64,9 +64,6 @@ extern "C" {
 
 };
 
-// namespace arduino {
-
-
 #if ( UART_CHANNEL == 0 ) /* ( UART_CHANNEL == 2 ) */
 #define URT_RXDx     RXD0
 #define URT_TXDx     TXD0
@@ -1141,23 +1138,28 @@ void HardwareUart::Set_SerialPort(uint8_t txd_pin,uint8_t rxd_pin)
     }
 
     /* Set PMCE Register for Output */
+#if defined(G23_FPB)
     if (0!=p->pmce){
       *p->portModeControlERegisterAddr &= (unsigned long)~(p->pmce);
     }
-
+#endif // G23_FPB
     /* Set CCDE Register for Digital InOut */
+#if defined(G23_FPB)
     if (0!=p->ccde){
       CCDE &= (uint8_t)~(p->ccde);
     }
+#endif // G23_FPB
 
     /* Set TxD pin */
     //getPinTable(txd_pin,p);
     pp = &pinTablelist[txd_pin];
     p = (PinTableType *)*pp;
     /* Set PMCE Register t */
+#if defined(G23_FPB)
     if (0!=p->pmce){
       *p->portModeControlERegisterAddr &= (unsigned long)~(p->pmce);
     }
+#endif // G23_FPB
 
     /* Set P Register for Set "H" Output Port*/
     *p->portRegisterAddr |= (unsigned long)(0x1 << p->bit);
@@ -1176,14 +1178,17 @@ void HardwareUart::Set_SerialPort(uint8_t txd_pin,uint8_t rxd_pin)
     }
 
     /* Set PMCE Register t */
+#if defined(G23_FPB)
     if (0!=p->pmce){
       *p->portModeControlERegisterAddr &= (unsigned long)~(p->pmce);
     }
-
+#endif // G23_FPB
     /* Set CCDE Register for Digital InOut */
+#if defined(G23_FPB)
     if (0!=p->ccde){
       CCDE &= (uint8_t)~(p->ccde);
     }
+#endif // G23_FPB
 }
 
 

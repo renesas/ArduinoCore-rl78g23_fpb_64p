@@ -2,7 +2,7 @@
 #include "api/ArduinoAPI.h"
 // #include "ArduinoClassics.h"
 //#include "pins_arduino_classics.h"
-#include "variant.h"
+#include "pins_variant.h"
 
 #include <pintable.h>
 

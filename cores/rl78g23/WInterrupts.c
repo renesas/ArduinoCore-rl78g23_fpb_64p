@@ -28,7 +28,7 @@
  */
 
 #include <inttypes.h>
-#include <avr/pgmspace.h>
+// #include <avr/pgmspace.h>
 #include <stdio.h>
 
 #include "utilities.h"

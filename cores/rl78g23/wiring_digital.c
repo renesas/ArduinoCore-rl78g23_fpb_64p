@@ -29,16 +29,13 @@
 
 #define ARDUINO_MAIN
 #include "wiring_private.h"
-//#include "pins_arduino_classics.h"
-#include "variant.h"
+#include "pins_variant.h"
+#include "wiring_private.h"
+#include "api/Common.h"
+#include "pintable.h"
 
 #define PMPUPIMPOM_CHECK_ENABLE		/* Do not change invalid bits */
 
-#include "wiring_private.h"
-#include "api/Common.h"
-
-#ifdef __RL78__
-#include "pintable.h"
 extern bool g_u8AnalogWriteAvailableTable[NUM_DIGITAL_PINS];
 extern volatile SwPwm g_SwPwm[NUM_SWPWM_PINS];
 extern const PinTableType * pinTablelist[NUM_DIGITAL_PINS];
@@ -66,11 +63,10 @@ void _turnOffPwmPin(uint8_t u8Pin)
 
 	uint8_t u8Timer = 0xFF;
 	if (u8Pin < NUM_DIGITAL_PINS) {
-//		u8Timer = getPinTable(u8Pin)->timer;
 		g_u8AnalogWriteAvailableTable[u8Pin] = false;
 	}
-	if (u8Timer == SWPWM_PIN) {
-#if defined(__RL78__)
+	if (u8Timer == SWPWM_PIN)
+	{
 		int i;
 
 		for (i = 0; i < NUM_SWPWM_PINS; i++) {
@@ -85,8 +81,9 @@ void _turnOffPwmPin(uint8_t u8Pin)
 		if (i >= NUM_SWPWM_PINS) {			// SoftwarePWM�̐ݒ�Ȃ�
 			_stopTimerChannel(SW_PWM_TIMER);
 		}
-#endif
-	} else {
+	}
+	else
+	{
 		switch (u8Timer) {
 		case 1:
 			u16TMR0x = TMR01;
@@ -118,7 +115,6 @@ void _turnOffPwmPin(uint8_t u8Pin)
 		}
 	}
 }
-#endif/*__RL78__*/
 
 /**********************************************************************************************************************
  * Function Name: pinmode setting
@@ -169,16 +165,19 @@ void pinMode(pin_size_t pin, PinMode u8Mode)
 		}
 
 		/* clear pmce register when ELCL pin */
+#if defined(G23_FPB)
 		if (0!=p->pmce)
 		{
 			*p->portModeControlERegisterAddr &= (unsigned long)~(p->pmce);
 		}
-
+#endif // G23_FPB
 		/* clear ccde register */
+#if defined(G23_FPB)
 		if (0!=p->ccde)
 		{
 			*p->portOutCurControlRegisterAddr &= (unsigned long)~(p->ccde);
 		}
+#endif // G23_FPB
 
 		if (g_u8AnalogWriteAvailableTable[pin]) {
 			_turnOffPwmPin(pin);	/* PWM setting cancel */
@@ -218,13 +217,17 @@ void pinMode(pin_size_t pin, PinMode u8Mode)
 			if (0 != p->pom){
 				*p->portOutputModeRegisterAddr &= (unsigned long)~(0x1 << p->bit);  /* set Normal Output */
 			}
+#if defined(G23_FPB)
 			if (0 != p->pdidis){
 				*p->portDigInputDisRegisterAddr &= (unsigned long)~(0x1 << p->bit);	/* set Input enable */
 			}
+#endif // G23_FPB
 			break;
 		case OUTPUT:
 		case OUTPUT_OPENDRAIN:
-            if((pin==27) || (pin==28) || (pin==41))
+// 2023/03/02
+//          if((pin==27) || (pin==28) || (pin==41))
+			if(CHECK_OUTPUT_INHIBIT_RL78(pin))
             {
                 break;
             }
@@ -232,16 +235,20 @@ void pinMode(pin_size_t pin, PinMode u8Mode)
 				if (0 != p->pom){
 					*p->portOutputModeRegisterAddr |= (unsigned long)(0x1 << p->bit);	/* set N-ch OpenDrain output */
 				}
+#if defined(G23_FPB)
 				if (0 != p->pdidis){
 					*p->portDigInputDisRegisterAddr |= (unsigned long)(0x1 << p->bit);	/* set N-ch Input disable */
 				}
+#endif // G23_FPB
 			} else {
 				if (0 != p->pom){
 					*p->portOutputModeRegisterAddr &= (unsigned long)~(0x1 << p->bit);  /* set Normal Output */
 				}
+#if defined(G23_FPB)
 				if (0 != p->pdidis){
 					*p->portDigInputDisRegisterAddr &= (unsigned long)~(0x1 << p->bit);	/* set Input enable */
 				}
+#endif // G23_FPB
 			}
 			if (0 != p->pm){
 				*p->portModeRegisterAddr &= (unsigned long)~(0x1 << p->bit);		/* set Output Mode */
@@ -333,10 +340,11 @@ void DisableDigitalInput(uint8_t pin)
 		PinTableType * p;
 		pp = &pinTablelist[pin];
 		p = (PinTableType *)*pp;
-
+#if defined(G23_FPB)
 		if (0 != p->pdidis){	/* can be changed */
 			*p->portDigInputDisRegisterAddr |= (unsigned long)(0x1 << p->bit);	/* Input disable */
 		}
+#endif // G23_FPB
 	}
 }
 
@@ -359,10 +367,11 @@ void EnableDigitalInput(uint8_t pin)
 		PinTableType * p;
 		pp = &pinTablelist[pin];
 		p = (PinTableType *)*pp;
-
+#if defined(G23_FPB)
 		if (0 != p->pdidis){	/* can be changed */
 			*p->portDigInputDisRegisterAddr &= (unsigned long)~(0x1 << p->bit);	/* set Input enable */
 		}
+#endif // G23_FPB
 	}
 }
 #endif /*__RL78__*/

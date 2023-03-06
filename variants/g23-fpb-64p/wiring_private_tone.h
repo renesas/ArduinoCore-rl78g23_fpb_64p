@@ -29,7 +29,6 @@
 #ifndef WiringPrivateTone_h
 #define WiringPrivateTone_h
 
-
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -38,7 +37,7 @@ extern "C"{
 #define FREQUENCY_MAX_VAL	(8000000)
 
 #define TONE_CH_NUM				(7)
-#define PULSE_IN_CH_NUM			(7)
+
 #define TAU_OPERATION_CLOCK		(0xC000U)    /* operation clock set by PRS register */
 #define CK00_CK01_OPERATION		(0x000F)	/* Selection of operation clock CK00, CK01 */
 #define CK02_OPERATION			(0x0300)	/* Selection of operation clock CK02 */
@@ -56,18 +55,51 @@ typedef struct {
 	void (*stop)();
 } tone_func;
 
-int8_t get_tone_channel(uint8_t tone_num);
-
-typedef struct {
-    void (*open)();
-	void (*start)();
-	void (*stop)();
-	void (*get_width)(uint32_t * const width);
-} pulse_in_func;
 
 
 #ifdef __cplusplus
 } // extern "C"
 #endif
+
+
+/* tone pin set */
+extern volatile unsigned short *g_tone_period_reg[TONE_CH_NUM];
+extern volatile unsigned short *g_timer_tone_mode_reg[TONE_CH_NUM];
+extern volatile unsigned short *g_timer_tone_clock_select_reg;
+extern const uint8_t  tone_channel_table[TONE_CH_NUM];
+
+//#include "Config_TAU0_1_Square_Wave.h"
+extern "C"{
+void R_Config_TAU0_1_Square_Wave_Create(void);
+void R_Config_TAU0_1_Square_Wave_Start(void);
+void R_Config_TAU0_1_Square_Wave_Stop(void);
+void R_Config_TAU0_1_Square_Wave_Create_UserInit(void);
+void R_Config_TAU0_2_Square_Wave_Create(void);
+void R_Config_TAU0_2_Square_Wave_Start(void);
+void R_Config_TAU0_2_Square_Wave_Stop(void);
+void R_Config_TAU0_2_Square_Wave_Create_UserInit(void);
+void R_Config_TAU0_3_Square_Wave_Create(void);
+void R_Config_TAU0_3_Square_Wave_Start(void);
+void R_Config_TAU0_3_Square_Wave_Stop(void);
+void R_Config_TAU0_3_Square_Wave_Create_UserInit(void);
+void R_Config_TAU0_4_Square_Wave_Create(void);
+void R_Config_TAU0_4_Square_Wave_Start(void);
+void R_Config_TAU0_4_Square_Wave_Stop(void);
+void R_Config_TAU0_4_Square_Wave_Create_UserInit(void);
+void R_Config_TAU0_5_Square_Wave_Create(void);
+void R_Config_TAU0_5_Square_Wave_Start(void);
+void R_Config_TAU0_5_Square_Wave_Stop(void);
+void R_Config_TAU0_5_Square_Wave_Create_UserInit(void);
+void R_Config_TAU0_6_Square_Wave_Create(void);
+void R_Config_TAU0_6_Square_Wave_Start(void);
+void R_Config_TAU0_6_Square_Wave_Stop(void);
+void R_Config_TAU0_6_Square_Wave_Create_UserInit(void);
+void R_Config_TAU0_7_Square_Wave_Create(void);
+void R_Config_TAU0_7_Square_Wave_Start(void);
+void R_Config_TAU0_7_Square_Wave_Stop(void);
+void R_Config_TAU0_7_Square_Wave_Create_UserInit(void);
+}
+
+extern tone_func tone_ch[TONE_CH_NUM];
 
 #endif
