@@ -144,8 +144,8 @@ int analogRead(uint8_t analog_pin) {
 
     if(analog_read_flg == 1)
     {
-    // アナログ値の読み込み
-    s16Result = _analogRead(g_au8AnalogPinTable[get_analog_channel(analog_pin)]);
+        // アナログ値の読み込み
+        s16Result = _analogRead(g_au8AnalogPinTable[get_analog_channel(analog_pin)]);
     }
     return s16Result;
 }
@@ -163,7 +163,8 @@ int analogRead(uint8_t analog_pin) {
 ***********************************************************************************************************************/
 void analogWrite(uint8_t pin, int value) {
 //    uint8_t u8Timer;
-    if (pin < NUM_DIGITAL_PINS) {
+    if (pin < NUM_DIGITAL_PINS)
+    {
         {
             value = max(value, PWM_MIN);
             value = min(value, PWM_MAX);
@@ -171,11 +172,6 @@ void analogWrite(uint8_t pin, int value) {
             uint8_t cnt;
             uint8_t analog_write_flg = 0;
             int8_t pwm_channel = get_pwm_channel(pin);
-
-            if (-1 ==(*(int8_t*)get_pwm_channel))
-            {
-                NOP();
-            }
 
             /* If it is not a PWM output terminal, do nothing and exit */
             for(cnt = 0; cnt < PWM_CH_NUM; cnt ++)
@@ -187,27 +183,27 @@ void analogWrite(uint8_t pin, int value) {
                 }
                 else
                 {
-                analog_write_flg = 0;
+                    analog_write_flg = 0;
                 }
             }
 
             if(analog_write_flg == 1)
             {
-            pwm_ch[pwm_channel].open();
+                pwm_ch[pwm_channel].open();
 
-            /* Frequency Set */
-            if(pwm_ch[pwm_channel].cycle == CYCLE_VALUE)
-            {
-                pwm_ch[pwm_channel].cycle = _analogFrequency(pin,FREQUENCY_MIN_VAL);
-            }
-            else
-            {
-                *(g_timer_period_reg[pwm_channel]) = pwm_ch[pwm_channel].cycle;
+                /* Frequency Set */
+                if(pwm_ch[pwm_channel].cycle == CYCLE_VALUE)
+                {
+                    pwm_ch[pwm_channel].cycle = _analogFrequency(pin,FREQUENCY_MIN_VAL);
+                }
+                else
+                {
+                    *(g_timer_period_reg[pwm_channel]) = pwm_ch[pwm_channel].cycle;
 
-            }
-            /* Duty set */
-            *(g_timer_duty_reg[pwm_channel])   = (uint16_t)_analogDuty(value, pwm_ch[pwm_channel].cycle);
-            pwm_ch[pwm_channel].start();
+                }
+                /* Duty set */
+                *(g_timer_duty_reg[pwm_channel])   = (uint16_t)_analogDuty(value, pwm_ch[pwm_channel].cycle);
+                pwm_ch[pwm_channel].start();
             }
         }
     }
@@ -233,10 +229,10 @@ void analogWriteFrequency(uint32_t Hz) {
 */
 
 void analogWriteFrequency(uint32_t Hz) {
-	for(int i = 0;i<PWM_CH_NUM;i++)
-	{
-		pwm_ch[i].cycle = _analogFrequency(pwm_channel_table[i],Hz);
-	}
+    for(int i = 0;i<PWM_CH_NUM;i++)
+    {
+        pwm_ch[i].cycle = _analogFrequency(pwm_channel_table[i],Hz);
+    }
 }
 
 /***********************************************************************************************************************
@@ -253,7 +249,10 @@ void analogWritePinFrequency(uint8_t pin, uint32_t Hz) {
     2 [ms] = 1/32 [MHz] x (TDR00 setting + 1)
     TDR00 setting value = 63999 */
     int8_t pwm_channel = get_pwm_channel(pin);
-    pwm_ch[pwm_channel].cycle = _analogFrequency(pin, Hz);
+    if(-1 != pwm_channel)
+    {
+        pwm_ch[pwm_channel].cycle = _analogFrequency(pin, Hz);
+    }
 }
 
 static uint16_t _analogFrequency (uint8_t pin, uint32_t u32Hz)
@@ -261,38 +260,38 @@ static uint16_t _analogFrequency (uint8_t pin, uint32_t u32Hz)
     uint16_t Result;
     uint32_t fclk_frequency = 0;
     uint32_t timer_frequency = 0;
-    uint32_t timer_clock_mode = 0;
-    uint32_t operating_clock_select = 0;
+    uint16_t timer_clock_mode = 0;
+    uint16_t operating_clock_select = 0;
     int8_t pwm_channel = get_pwm_channel(pin);
 
     fclk_frequency = R_BSP_GetFclkFreqHz();
     /* Get timer frequency */
-        timer_clock_mode = *((uint32_t*)g_timer_analog_mode_reg[pwm_channel]) & TAU_OPERATION_CLOCK;
-        if (timer_clock_mode == _4000_TAU_CLOCK_SELECT_CKM2) /* CK02 Clock Selected */
+    timer_clock_mode = *g_timer_analog_mode_reg[pwm_channel] & TAU_OPERATION_CLOCK;
+    if (timer_clock_mode == _4000_TAU_CLOCK_SELECT_CKM2) /* CK02 Clock Selected */
+    {
+        operating_clock_select = *g_timer_analog_clock_select_reg & CK02_OPERATION;
+        if(operating_clock_select == _0000_TAU_CKM2_FCLK_1)
         {
-            operating_clock_select = *((uint32_t*)g_timer_analog_clock_select_reg) & CK02_OPERATION;
-            if(operating_clock_select == _0000_TAU_CKM2_FCLK_1)
-            {
-                timer_frequency = fclk_frequency/2;    /*  fclk/2 */
-            }
-            else
-            {
-                operating_clock_select = operating_clock_select >> 8;
-                timer_frequency = (uint32_t)((double)fclk_frequency/( pow((double)2, (double)(2 * operating_clock_select))));    /*  fclk/2^2 ~ 2^6 */
-            }
+            timer_frequency = fclk_frequency/2;    /*  fclk/2 */
         }
-        else if  (timer_clock_mode == _C000_TAU_CLOCK_SELECT_CKM3) /* CK03 Clock Selected */
+        else
         {
-            operating_clock_select = *((uint32_t*)g_timer_analog_clock_select_reg) & CK03_OPERATION;
+            operating_clock_select = operating_clock_select >> 8;
+            timer_frequency = fclk_frequency / (1 << (operating_clock_select * 2)) ;     /*  fclk/2^2 ~ 2^6 */
+        }
+    }
+    else if  (timer_clock_mode == _C000_TAU_CLOCK_SELECT_CKM3) /* CK03 Clock Selected */
+    {
+        operating_clock_select = *g_timer_analog_clock_select_reg & CK03_OPERATION;
 
-            operating_clock_select = operating_clock_select >> 12;
-            timer_frequency = (uint32_t)((double)fclk_frequency/( pow((double)2,(double)(2 * operating_clock_select +8))));    /* fclk/2^8 ~ 2^14 */
-        }
-        else /* CK00, CK01 Clock Selected */
-        {
-            operating_clock_select = *((uint32_t*)g_timer_analog_clock_select_reg) & CK00_CK01_OPERATION;
-            timer_frequency = (uint32_t)((double)fclk_frequency/( pow((double)2,(double)operating_clock_select)));    /* ckm00, ckm01 - fclk/2^0 ~ 2^15 */
-        }
+        operating_clock_select = operating_clock_select >> 12;
+        timer_frequency = fclk_frequency / (1 << (operating_clock_select * 2 + 8));    /* fclk/2^8 ~ 2^14 */
+    }
+    else /* CK00, CK01 Clock Selected */
+    {
+        operating_clock_select = *g_timer_analog_clock_select_reg & CK00_CK01_OPERATION;
+        timer_frequency = fclk_frequency / (1 << operating_clock_select) ;    /* ckm00, ckm01 - fclk/2^0 ~ 2^15 */
+    }
 
     /* 490 Hz <= frequency <= 8MHz */
     u32Hz = max(u32Hz, (uint32_t)FREQUENCY_MIN_VAL);

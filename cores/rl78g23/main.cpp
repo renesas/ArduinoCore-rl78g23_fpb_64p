@@ -93,11 +93,17 @@ int main(void)
     SO0 |= 0x08;
 // 2022/11/18 added by KAD for safety reason for G22, These pins are not available
 #if defined(G22_FPB)
-    P2_bit.no3 = 0U;
-    P2_bit.no4 = 0U;
-    P2_bit.no5 = 0U;
-    P2_bit.no6 = 0U;
-    P3_bit.no0 = 0U;
+    /* P26,P25,P24,P23,P22 */
+    PMCA2 &= 0x83;  /* 0 : Use Digital IO */
+    PMCT2 &= 0x83;  /* 0 : Use Digital IO */
+    PM2 &= 0x83;    /* 0 : Use Output Mode */
+    P2 &= 0x83;     /* 0 : Use Output Low  */
+
+    /* P30 */
+    PMCT3 &= 0xFE;  /* 0 : Use Digital IO */
+    PM3 &= 0xFE;    /* 0 : Use Output Mode */
+    P3 &= 0xFE;     /* 0 : Use Output Low  */
+
 #endif
 /******************************************************/
     

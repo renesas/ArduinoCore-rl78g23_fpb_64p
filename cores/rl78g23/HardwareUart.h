@@ -18,7 +18,6 @@
 
 #pragma once
 
-// #include "api/HardwareSerial.h"
 #include "api/HardwareSerial.h"
 
 #ifdef SERIAL_BUFFER_SIZE
@@ -30,11 +29,6 @@
 class HardwareUart : public arduino::HardwareSerial
 {
   public:
-	HardwareUart(
-	  volatile uint8_t *ubrrh, volatile uint8_t *ubrrl,
-	  volatile uint8_t *ucsra, volatile uint8_t *ucsrb,
-	  volatile uint8_t *ucsrc, volatile uint8_t *udr,
-	  uint8_t rxen, uint8_t txen, uint8_t rxcie, uint8_t udrie, uint8_t u2x);
 	HardwareUart(uint8_t rxen);
     /*API*/
     void begin(unsigned long baud) override ;
@@ -61,7 +55,6 @@ class HardwareUart : public arduino::HardwareSerial
     void store_char(void);
     operator bool() override ;
 
-  private:
   private:
     volatile int _rx_buffer_head;
     volatile int _rx_buffer_tail;

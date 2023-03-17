@@ -123,9 +123,15 @@ void _turnOffPwmPin(uint8_t u8Pin)
  * Return Value : -
  *********************************************************************************************************************/
 // void pinMode(uint8_t pin, uint8_t u8Mode)
-void pinMode(pin_size_t pin, PinMode u8Mode)
+void pinMode(pin_size_t pin, PinMode pinMode)
 {
+	uint8_t u8Mode = (uint8_t)pinMode;
 	if (pin < NUM_DIGITAL_PINS) {
+		if(CHECK_PINMODE_INHIBIT_RL78(pin))
+        {
+            return;
+        }
+
 		//PinTableType pin_tbl;
 		//p = (PinTableType*)&pin_tbl;
 		//getPinTable(pin,p);
@@ -279,16 +285,19 @@ void digitalWrite(pin_size_t pin, PinStatus val)
 {
     const PinTableType ** pp;
     PinTableType * p;
-	if (pin < NUM_DIGITAL_PINS) {
-	    pp = &pinTablelist[pin];
-        p = (PinTableType *)*pp;
+    if (pin < NUM_DIGITAL_PINS)
+    {
+        if(CHECK_OUTPUT_INHIBIT_RL78(pin))
         {
-            /* When Output Mode  */
-            if (val == LOW) {
-                *p->portRegisterAddr &= ~p->mask;       /* Write "0" to Port */
-            } else {
-                *p->portRegisterAddr |= p->mask;        /* Write "1" to Port */
-            }
+            return;
+        }
+        pp = &pinTablelist[pin];
+        p = (PinTableType *)*pp;
+        /* When Output Mode  */
+        if (val == LOW) {
+            *p->portRegisterAddr &= ~p->mask;       /* Write "0" to Port */
+        } else {
+            *p->portRegisterAddr |= p->mask;        /* Write "1" to Port */
         }
     }
 }

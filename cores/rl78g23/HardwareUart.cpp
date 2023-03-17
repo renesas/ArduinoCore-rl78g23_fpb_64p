@@ -55,7 +55,7 @@ extern "C" {
     #include "Config_UART0.h"
 #endif /* ( UART_CHANNEL == 0 ) */
 #if ( UART1_CHANNEL == 1 )
-	#include "Config_UART1.h"
+    #include "Config_UART1.h"
 #endif /* ( UART1_CHANNEL == 1 ) */
 #if ( UART2_CHANNEL == 2 )
     #include "Config_UART2.h"
@@ -372,42 +372,6 @@ fInterruptFunc_t uart_transmit_callback_table[3] __attribute__((weak));
 /**********************************************************************************************************************
  * Function Name: HardwareUart::HardwareUart
  * Description  : Constructor
- * Arguments    : ubrrh - (Not Used)
- *              : ubrrl - (Not Used)
- *              : ucsra - (Not Used)
- *              : ucsrb - (Not Used)
- *              : ucsrc - (Not Used)
- *              : udr   - (Not Used)
- *              : rxen  - UART channel
- *              : txen  - (Not Used)
- *              : rxcie - (Not Used)
- *              : udrie - (Not Used)
- *              : u2x   - (Not Used)
- * Return Value : void
- *********************************************************************************************************************/
-HardwareUart::HardwareUart(
-  volatile uint8_t *ubrrh, volatile uint8_t *ubrrl,
-  volatile uint8_t *ucsra, volatile uint8_t *ucsrb,
-  volatile uint8_t *ucsrc, volatile uint8_t *udr,
-  uint8_t rxen, uint8_t txen, uint8_t rxcie, uint8_t udrie, uint8_t u2x)
-{
-    _urt_channel    = rxen;
-    _rx_buffer_head = 0;
-    _rx_buffer_tail = 0;
-    _tx_buffer_head = 0;
-    _tx_buffer_tail = 0;
-    _rx_buf_size    = 0;
-    _tx_buf_size    = 0;
-    _rx_buffer      = 0;
-    _tx_buffer      = 0;
-    transmitting    = 0;
-    receive_buffer  = 0;
-}
-
-
-/**********************************************************************************************************************
- * Function Name: HardwareUart::HardwareUart
- * Description  : Constructor
  * Arguments    : rxen - UART channel
  * Return Value : void
  *********************************************************************************************************************/
@@ -522,12 +486,12 @@ void HardwareUart::begin(unsigned long baud, uint16_t config, int rx_buf, int tx
             break;
         case 1:
 #if (UART1_CHANNEL==1)
-			R_Config_UART1_Create();
-			Set_Baudrate(baud);
-			Set_SerialPort(SERIAL_TXD1,SERIAL_RXD1);
-			Set_Config(config);
-			R_Config_UART1_Start();
-			R_Config_UART1_Receive((uint8_t * const)&receive_buffer,1);
+            R_Config_UART1_Create();
+            Set_Baudrate(baud);
+            Set_SerialPort(SERIAL_TXD1,SERIAL_RXD1);
+            Set_Config(config);
+            R_Config_UART1_Start();
+            R_Config_UART1_Receive((uint8_t * const)&receive_buffer,1);
 #endif /* UART1_CHANNEL==1 */
             break;
         case 2:
@@ -565,7 +529,7 @@ void HardwareUart::end()
         break;
     case 1:
 #if (UART1_CHANNEL == 1 )
-		R_Config_UART1_Stop();
+        R_Config_UART1_Stop();
 #endif /* (UART1_CHANNEL == 1 ) */
         break;
     case 2:
@@ -663,17 +627,17 @@ void HardwareUart::flush()
     return;
   }
   if (_urt_channel == 0) {
-    while (SSR00 & 0x0060) {  /* check TSF00 and BFF00 */
+    while (SSR00 & (_0040_SAU_UNDER_EXECUTE | _0020_SAU_VALID_STORED)) {  /* check TSF00 and BFF00 */
       ;
     }
   }
   else if (_urt_channel == 1) {
-    while (SSR02 & 0x0060) {  /* check TSF02 and BFF02 */
+    while (SSR02 & (_0040_SAU_UNDER_EXECUTE | _0020_SAU_VALID_STORED)) {  /* check TSF02 and BFF02 */
       ;
     }
   }
   else if (_urt_channel == 2) {
-    while (SSR10 & 0x0060) {  /* check TSF10 and BFF10 */
+    while (SSR10 & (_0040_SAU_UNDER_EXECUTE | _0020_SAU_VALID_STORED)) {  /* check TSF10 and BFF10 */
       ;
     }
   }
@@ -695,12 +659,11 @@ size_t HardwareUart::UART_Send(uint8_t c)
     MD_STATUS err = MD_OK;
     int i;
     uint8_t isp;
-    size_t ret = -1;
+    size_t ret = 0;
 
     /* buffer is none */
     if (0 == _tx_buf_size){
-//        return -1;
-    	return ret;
+        return ret;
     }
 
     isp = (uint8_t)GET_PSW_ISP();
@@ -708,7 +671,7 @@ size_t HardwareUart::UART_Send(uint8_t c)
     noInterrupts();
     if(_tx_buffer_tail == _tx_buffer_head){
         /* Unsent */
-        int head = (_tx_buffer_head + 1);
+        //int head = (_tx_buffer_head + 1);
         i = (_tx_buffer_head + 1) % _tx_buf_size;
         _tx_buffer[_tx_buffer_head] = c;
         _tx_buffer_head = i;
@@ -717,23 +680,23 @@ size_t HardwareUart::UART_Send(uint8_t c)
         switch (_urt_channel)
         {
             case 0:
-                if((SSR00 & 0x20) != 0)/*BFF00*/
+                if((SSR00 & _0020_SAU_VALID_STORED) != 0)/*BFF00*/
                 {
-                    return -1;
+                    return 0;
                 }
                 err = R_Config_UART0_Send((uint8_t * const)&c,1);
                 break;
             case 1:
-				if((SSR02 & 0x20) != 0)/*BFF00*/
-				{
-					return -1;
-				}
-				err = R_Config_UART1_Send((uint8_t * const)&c,1); 
+                if((SSR02 & _0020_SAU_VALID_STORED) != 0)/*BFF02*/
+                {
+                    return 0;
+                }
+                err = R_Config_UART1_Send((uint8_t * const)&c,1);
                 break;
             case 2:
-                if((SSR10 & 0x20) != 0)/*BFF00*/
+                if((SSR10 & _0020_SAU_VALID_STORED) != 0)/*BFF10*/
                 {
-                    return -1;
+                    return 0;
                 }
                 err = R_Config_UART2_Send((uint8_t * const)&c,1);
                 break;
@@ -765,7 +728,7 @@ size_t HardwareUart::UART_Send(uint8_t c)
                 {
                     case 0:
         #if ( UART_CHANNEL == 0 )
-                        while((SSR00 & 0x20) != 0)/*BFF00*/
+                        while((SSR00 & _0020_SAU_VALID_STORED) != 0)/*BFF00*/
                         {
                             ;
                         }
@@ -773,17 +736,17 @@ size_t HardwareUart::UART_Send(uint8_t c)
         #endif /* ( UART_CHANNEL == 0 ) */
                         break;
                     case 1:
-		#if ( UART1_CHANNEL == 1 )
-						while((SSR02 & 0x20) != 0)/*BFF00*/
-						{
-							;
-						}
-					    STIF1 = 0;
-		#endif /* ( UART1_CHANNEL == 1 ) */
+        #if ( UART1_CHANNEL == 1 )
+                        while((SSR02 & _0020_SAU_VALID_STORED) != 0)/*BFF02*/
+                        {
+                            ;
+                        }
+                        STIF1 = 0;
+        #endif /* ( UART1_CHANNEL == 1 ) */
                         break;
                     case 2:
         #if ( UART2_CHANNEL == 2 )
-                        while((SSR10 & 0x20) != 0)/*BFF00*/
+                        while((SSR10 & _0020_SAU_VALID_STORED) != 0)/*BFF10*/
                         {
                             ;
                         }
@@ -799,7 +762,6 @@ size_t HardwareUart::UART_Send(uint8_t c)
                     (*uart_transmit_callback_table[_urt_channel])();
                 }
             }
-//          return -1;
         }
         _tx_buffer[_tx_buffer_head] = c;
         _tx_buffer_head = i;
@@ -808,8 +770,7 @@ size_t HardwareUart::UART_Send(uint8_t c)
     if(err == MD_OK){
         return 1;
     }
-	return ret;
-//	return -1;
+    return ret;
 }
 
 /**********************************************************************************************************************
@@ -892,7 +853,7 @@ void HardwareUart::load_char(void){
             break;
         case 1:
 #if (UART1_CHANNEL == 1)
-			R_Config_UART1_Send((uint8_t * const)&send_buffer,1);
+            R_Config_UART1_Send((uint8_t * const)&send_buffer,1);
 #endif /* (UART1_CHANNEL == 1) */
             break;
         case 2:
@@ -928,9 +889,9 @@ void HardwareUart::store_char(void){
     #endif /* (UART_CHANNEL == 0) */
         break;
     case 1:
-	#if (UART1_CHANNEL == 1)
-		R_Config_UART1_Receive((uint8_t * const)&receive_buffer,1);
-	#endif /* (UART1_CHANNEL == 1) */
+    #if (UART1_CHANNEL == 1)
+        R_Config_UART1_Receive((uint8_t * const)&receive_buffer,1);
+    #endif /* (UART1_CHANNEL == 1) */
         break;
     case 2:
     #if (UART2_CHANNEL == 2)
@@ -965,7 +926,7 @@ void HardwareUart::store_char(unsigned char c){
  *              :            { 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 31250, 38400, 57600, 115200 }
  * Return Value : void
  *********************************************************************************************************************/
-void HardwareUart::Set_Baudrate(unsigned long baurate)
+void HardwareUart::Set_Baudrate(unsigned long baudrate)
 {
     uint32_t fclk_frequency;
     uint32_t  peri_clk    ;
@@ -976,12 +937,12 @@ void HardwareUart::Set_Baudrate(unsigned long baurate)
 
     peri_clk    = (fclk_frequency) ; /* SPSmk0\[3:0] = 0x0 */
 
-    tmp_sdr = (uint16_t)(((peri_clk/baurate) >> 1) -1) ;
+    tmp_sdr = (uint16_t)(((peri_clk/baudrate) >> 1) -1) ;
     while(0x007F<tmp_sdr)
     {
         prs++;
         peri_clk = (peri_clk >> 1);
-        tmp_sdr  = (uint16_t)(((peri_clk/baurate) >> 1) -1) ;
+        tmp_sdr  = (uint16_t)(((peri_clk/baudrate) >> 1) -1) ;
     }
 
     sdr     = (uint8_t)(tmp_sdr & 0x007F) ;
@@ -990,38 +951,26 @@ void HardwareUart::Set_Baudrate(unsigned long baurate)
     {
         case 0:
 #if ( UART_CHANNEL == 0 )
-            ST0  &= 0xFC;
-            SS0  &= 0xFC;
-            SPS0 &= (0x00F0) ;
+            SPS0 &= (_00F0_SAU_CK00_CLEAR) ;
             SPS0 |=  prs ;
             SDR00 = ((uint16_t)sdr) << 9 ;
             SDR01 = ((uint16_t)sdr) << 9 ;
-            SS0  |= 0x03;
-            ST0  |= 0x03;
 #endif /* ( UART_CHANNEL == 0 ) */
             break;
         case 1:
 #if ( UART1_CHANNEL == 1 )
-			ST0  &= 0xF3;
-			SS0  &= 0xF3;
-			SPS0 &= (0x000F) ;
-			SPS0 |= ((uint16_t)prs << 4);
-			SDR02 = ((uint16_t)sdr) << 9 ;
-			SDR03 = ((uint16_t)sdr) << 9 ;
-			SS0  |= 0x0C;
-			ST0  |= 0x0C;
+            SPS0 &= (_000F_SAU_CK01_CLEAR) ;
+            SPS0 |= ((uint16_t)prs << 4);
+            SDR02 = ((uint16_t)sdr) << 9 ;
+            SDR03 = ((uint16_t)sdr) << 9 ;
 #endif /* ( UART1_CHANNEL == 1 ) */
             break;
         case 2:
 #if ( UART2_CHANNEL == 2 )
-            ST1  &= 0xFC;
-            SS1  &= 0xFC;
-            SPS1 &= (0x00F0) ;
+            SPS1 &= (_00F0_SAU_CK00_CLEAR) ;
             SPS1 |= prs ;
             SDR10 = ((uint16_t)sdr) << 9 ;
             SDR11 = ((uint16_t)sdr) << 9 ;
-            SS1  |= 0x03;
-            ST1  |= 0x03;
 #endif /* ( UART2_CHANNEL == 2 ) */
             break;
         case 3:
@@ -1042,6 +991,62 @@ void HardwareUart::Set_Baudrate(unsigned long baurate)
  *********************************************************************************************************************/
 void HardwareUart::Set_Config(uint16_t config )
 {
+    uint16_t converted_config = 0;
+
+    switch(config)
+    {
+        case SERIAL_7N1:
+        case SERIAL_8N1:
+        case SERIAL_7N2:
+        case SERIAL_8N2:
+        case SERIAL_7E1:
+        case SERIAL_8E1:
+        case SERIAL_7E2:
+        case SERIAL_8E2:
+        case SERIAL_7O1:
+        case SERIAL_8O1:
+        case SERIAL_7O2:
+        case SERIAL_8O2:
+            /* Do nothing */
+            break;
+        default:
+            config = SERIAL_8N1;
+            break;
+    }
+    if(SERIAL_DATA_7 == (SERIAL_DATA_MASK & config))
+    {
+        converted_config |= _0002_SAU_LENGTH_7;
+    }
+    else
+    {
+        /* All other settings are treated as SERIAL_DATA_8(default). */
+        converted_config |= _0003_SAU_LENGTH_8;
+    }
+
+    if(SERIAL_STOP_BIT_2 == (SERIAL_STOP_BIT_MASK & config))
+    {
+        converted_config |= _0020_SAU_STOP_2;
+    }
+    else
+    {
+        /* All other settings are treated as SERIAL_STOP_BIT_1(default). */
+        converted_config |= _0010_SAU_STOP_1;
+    }
+
+    if(SERIAL_PARITY_EVEN == (SERIAL_PARITY_MASK & config))
+    {
+        converted_config |= _0200_SAU_PARITY_EVEN;
+    }
+    else if(SERIAL_PARITY_ODD == (SERIAL_PARITY_MASK & config))
+    {
+        converted_config |= _0300_SAU_PARITY_ODD;
+    }
+    else
+    {
+        /* All other settings are treated as SERIAL_PARITY_NONE(default). */
+        converted_config |= _0000_SAU_PARITY_NONE;
+    }
+
     switch (_urt_channel)
     {
         /* Rewriting prohibited when SEmn = 1 / Set_Config is called between R_Config_UART0_Create () and R_Config_UART0_Start (), so SEmn = 0*/
@@ -1049,14 +1054,14 @@ void HardwareUart::Set_Config(uint16_t config )
         {
         /* SCR00 16bit*/
 #if ( UART_CHANNEL == 0 )
-        unsigned short SCR00data=_8000_SAU_TRANSMISSION| _0000_SAU_INTSRE_MASK |0x4 |_0080_SAU_LSB | config;
+        unsigned short SCR00data=_8000_SAU_TRANSMISSION |_0000_SAU_INTSRE_MASK |_0004_SAU_SCRMN_INITIALVALUE |_0080_SAU_LSB | converted_config;
         /* When sending, _0000_SAU_INTSRE_MASK :EOCmn = 0*/
-        unsigned short SCR01data=_4000_SAU_RECEPTION| _0400_SAU_INTSRE_ENABLE |0x4 |_0080_SAU_LSB |config;
+        unsigned short SCR01data=_4000_SAU_RECEPTION |_0400_SAU_INTSRE_ENABLE |_0004_SAU_SCRMN_INITIALVALUE |_0080_SAU_LSB | converted_config;
         /* _0400_SAU_INTSRE_ENABLE: EOCmn = 1 Allow the occurrence of the error interrupt INTSREx */
 
         /* SLCmn1: 0 SLCmn0: 1 when receiving XXXXXXXXXX01XXXX*/
-        SCR01data &= 0xFFDF;
-        SCR01data |= 0x0010;
+        SCR01data &= ~(_0020_SAU_STOP_2);
+        SCR01data |= _0010_SAU_STOP_1;
 
         SCR00 = SCR00data;
         SCR01 = SCR01data;
@@ -1067,25 +1072,25 @@ void HardwareUart::Set_Config(uint16_t config )
         case 1:
         {
 #if ( UART1_CHANNEL == 1 )
-		unsigned short SCR02data=_8000_SAU_TRANSMISSION| _0000_SAU_INTSRE_MASK |0x4 |_0080_SAU_LSB |config;
-		unsigned short SCR03data=_4000_SAU_RECEPTION| _0400_SAU_INTSRE_ENABLE |0x4 |_0080_SAU_LSB |config;
-		/* SLCmn1: 0 SLCmn0: 1 when receiving XXXXXXXXXX01XXXX*/
-		SCR03data &= 0xFFDF;
-		SCR03data |= 0x0010;
+        unsigned short SCR02data=_8000_SAU_TRANSMISSION| _0000_SAU_INTSRE_MASK |_0004_SAU_SCRMN_INITIALVALUE |_0080_SAU_LSB |converted_config;
+        unsigned short SCR03data=_4000_SAU_RECEPTION| _0400_SAU_INTSRE_ENABLE |_0004_SAU_SCRMN_INITIALVALUE |_0080_SAU_LSB |converted_config;
+        /* SLCmn1: 0 SLCmn0: 1 when receiving XXXXXXXXXX01XXXX*/
+        SCR03data &= ~(_0020_SAU_STOP_2);
+        SCR03data |= _0010_SAU_STOP_1;
 
-		SCR02 = SCR02data;
-		SCR03 = SCR03data;
+        SCR02 = SCR02data;
+        SCR03 = SCR03data;
 #endif /* ( UART1_CHANNEL == 1 ) */
         }
         break;
         case 2:
         {
 #if ( UART2_CHANNEL == 2 )
-            unsigned short SCR10data=_8000_SAU_TRANSMISSION| _0000_SAU_INTSRE_MASK |0x4 |_0080_SAU_LSB |config;
-            unsigned short SCR11data=_4000_SAU_RECEPTION| _0400_SAU_INTSRE_ENABLE |0x4 |_0080_SAU_LSB |config;
+            unsigned short SCR10data=_8000_SAU_TRANSMISSION| _0000_SAU_INTSRE_MASK |_0004_SAU_SCRMN_INITIALVALUE |_0080_SAU_LSB |converted_config;
+            unsigned short SCR11data=_4000_SAU_RECEPTION| _0400_SAU_INTSRE_ENABLE |_0004_SAU_SCRMN_INITIALVALUE |_0080_SAU_LSB |converted_config;
             /* SLCmn1: 0 SLCmn0: 1 when receiving XXXXXXXXXX01XXXX*/
-            SCR11data &= 0xFFDF;
-            SCR11data |= 0x0010;
+            SCR11data &= ~(_0020_SAU_STOP_2);
+            SCR11data |= _0010_SAU_STOP_1;
             SCR10 = SCR10data;
             SCR11 = SCR11data;
 #endif /* ( UART2_CHANNEL == 2 ) */
@@ -1220,7 +1225,7 @@ void Set_Char_Serial_to_buf(uint8_t chn)
             break;
         case 1:
 #if (UART1_CHANNEL == 1)
-			Serial1.store_char();
+            Serial1.store_char();
 #endif /* (UART1_CHANNEL == 1) */
             break;
         case 2:
@@ -1251,7 +1256,7 @@ void Set_Char_Serial_from_buf(uint8_t chn)
             break;
         case 1:
 #if (UART1_CHANNEL == 1)
-			Serial1.load_char();
+            Serial1.load_char();
 #endif /* (UART1_CHANNEL == 1) */
             break;
         case 2:
@@ -1269,13 +1274,13 @@ void Set_Char_Serial_from_buf(uint8_t chn)
 // Preinstantiate Objects //////////////////////////////////////////////////////
 
 #if ( UART_CHANNEL == 0 )
-  HardwareUart Serial(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  HardwareUart Serial(0);
 #endif /* ( UART_CHANNEL == 0 ) */
 #if ( UART1_CHANNEL == 1 )
-    HardwareUart Serial1(0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0);
+    HardwareUart Serial1(1);
 #endif /* ( UART1_CHANNEL == 1 ) */
 #if ( UART2_CHANNEL == 2 )
-    HardwareUart Serial2(0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0);
+    HardwareUart Serial2(2);
 #endif /* ( UART2_CHANNEL == 2 ) */
 
 

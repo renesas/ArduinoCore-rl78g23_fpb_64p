@@ -41,13 +41,17 @@ void randomSeed(unsigned long seed)
 
 long random(long howbig)
 {
+  unsigned long value = 0;
   if (howbig == 0) {
     return 0;
   }
 #ifndef __RL78__
   return random() % howbig;
 #else
-  return rand() % howbig;
+  value = ((unsigned long)rand() << 16);
+  value |= ((unsigned long)rand() << 1);
+  value |= ((unsigned long)rand() & 0x01);
+  return (signed long)value % howbig;
 #endif
 }
 

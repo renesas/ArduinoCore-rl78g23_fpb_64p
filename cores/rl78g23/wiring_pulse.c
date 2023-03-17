@@ -59,7 +59,7 @@ unsigned long pulseIn(pin_size_t pin, uint8_t state, unsigned long timeout)
     uint8_t pulse_in_flg = 0;
     uint8_t l_tau_interrupt_flag = 0;
     uint32_t Result = 0;
-    uint32_t timer_clock_mode = 0;
+    uint16_t timer_clock_mode = 0;
     uint32_t pulse_frequency = 0;
     uint32_t timeout_frequency = 0;
     g_pulse_enable_interrupt_flag = 1;
@@ -87,16 +87,16 @@ unsigned long pulseIn(pin_size_t pin, uint8_t state, unsigned long timeout)
         /* State Set */
         if(state == LOW)
         {
-            *((uint32_t*)g_timer_pulse_mode_reg[pulse_in_channel]) |= _0200_TAU_TRIGGER_TIMN_BOTH | _0080_TAU_TIMN_EDGE_BOTH_LOW;
+            *(g_timer_pulse_mode_reg[pulse_in_channel]) |= _0200_TAU_TRIGGER_TIMN_BOTH | _0080_TAU_TIMN_EDGE_BOTH_LOW;
         }
         else
         {
-            *((uint32_t*)g_timer_pulse_mode_reg[pulse_in_channel]) |= _00C0_TAU_TIMN_EDGE_BOTH_HIGH;
+            *(g_timer_pulse_mode_reg[pulse_in_channel]) |= _00C0_TAU_TIMN_EDGE_BOTH_HIGH;
         }
 
         /* Get timeout frequency */
-        timer_clock_mode = *((uint32_t*)g_timer_timeout_mode_reg) & TAU_OPERATION_CLOCK;
-        timeout_frequency = get_timer_frequency(timer_clock_mode);
+        timer_clock_mode = *g_timer_timeout_mode_reg & TAU_OPERATION_CLOCK;
+        timeout_frequency = get_timer_frequency((uint32_t)timer_clock_mode);
 
         /* Timeout Set */
         timeout = min(timeout, (uint32_t)TIMEOUT_MAX_VAL);
@@ -218,15 +218,15 @@ unsigned long pulseIn(pin_size_t pin, uint8_t state, unsigned long timeout)
         {
             pulse_in_ch[pulse_in_channel].get_width(&Result);    /* Store capture value */
             /* Get pulse frequency */
-            timer_clock_mode = *((uint32_t*)g_timer_pulse_mode_reg[pulse_in_channel]) & TAU_OPERATION_CLOCK;
-            pulse_frequency = get_timer_frequency(timer_clock_mode);
+            timer_clock_mode = *g_timer_pulse_mode_reg[pulse_in_channel] & TAU_OPERATION_CLOCK;
+            pulse_frequency = get_timer_frequency((uint32_t)timer_clock_mode);
             Result = Result * (1000000/pulse_frequency);
         }
         else
         {
             Result = 0;
         }
-            g_tau0_ch0_interrupt_flag = 0;
+        g_tau0_ch0_interrupt_flag = 0;
     }
     return Result;
 }
@@ -235,13 +235,13 @@ static uint32_t get_timer_frequency(uint32_t clock_mode)
 {
     uint32_t fclk_frequency = 0;
     uint32_t timer_frequency = 0;
-    uint32_t operating_clock_select = 0;
+    uint16_t operating_clock_select = 0;
 
     fclk_frequency = R_BSP_GetFclkFreqHz();
 
     if (clock_mode == _4000_TAU_CLOCK_SELECT_CKM2)
     {
-        operating_clock_select = *((uint32_t*)g_timer_pulse_clock_select_reg) & CK02_OPERATION;
+        operating_clock_select = *g_timer_pulse_clock_select_reg & CK02_OPERATION;
         if(operating_clock_select == _0000_TAU_CKM2_FCLK_1)
         {
             timer_frequency = fclk_frequency/2;
@@ -249,20 +249,20 @@ static uint32_t get_timer_frequency(uint32_t clock_mode)
         else
         {
             operating_clock_select = operating_clock_select >> 8;
-            timer_frequency = (uint32_t)((double)fclk_frequency/( pow((double)2, (double)(2 * operating_clock_select))));    /*  fclk/2^2 ~ 2^6 */
+            timer_frequency = fclk_frequency / (1 << (operating_clock_select * 2)) ;     /*  fclk/2^2 ~ 2^6 */
         }
     }
     else if  (clock_mode == _C000_TAU_CLOCK_SELECT_CKM3)
     {
-        operating_clock_select = *((uint32_t*)g_timer_pulse_clock_select_reg) & CK03_OPERATION;
+        operating_clock_select = *g_timer_pulse_clock_select_reg & CK03_OPERATION;
 
         operating_clock_select = operating_clock_select >> 12;
-        timer_frequency = (uint32_t)((double)fclk_frequency/( pow((double)2,(double)(2 * operating_clock_select +8))));    /* fclk/2^8 ~ 2^14 */
+        timer_frequency = fclk_frequency / (1 << (operating_clock_select * 2 + 8));    /* fclk/2^8 ~ 2^14 */
     }
     else /* CK00, CK01 Clock Select */
     {
-        operating_clock_select = *((uint32_t*)g_timer_pulse_clock_select_reg) & CK00_CK01_OPERATION;
-        timer_frequency = (uint32_t)((double)fclk_frequency/( pow((double)2,(double)operating_clock_select)));    /* ckm00, ckm01 - fclk/2^0 ~ 2^15 */
+        operating_clock_select = *g_timer_pulse_clock_select_reg & CK00_CK01_OPERATION;
+        timer_frequency = fclk_frequency / (1 << operating_clock_select) ;    /* ckm00, ckm01 - fclk/2^0 ~ 2^15 */
     }
     return timer_frequency;
 }

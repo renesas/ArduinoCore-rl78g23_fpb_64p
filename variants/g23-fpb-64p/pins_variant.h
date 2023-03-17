@@ -61,7 +61,10 @@
 #define IIC_CHANNEL0 (0)
 #define IIC_CHANNEL1 (1)
 
-#define CHECK_OUTPUT_INHIBIT_RL78(p) ((p) == 27 || (p) == 28 || (p) == 41)
+#define CHECK_PINMODE_INHIBIT_RL78(p) (\
+    (p) == 41 || /* P21(AVREFM) */\
+    (p) == 14    /* P20(AVREFP) */)
+#define CHECK_OUTPUT_INHIBIT_RL78(p) ((p) == 14 || (p) == 27 || (p) == 28 || (p) == 41)
 
 // 2023/03/02 end of copy from Arduino.h
 
@@ -91,7 +94,7 @@ extern "C"
 
 // tone_func
 
-#define PULSE_IN_CH_NUM			(4)
+#define PULSE_IN_CH_NUM			(7)
 int8_t get_tone_channel(uint8_t tone_num);
 
 typedef struct {
