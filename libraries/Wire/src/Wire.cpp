@@ -29,7 +29,6 @@ extern "C" {
 #include <wiring_private.h>
 
 #include "Wire.h"
-// 2023/02/15
 using namespace arduino;
 
 /* Initialize Class Variables *************************************************/
@@ -115,7 +114,6 @@ void TwoWire::begin(int address)
   begin((uint8_t)address);
 }
 #endif  /* !defined(I2C_SLAVE_MODE_UNSUPPORTED) */
-// 2023/02/15
 void TwoWire::begin(uint8_t address)
 {
   #warning TODO: Slave: twi_setAddress(address);

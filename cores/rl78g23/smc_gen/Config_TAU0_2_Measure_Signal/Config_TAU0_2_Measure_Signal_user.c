@@ -49,14 +49,6 @@ volatile uint32_t g_tau0_ch2_width = 0UL;
 volatile uint8_t g_tau0_ch2_interrupt_flag = 0UL;
 extern volatile uint8_t g_pulse_enable_interrupt_flag;
 
-extern volatile uint8_t g_servo_enable_interrupt_flag[7];
-void R_Config_TAU0_1_Servo_Stop(void);
-void R_Config_TAU0_2_Measure_Signal_Servo_Stop(void);
-void R_Config_TAU0_3_Servo_Stop(void);
-void R_Config_TAU0_4_Servo_Stop(void);
-void R_Config_TAU0_5_Servo_Stop(void);
-void R_Config_TAU0_6_Servo_Stop(void);
-void R_Config_TAU0_7_Servo_Stop(void);
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -95,11 +87,6 @@ void r_Config_TAU0_2_Measure_Signal_interrupt(void)
 	else
 	{
 		;
-	}
-	if (g_servo_enable_interrupt_flag[1] == 1UL)
-	{
-		R_Config_TAU0_2_Servo_Stop();
-		g_servo_enable_interrupt_flag[1]= 0UL;
 	}
     /* End user code. Do not edit comment generated here */
 }

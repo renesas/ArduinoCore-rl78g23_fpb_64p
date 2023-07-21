@@ -4,7 +4,7 @@
 # For more info:
 # LLVM Prototype Package for Tools Test
 name=Renesas RL78/G23
-version=2.0.0
+version=2.1.0
 
 # --------------------- 
 # Compile variables
@@ -64,59 +64,50 @@ compiler.size.flags=--format=sysv
 #--------------------------------------------------#
 # Add Config_TAU0_*_Servo for Servo Motor Library
 #--------------------------------------------------#
-inc0 ="-I{runtime.platform.path}/cores/rl78g23/smc_gen"
-inc1 ="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_ADC"
-inc2 ="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_CSI11"
-inc3 ="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_IICA0"
-inc4 ="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_IICA1"
-inc5 ="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_INTC"
-inc6 ="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_ITL000"
-inc7 ="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_ITL001"
-inc8 ="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_ITL012"
-inc9 ="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_ITL013"
-inc10="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_0_Measure_Signal"
-inc11="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_01_PWM"
-inc12="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_1_Measure_Signal"
-inc13="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_1_Servo"
-inc14="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_1_Square_Wave"
-inc15="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_2_Measure_Signal"
-inc16="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_2_Servo"
-inc17="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_2_Square_Wave"
-inc18="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_23_PWM"
-inc19="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_3_Measure_Signal"
-inc20="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_3_Servo"
-inc21="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_3_Square_Wave"
-inc22="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_4_Measure_Signal"
-inc23="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_4_Servo"
-inc24="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_4_Square_Wave"
-inc25="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_45_PWM"
-inc26="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_5_Measure_Signal"
-inc27="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_5_Square_Wave"
-inc28="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_5_Servo"
-inc29="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_6_Measure_Signal"
-inc30="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_6_Micros"
-inc31="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_6_Servo"
-inc32="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_6_Square_Wave"
-inc33="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_67_PWM"
-inc34="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_7_Measure_Signal"
-inc35="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_7_MsTimer2"
-inc36="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_7_Servo"
-inc37="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_7_Square_Wave"
-inc38="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_RTC"
-inc39="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_UART0"
-inc40="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_UART1"
-inc41="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_UART2"
-inc42="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_WDT"
-inc43="-I{runtime.platform.path}/cores/rl78g23/smc_gen/general"
-inc44="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp"
-inc45="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp/board"
-inc46="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp/board/generic_rl78_g23"
-inc47="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp/mcu/all"
-inc48="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp/mcu/rl78_g23"
-inc49="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp/mcu/rl78_g23/register_access"
-inc50="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp/mcu/rl78_g23/register_access/llvm"
-inc51="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_config"
-inc52="-I{runtime.platform.path}/cores/rl78g23"
+inc0= "-I{runtime.platform.path}/cores/rl78g23/smc_gen"
+inc1= "-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_ADC"
+inc2= "-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_CSI11"
+inc3= "-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_IICA0"
+inc4= "-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_IICA1"
+inc5= "-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_INTC"
+inc6= "-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_ITL000"
+inc7= "-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_ITL001"
+inc8= "-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_ITL012"
+inc9= "-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_ITL013"
+inc10="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_RTC"
+inc11="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_0_Measure_Signal"
+inc12="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_0_PWM"
+inc13="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_1_Micros"
+inc14="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_2_Measure_Signal"
+inc15="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_2_Square_Wave"
+inc16="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_3_Measure_Signal"
+inc17="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_3_Square_Wave"
+inc18="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_4_Measure_Signal"
+inc19="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_4_Square_Wave"
+inc20="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_5_Measure_Signal"
+inc21="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_5_NewServo"
+inc22="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_5_Square_Wave"
+inc23="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_6_Measure_Signal"
+inc24="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_6_Square_Wave"
+inc25="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_7_Measure_Signal"
+inc26="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_7_MSTimer2"
+inc27="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_TAU0_7_Square_Wave"
+inc28="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_Through"
+inc29="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_UART0"
+inc30="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_UART1"
+inc31="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_UART2"
+inc32="-I{runtime.platform.path}/cores/rl78g23/smc_gen/Config_WDT"
+inc33="-I{runtime.platform.path}/cores/rl78g23/smc_gen/general"
+inc34="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp"
+inc35="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp/board"
+inc36="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp/board/generic_rl78_g23"
+inc37="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp/mcu"
+inc38="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp/mcu/all"
+inc39="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp/mcu/rl78_g23"
+inc40="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp/mcu/rl78_g23/register_access"
+inc41="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp/mcu/rl78_g23/register_access/llvm"
+inc42="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_config"
+
 
 
 #Libinc0="-I{runtime.platform.path}/libraries/Ethernet3/src" 
@@ -140,9 +131,9 @@ inc52="-I{runtime.platform.path}/cores/rl78g23"
 incA={inc0}  {inc1}  {inc2}  {inc3}  {inc4}  {inc5}  {inc6}  {inc7}  {inc8}  {inc9} 
 incB={inc10} {inc11} {inc12} {inc13} {inc14} {inc15} {inc16} {inc17} {inc18} {inc19} 
 incC={inc20} {inc21} {inc22} {inc23} {inc24} {inc25} {inc26} {inc27} {inc28} {inc29} 
-incD={inc30} {inc31} {inc32} {inc33} {inc34} {inc35} {inc36} {inc37} {inc38} {inc39} 
-incE={inc40} {inc41} {inc42} {inc43} {inc44} {inc45} {inc46} {inc47} {inc48} {inc49} 
-incF={inc50} {inc51} {inc52} 
+incD={inc30} {inc31} {inc32} {inc33} {inc34} {inc35} {inc36} {inc27} {inc28} {inc29} 
+incE={inc40} {inc41} {inc42} 
+incF=
 
 #incG={Libinc0}  {Libinc1}  {Libinc2}  {Libinc3}  {Libinc4}  {Libinc5}  {Libinc6}  {Libinc7}  {Libinc8} {Libinc9} 
 #incH={Libinc10} {Libinc11} {Libinc12} {Libinc13} {Libinc14} {Libinc15} {Libinc16} 

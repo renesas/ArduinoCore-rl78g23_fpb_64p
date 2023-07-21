@@ -31,6 +31,9 @@
 #include "pins_variant.h"
 #include "pintable.h"
 #include "r_smc_entry.h"
+#if defined(G23_FPB)
+#include "Config_Through.h"
+#endif // G23_FPB
 
 extern const PinTableType * pinTablelist[NUM_DIGITAL_PINS];
 extern uint8_t g_adc_int_flg;
@@ -39,6 +42,8 @@ boolean g_bAdcInterruptFlag = false;
 uint16_t g_u16ADUL;
 uint16_t g_u16ADLL;
 extern uint32_t R_BSP_GetFclkFreqHz(void);
+uint8_t g_pwm_create_flg=0;
+uint8_t g_analogWrite_enable_interrupt_flag=0;
 
 /* Match to the value of PWM_PIN */
 extern volatile unsigned short *g_timer_period_reg[PWM_CH_NUM];
@@ -52,20 +57,12 @@ extern const uint8_t g_analog_pin_input[NUM_ANALOG_INPUTS];
 
 static void _analogPinRead(uint8_t pin);
 static int _analogRead(uint8_t u8ADS);
-static int _analogDuty(int val, uint16_t frequency);
+static uint16_t _analogDuty(int val, uint16_t frequency);
 static uint16_t _analogFrequency (uint8_t pin, uint32_t u32Hz);
 
 volatile SwPwm g_SwPwm[NUM_SWPWM_PINS] = { { 0, 0, 0, 0, 0, 0 }, };
 bool g_u8AnalogReadAvailableTable[NUM_ANALOG_INPUTS] = { 0 };
-bool g_u8AnalogWriteAvailableTable[NUM_DIGITAL_PINS] = {
-false, false, false, false,
-false, false, false, false,
-false, false, false, false,
-false, false, false, false,
-false, false, false, false,
-false, false, false, false,
-false, };
-
+bool g_u8AnalogWriteAvailableTable[NUM_DIGITAL_PINS] = {};
 
 int8_t get_pwm_channel(uint8_t pwm_num)
 {
@@ -162,7 +159,8 @@ int analogRead(uint8_t analog_pin) {
 * Return Value : None
 ***********************************************************************************************************************/
 void analogWrite(uint8_t pin, int value) {
-//    uint8_t u8Timer;
+	uint16_t pwm_frequency = 0;
+
     if (pin < NUM_DIGITAL_PINS)
     {
         {
@@ -189,21 +187,46 @@ void analogWrite(uint8_t pin, int value) {
 
             if(analog_write_flg == 1)
             {
-                pwm_ch[pwm_channel].open();
+                if(g_pwm_create_flg == 0)
+                {
 
-                /* Frequency Set */
-                if(pwm_ch[pwm_channel].cycle == CYCLE_VALUE)
-                {
-                    pwm_ch[pwm_channel].cycle = _analogFrequency(pin,FREQUENCY_MIN_VAL);
-                }
-                else
-                {
+                    /* Master & Slave Initialize */
+                    pwm_ch[pwm_channel].open();
+
+                    /* Master Channel Frequency Set */
+                    if(pwm_ch[pwm_channel].cycle == CYCLE_VALUE)
+                    {
+                    	pwm_frequency = _analogFrequency(pwm_channel_table[0],FREQUENCY_MIN_VAL);
+                	    for(int i = 0;i<PWM_CH_NUM;i++)
+                	    {
+                	    	pwm_ch[i].cycle = pwm_frequency;
+                	    }
+                    }
+
                     *(g_timer_period_reg[pwm_channel]) = pwm_ch[pwm_channel].cycle;
 
                 }
-                /* Duty set */
-                *(g_timer_duty_reg[pwm_channel])   = (uint16_t)_analogDuty(value, pwm_ch[pwm_channel].cycle);
-                pwm_ch[pwm_channel].start();
+
+                /* Slave Channel Duty set */
+                *(g_timer_duty_reg[pwm_channel])   = _analogDuty(value, pwm_ch[pwm_channel].cycle);
+
+                if(g_u8AnalogWriteAvailableTable[pin] == 0)
+                {
+                	pwm_ch[pwm_channel].open_slave();
+                	pwm_ch[pwm_channel].start_slave();
+
+                	g_analogWrite_enable_interrupt_flag = 1;
+                	g_u8AnalogWriteAvailableTable[pin] = 1;
+
+                	pwm_ch[pwm_channel].enable_interrupt();
+                }
+
+                if(g_pwm_create_flg == 0)
+                {
+                    pwm_ch[pwm_channel].start();
+                    g_pwm_create_flg = 1;
+
+                }
             }
         }
     }
@@ -229,10 +252,16 @@ void analogWriteFrequency(uint32_t Hz) {
 */
 
 void analogWriteFrequency(uint32_t Hz) {
-    for(int i = 0;i<PWM_CH_NUM;i++)
-    {
-        pwm_ch[i].cycle = _analogFrequency(pwm_channel_table[i],Hz);
-    }
+	uint16_t pwm_frequency = 0;
+
+	if(g_pwm_create_flg == 0)
+	{
+		pwm_frequency = _analogFrequency(pwm_channel_table[0],Hz);
+	    for(int i = 0;i<PWM_CH_NUM;i++)
+	    {
+	        pwm_ch[i].cycle = pwm_frequency;
+	    }
+	}
 }
 
 /***********************************************************************************************************************
@@ -243,6 +272,8 @@ void analogWriteFrequency(uint32_t Hz) {
 * Return Value : None
 ***********************************************************************************************************************/
 void analogWritePinFrequency(uint8_t pin, uint32_t Hz) {
+	/* Due to a change in the PWM control method, this function is not supported. */
+#if 0
     /* PWM output pulse cycle setting
     Pulse period = (TDR00 setting value + 1) x count clock period
     Example) When the pulse period is 2 [ms]
@@ -253,6 +284,7 @@ void analogWritePinFrequency(uint8_t pin, uint32_t Hz) {
     {
         pwm_ch[pwm_channel].cycle = _analogFrequency(pin, Hz);
     }
+#endif
 }
 
 static uint16_t _analogFrequency (uint8_t pin, uint32_t u32Hz)
@@ -303,20 +335,26 @@ static uint16_t _analogFrequency (uint8_t pin, uint32_t u32Hz)
     return Result;
 }
 
-static int _analogDuty(int val, uint16_t frequency)
+static uint16_t _analogDuty(int val, uint16_t frequency)
 {
 /*    Duty factor [0 ~ 255] = {Set value of TDRmp (slave)}/{Set value of TDRmn (master) + 1} × 255
     {Set value of TDRmp (slave)} = Duty factor * {Set value of TDRmn (master) + 1} / 255 */
-    int u16Duty = 0;
+    uint16_t u16Duty = 0;
     /* Duty set */
-    if(val> PWM_MAX)
+    if(val >= PWM_MAX)
     {
-        val = PWM_MAX;
+        u16Duty = 0;
+    }
+    else if(val == PWM_MIN)
+    {
+        u16Duty = frequency + 1;
+
     }
     else
     {
-        u16Duty = (int) (((unsigned long) val
+        u16Duty = (uint16_t)(((unsigned long) val
                 * (frequency + 1)) / PWM_MAX);
+        u16Duty = (frequency + 1) - u16Duty;
     }
     return u16Duty;
 }
@@ -346,15 +384,26 @@ static void _analogPinRead (uint8_t pin)
         PinTableType * p;
         pp = &pinTablelist[pin];
         p = (PinTableType *)*pp;
+#if defined(G22_FPB) || defined(G23_FPB)
         if (0!=p->pmca)
         {
             pinMode(pin, INPUT);
             /* アナログピンの場合PMCAをセットする */
             *p->portModeControlARegisterAddr |= (unsigned long)(p->pmca);
 
-//            *p->portModeControlARegisterAddr &= (unsigned long)~(p->pmca);
+
             g_u8AnalogReadAvailableTable[pin_index] = true;
         }
+#elif defined(G16_FPB)
+        if (0!=p->pmc)
+        {
+            pinMode(pin, INPUT);
+          /* アナログピンの場合PMCAセットする */
+            *p->portModeControlRegisterAddr |= (unsigned long)(p->pmc);
+            *p->portModeControlRegisterAddr &= (unsigned long)~(p->pmc);
+            g_u8AnalogReadAvailableTable[pin_index] = true;
+        }
+#endif
     }
 }
 
@@ -365,7 +414,9 @@ static int _analogRead(uint8_t u8ADS) {
     // 1. AD reference setting
     R_Config_ADC_Set_Reference (g_u8AnalogReference);
     // 3. Snooze mode return upper / lower limit setting
+#if defined(G22_FPB) || defined(G23_FPB)
     R_Config_ADC_Set_ComparisonLimit((uint8_t)(g_u16ADUL >> 2), (uint8_t)(g_u16ADLL >> 2));
+#endif // defined(G22_FPB) || defined(G23_FPB)
     // 4. AD channel setting
     R_Config_ADC_Set_ADChannel(u8ADS);
     while(0 == adc_end_flg)
@@ -374,6 +425,7 @@ static int _analogRead(uint8_t u8ADS) {
         // 2. Trigger mode setting
         if (PM_SNOOZE_MODE == g_u8PowerManagementMode)
         {
+#if defined(G22_FPB) || defined(G23_FPB)
             R_Config_ITL000_Stop();
             // Hardware trigger wait mode(RTC), one-shot conversion
             R_Config_ADC_Set_ModeTrigger(PM_SNOOZE_MODE);
@@ -381,11 +433,14 @@ static int _analogRead(uint8_t u8ADS) {
             R_Config_ADC_Set_SnoozeOn();    //AWC =1
             // 5. AD comparator ON
             R_Config_ADC_Snooze_Start();    //enable interrupt & ADCS=1
+#endif // defined(G22_FPB) || defined(G23_FPB)
         }
         else
         {
             // Software trigger mode, one-shot conversion
+#if defined(G22_FPB) || defined(G23_FPB)
             R_Config_ADC_Set_ModeTrigger(PM_NORMAL_MODE);
+#endif // defined(G22_FPB) || defined(G23_FPB)
             // 5. AD comparator ON
             R_Config_ADC_Set_OperationOn();  //ADCE=1 & wait
             R_Config_ADC_Start();            //ADCS=1 & enable interrupt
@@ -405,9 +460,11 @@ static int _analogRead(uint8_t u8ADS) {
         // 8. Snooze mode Off (interrupt stop)
         if (PM_SNOOZE_MODE == g_u8PowerManagementMode)
         {
+#if defined(G22_FPB) || defined(G23_FPB)
             R_Config_ADC_Set_SnoozeOff();
             R_Config_ADC_Snooze_Stop();
             R_Config_ITL000_Start();
+#endif // defined(G22_FPB) || defined(G23_FPB)
         }
         else
         {

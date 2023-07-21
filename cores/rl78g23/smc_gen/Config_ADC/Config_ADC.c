@@ -311,7 +311,7 @@ void R_Config_ADC_Set_ComparisonLimit(uint8_t upper, uint8_t lower)
 }
 
 
-//���x�Z���T�o�͂̃��W�X�^�̐ݒ�
+//温度センサ出力のレジスタの設定
 void R_Config_ADC_Set_TemperatureSensor(void)
 {
     ADCEN = 1U;    /* supply AD clock */
@@ -343,7 +343,7 @@ void R_Config_ADC_Set_TemperatureSensor(void)
 
 }
 
-//������d���o�͂̃��W�X�^�ݒ�
+//内部基準電圧出力のレジスタ設定
 
 void R_Config_ADC_Set_InternalReferenceVoltage(void)
 {

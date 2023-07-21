@@ -42,7 +42,7 @@ extern "C" {
 }
 
 #include "Arduino.h"
-#include "platform.h"
+// #include "platform.h"
 
 
 extern "C" {
@@ -357,7 +357,7 @@ extern "C" {
  * to which to write the next incoming character and tail is the index of the
  * location from which to read.
  */
-#define SERIAL_BUFFER_SIZE 256
+// #define SERIAL_BUFFER_SIZE 256
 
 void serialEventRun(void)
 {
@@ -451,6 +451,10 @@ void HardwareUart::begin(unsigned long baud, uint16_t config, int rx_buf, int tx
     if ((1 == rx_buf) || (1 == tx_buf)){
         return;
     }
+#if defined(FEW_RAM_MODEL) && (FEW_RAM_MODEL == 1)
+    _rx_buffer = base_rx_buffer;
+    _tx_buffer = base_tx_buffer;
+#else
     _rx_buffer = (uint8_t *)malloc((size_t)(rx_buf * (int)sizeof(uint8_t)));
     if (0 == _rx_buffer){
         _rx_buf_size = 0;
@@ -465,6 +469,8 @@ void HardwareUart::begin(unsigned long baud, uint16_t config, int rx_buf, int tx
         _tx_buf_size = 0;
         return;
     }
+#endif
+
     _rx_buf_size = rx_buf;
     _tx_buf_size = tx_buf;
     _rx_buffer_head = 0;
@@ -540,6 +546,10 @@ void HardwareUart::end()
     case 3:
         break;
         }
+#if defined(FEW_RAM_MODEL) && (FEW_RAM_MODEL == 1)
+    _rx_buffer = 0;
+    _tx_buffer = 0;
+#else
     if(_rx_buffer!= 0)
     {
         free((uint8_t *)_rx_buffer);
@@ -550,6 +560,7 @@ void HardwareUart::end()
         free((uint8_t *)_tx_buffer);
         _tx_buffer = 0;
     }
+#endif
     _rx_buffer_head = 0;
     _rx_buffer_tail = 0;
     _tx_buffer_head = 0;
@@ -636,11 +647,15 @@ void HardwareUart::flush()
       ;
     }
   }
+#if ( UART2_CHANNEL == 2 )
   else if (_urt_channel == 2) {
     while (SSR10 & (_0040_SAU_UNDER_EXECUTE | _0020_SAU_VALID_STORED)) {  /* check TSF10 and BFF10 */
+
       ;
     }
   }
+#endif /* ( UART2_CHANNEL == 2 ) */
+
   while(_tx_buf_size-1!=availableForWrite())
   {
     NOP();
@@ -694,11 +709,13 @@ size_t HardwareUart::UART_Send(uint8_t c)
                 err = R_Config_UART1_Send((uint8_t * const)&c,1);
                 break;
             case 2:
+#if ( UART2_CHANNEL == 2 )
                 if((SSR10 & _0020_SAU_VALID_STORED) != 0)/*BFF10*/
                 {
                     return 0;
                 }
                 err = R_Config_UART2_Send((uint8_t * const)&c,1);
+#endif /* ( UART2_CHANNEL == 2 ) */
                 break;
             case 3:
                 break;
@@ -1132,15 +1149,19 @@ void HardwareUart::Set_SerialPort(uint8_t txd_pin,uint8_t rxd_pin)
     /* Set PM Register for Input */
     *p->portModeRegisterAddr |=  (unsigned long)(0x1 << p->bit);
 
+#if defined(G22_FPB) || defined(G23_FPB)
     /* Set PMCA Register */
     if (0!=p->pmca){
       *p->portModeControlARegisterAddr &= (unsigned long)~(p->pmca);
     }
+#endif // defined(G22_FPB) || defined(G23_FPB)
 
     /* Set PMCT Register */
+#if defined(G22_FPB) || defined(G23_FPB)
     if (0!=p->pmct){
       *p->portModeControlTRegisterAddr &= (unsigned long)~(p->pmct);
     }
+#endif // defined(G22_FPB) || defined(G23_FPB)
 
     /* Set PMCE Register for Output */
 #if defined(G23_FPB)
@@ -1154,6 +1175,11 @@ void HardwareUart::Set_SerialPort(uint8_t txd_pin,uint8_t rxd_pin)
       CCDE &= (uint8_t)~(p->ccde);
     }
 #endif // G23_FPB
+#if defined(G16_FPB)
+    if (0!=p->pmc){
+      *p->portModeControlRegisterAddr &= (unsigned long)~(p->pmc);
+    }
+#endif // defined(G16_FPB)
 
     /* Set TxD pin */
     //getPinTable(txd_pin,p);
@@ -1173,14 +1199,18 @@ void HardwareUart::Set_SerialPort(uint8_t txd_pin,uint8_t rxd_pin)
     *p->portModeRegisterAddr &= (unsigned long)~(0x1 << p->bit);
 
     /* Set PMCA Register */
+#if defined(G22_FPB) || defined(G23_FPB)
     if (0!=p->pmca){
       *p->portModeControlARegisterAddr &= (unsigned long)~(p->pmca);
     }
+#endif // defined(G22_FPB) || defined(G23_FPB)
 
     /* Set PMCT Register */
+#if defined(G22_FPB) || defined(G23_FPB)
     if (0!=p->pmct){
       *p->portModeControlTRegisterAddr &= (unsigned long)~(p->pmct);
     }
+#endif // defined(G22_FPB) || defined(G23_FPB)
 
     /* Set PMCE Register t */
 #if defined(G23_FPB)
@@ -1194,8 +1224,13 @@ void HardwareUart::Set_SerialPort(uint8_t txd_pin,uint8_t rxd_pin)
       CCDE &= (uint8_t)~(p->ccde);
     }
 #endif // G23_FPB
-}
 
+#if defined(G16_FPB)
+    if (0!=p->pmc){
+      *p->portModeControlRegisterAddr &= (unsigned long)~(p->pmc);
+    }
+#endif // G16_FPB
+}
 
 void HardwareUart::setReceiveCallback(void (*userFunc)(void))
 {

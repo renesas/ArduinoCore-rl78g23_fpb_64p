@@ -31,7 +31,7 @@
 #include "pins_variant.h"
 #include "pintable.h"
 #include "r_smc_entry.h"
-
+extern uint32_t R_BSP_GetFclkFreqHz(void);
 
 int8_t get_pulse_in_channel(uint8_t pulse_in_num)
 {
@@ -146,26 +146,11 @@ unsigned long pulseIn(pin_size_t pin, uint8_t state, unsigned long timeout)
                 break;
             default:
                 break;
-            }
+        }
+        g_tau0_ch0_interrupt_flag = 0;
 #elif defined(G23_FPB)
         switch(pin)
         {
-            case PWM_PIN_32:
-                while((g_tau0_ch1_interrupt_flag == 0) && (g_tau0_ch0_interrupt_flag == 0));        /* Wait get width */
-                if(0  != g_tau0_ch1_interrupt_flag)
-                {
-                    l_tau_interrupt_flag = 1;
-                }
-                g_tau0_ch1_interrupt_flag = 0;
-                break;
-            case PWM_PIN_31:
-                while((g_tau0_ch2_interrupt_flag == 0) && (g_tau0_ch0_interrupt_flag == 0));        /* Wait get width */
-                if(0  != g_tau0_ch2_interrupt_flag)
-                {
-                    l_tau_interrupt_flag = 1;
-                }
-                g_tau0_ch2_interrupt_flag = 0;
-                break;
             case PWM_PIN_6:
                 while((g_tau0_ch3_interrupt_flag == 0) && (g_tau0_ch0_interrupt_flag == 0));        /* Wait get width */
                 if(0  != g_tau0_ch3_interrupt_flag)
@@ -209,7 +194,30 @@ unsigned long pulseIn(pin_size_t pin, uint8_t state, unsigned long timeout)
             default:
                 break;
         }
-
+        g_tau0_ch0_interrupt_flag = 0;
+#elif defined(G16_FPB)
+        switch(pin)
+        {
+            case PWM_PIN_3:
+                while((g_tau0_ch3_interrupt_flag == 0) && (g_tau0_ch2_interrupt_flag == 0));        /* Wait get width */
+                if(0  != g_tau0_ch3_interrupt_flag)
+                {
+                    l_tau_interrupt_flag = 1;
+                }
+                g_tau0_ch3_interrupt_flag = 0;
+                break;
+            case PWM_PIN_6:
+                while((g_tau0_ch4_interrupt_flag == 0) && (g_tau0_ch2_interrupt_flag == 0));        /* Wait get width */
+                if(0  != g_tau0_ch4_interrupt_flag)
+                {
+                    l_tau_interrupt_flag = 1;
+                }
+                g_tau0_ch4_interrupt_flag = 0;
+                break;
+            default:
+                break;
+        }
+        g_tau0_ch2_interrupt_flag = 0;
 #endif
 
         /* Timer Stop */
@@ -226,7 +234,7 @@ unsigned long pulseIn(pin_size_t pin, uint8_t state, unsigned long timeout)
         {
             Result = 0;
         }
-        g_tau0_ch0_interrupt_flag = 0;
+
     }
     return Result;
 }

@@ -63,7 +63,6 @@ void R_ITL_Create(void)
     R_Config_ITL000_Create();
 //    R_Config_ITL001_Create();
     R_Config_ITL012_Create();
-// 2023/03/08
     R_Config_ITL013_Create();
 }
 

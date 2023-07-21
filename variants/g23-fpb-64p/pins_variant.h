@@ -29,13 +29,14 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-// 2023/03/02 moved from Arduino.h
-// Arduino.h should not be board specific
 #ifndef configCPU_CLOCK_HZ
 #define configCPU_CLOCK_HZ 					(32000000)	//!< CPUの動作周波数（RTOS未使用時に定義）
 #endif
 
 #define F_CPU (32 * 1000 * 1000L)
+
+// G22, G23 :2 , G16:1, G24:3
+#define MICROS_TIMER_DIVIDE_FACTOR ((uint32_t)2)
 
 #define UART_CHANNEL 		0		// UART0(Serial0)
 #define UART1_CHANNEL       1       // UART1(Serial1)
@@ -66,7 +67,6 @@
     (p) == 14    /* P20(AVREFP) */)
 #define CHECK_OUTPUT_INHIBIT_RL78(p) ((p) == 14 || (p) == 27 || (p) == 28 || (p) == 41)
 
-// 2023/03/02 end of copy from Arduino.h
 
 #ifdef __cplusplus
 extern "C"
@@ -78,12 +78,12 @@ extern "C"
 
 #define TONE_CH_NUM				(7)
 
-#define TAU_OPERATION_CLOCK		(0xC000U)    /* operation clock set by PRS register */
-#define CK00_CK01_OPERATION		(0x000F)	/* Selection of operation clock CK00, CK01 */
-#define CK02_OPERATION			(0x0300)	/* Selection of operation clock CK02 */
-#define CK03_OPERATION			(0x3000)	/* Selection of operation clock CK03 */
-#define TIMEOUT_MAX_VAL			(65535)
-#define PULSE_INTERUPT			(1)
+// #define TAU_OPERATION_CLOCK		(0xC000U)    /* operation clock set by PRS register */
+// #define CK00_CK01_OPERATION		(0x000F)	/* Selection of operation clock CK00, CK01 */
+// #define CK02_OPERATION			(0x0300)	/* Selection of operation clock CK02 */
+// #define CK03_OPERATION			(0x3000)	/* Selection of operation clock CK03 */
+// #define TIMEOUT_MAX_VAL			(65535)
+// #define PULSE_INTERUPT			(1)
 
 #define _4000_TAU_CLOCK_SELECT_CKM2       (0x4000U)    /* operation clock CK2 set by PRS register */
 #define _0000_TAU_CKM2_FCLK_1             (0x0000U)    /* ckm2 - fCLK/2^1 */
@@ -94,7 +94,7 @@ extern "C"
 
 // tone_func
 
-#define PULSE_IN_CH_NUM			(7)
+#define PULSE_IN_CH_NUM			(5)
 int8_t get_tone_channel(uint8_t tone_num);
 
 typedef struct {
@@ -113,7 +113,7 @@ typedef struct {
 // #endif
 #define analogInputToDigitalPin(p)  ((p < 6) ? (p) + 14 : -1)
 
-#define digitalPinHasPWM(p)         ((p) == 5 || (p) == 6 || (p) == 10 || (p) == 32)
+#define digitalPinHasPWM(p)         ((p) == 3 || (p) == 5 || (p) == 6 || (p) == 9 || (p) == 10 || (p) == 11)
 
 
 #define PIN_SPI_SS    (10)
@@ -155,7 +155,6 @@ extern const uint8_t SCK5;
 #define PIN_WIRE_SCL0_MASK   0x01 // P60
 #define PIN_WIRE_SDA1_MASK   0x08 // P63
 #define PIN_WIRE_SCL1_MASK   0x04 // P62
-// 2023/02/20
 extern const uint8_t SDA0;
 extern const uint8_t SCL0;
 extern const uint8_t SDA1;
@@ -177,7 +176,6 @@ extern const uint8_t SCL1;
 #define PIN_A7	(1)		/* ANI17(P02/TxD1) */
 #define PIN_A8	(29)	/* ANI19(P120) (DIGITAL_PIN_29) */
 #define PIN_A9	(40)	/* ANI18(P147) (DIGITAL_PIN_40) */
-// 2023/02/20
 extern const uint8_t A0;
 extern const uint8_t A1;
 extern const uint8_t A2;
@@ -1028,35 +1026,23 @@ extern const uint8_t A9;
 //#define DIGITAL_PIN_MASK_30	0x20	// P75
 #endif
 
-//#define PWM_PIN_3			1		// TO1
-//#define PWM_PIN_5			2		// TO2
-//#define PWM_PIN_6			7		// TO7
-//#define PWM_PIN_9			4		// TO4
-//#define PWM_PIN_10			3		// TO3
-//#define PWM_PIN_11			0xE0	// Software PWM0
-//#define PWM_PIN_22			0xE1	// Software PWM1
-//#define PWM_PIN_23			0xE2	// Software PWM2
-//#define PWM_PIN_24			0xE3	// Software PWM3
-
-//#define PWM_PIN_3			1		// TO1
-//#define PWM_PIN_5			2		// TO2
-//#define PWM_PIN_6			7		// TO7
-//#define PWM_PIN_9			4		// TO4
-//#define PWM_PIN_10			3		// TO3
-#define PWM_PIN_11			0xE0	// Software PWM0
-#define PWM_PIN_22			0xE1	// Software PWM1
-#define PWM_PIN_23			0xE2	// Software PWM2
-#define PWM_PIN_24			0xE3	// Software PWM3
-
 #define SWPWM_PIN			0xE0
-/* 1006 Nhu add */
+
 #define PWM_PIN_3			3		// TO4
 #define PWM_PIN_5			5		// TO7
 #define PWM_PIN_6			6		// TO3
 #define PWM_PIN_9			9		// TO6
 #define PWM_PIN_10			10		// TO5
-#define PWM_PIN_31			31		// TO2
-#define PWM_PIN_32			32		// TO1
+#define PWM_PIN_11			11		// TO2
+
+#define TONE_PIN_3			3		// TO4
+#define TONE_PIN_5			5		// TO7
+#define TONE_PIN_6			6		// TO3
+#define TONE_PIN_9			9		// TO6
+#define TONE_PIN_10			10		// TO5
+#define TONE_PIN_11			11		// TO2 -> ELCL
+
+
 /* 1006 Nhu add */
 /* Define Serial Port Number */
 #define SERIAL_TXD0			36 // P12
@@ -1081,7 +1067,6 @@ extern const uint8_t A9;
 #define PIN_SERIAL1_TX          1
 #define PIN_SERIAL2_RX          34
 #define PIN_SERIAL2_TX          35
-// 2023/02/20
 #if defined(UART_CHANNEL)
 #define IS_PIN_SERIAL0(p)        ((p) == PIN_SERIAL0_RX || (p) == PIN_SERIAL0_TX )
 #else
@@ -1101,7 +1086,6 @@ extern const uint8_t A9;
 #endif
 
 // #define IS_PIN_SERIAL1(p)        (0)
-
 // #define IS_PIN_SERIAL2(p)        ((p) == PIN_SERIAL2_RX || (p) == PIN_SERIAL2_TX)
 
 #define IS_PIN_DIGITAL(p)       ((p) >= 0 && (p) < NUM_DIGITAL_PINS && (!(IS_PIN_SERIAL(p))))

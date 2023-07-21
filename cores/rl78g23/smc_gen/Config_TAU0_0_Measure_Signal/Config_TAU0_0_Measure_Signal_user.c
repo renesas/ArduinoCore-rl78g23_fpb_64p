@@ -46,6 +46,10 @@ extern volatile uint8_t g_pulse_enable_interrupt_flag;
 Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
+extern uint8_t g_analogWrite_enable_interrupt_flag;
+extern volatile uint8_t g_tau_output_enable;
+// #define SERVO_CH_NUM	(7)
+// volatile uint8_t g_servo_enable_interrupt_flag[SERVO_CH_NUM] = {0,0,0,0,0,0,0};
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -69,6 +73,21 @@ void R_Config_TAU0_0_Measure_Signal_Create_UserInit(void)
 void r_Config_TAU0_0_Measure_Signal_interrupt(void)
 {
     /* Start user code for r_Config_TAU0_0_Measure_Signal_interrupt. Do not edit comment generated here */
+
+	if(g_analogWrite_enable_interrupt_flag == 1UL)
+    {
+    	TOE0 |= g_tau_output_enable;
+    	g_tau_output_enable = 0;
+    	g_analogWrite_enable_interrupt_flag = 0;
+        TMMK00 = 1U;    /* disable INTTM00 interrupt */
+        TMIF00 = 0U;    /* clear INTTM00 interrupt flag */
+    }
+	else
+	{
+		;
+	}
+
+
 	if(g_pulse_enable_interrupt_flag == 1UL)
 	{
 		g_tau0_ch0_interrupt_flag = 1UL;
@@ -77,6 +96,7 @@ void r_Config_TAU0_0_Measure_Signal_interrupt(void)
 	{
 		;
 	}
+
     /* End user code. Do not edit comment generated here */
 }
 

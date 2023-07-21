@@ -24,7 +24,11 @@
 #undef SERIAL_BUFFER_SIZE
 #endif
 
+#if defined(FEW_RAM_MODEL) && (FEW_RAM_MODEL == 1)
+#define SERIAL_BUFFER_SIZE  32
+#else
 #define SERIAL_BUFFER_SIZE  256
+#endif
 
 class HardwareUart : public arduino::HardwareSerial
 {
@@ -64,6 +68,11 @@ class HardwareUart : public arduino::HardwareSerial
     volatile int _tx_buf_size;
     unsigned char *_rx_buffer;
     unsigned char *_tx_buffer;
+
+#if defined(FEW_RAM_MODEL) && (FEW_RAM_MODEL == 1)
+    unsigned char base_rx_buffer[SERIAL_BUFFER_SIZE];
+    unsigned char base_tx_buffer[SERIAL_BUFFER_SIZE];
+#endif //
 
     uint8_t receive_buffer;
     uint8_t _urt_channel;

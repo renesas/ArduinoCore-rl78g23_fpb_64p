@@ -108,26 +108,26 @@ void R_Config_INTC_Create(void)
     EGP1 = _00_INTP11_EDGE_RISING_UNSEL | _00_INTP10_EDGE_RISING_UNSEL;
 */
     /* Set INTP1 pin */
-    PMCT5 &= 0xFEU;
-    PMCE5 &= 0xFEU;
-    CCDE &= 0xF7U;
-    PM5 |= 0x01U;
+//    PMCT5 &= 0xFEU;
+//    PMCE5 &= 0xFEU;
+//    CCDE &= 0xF7U;
+//    PM5 |= 0x01U;
     /* Set INTP2 pin */
-    PMCE5 &= 0xFDU;
-    CCDE &= 0xFBU;
-    PM5 |= 0x02U;
+////    PMCE5 &= 0xFDU;
+////    CCDE &= 0xFBU;
+////    PM5 |= 0x02U;
     /* Set INTP3 pin */
-    PMCT3 &= 0xFEU;
-    PM3 |= 0x01U;
+//    PMCT3 &= 0xFEU;
+//    PM3 |= 0x01U;
     /* Set INTP4 pin */
-    PMCT3 &= 0xFDU;
-    PM3 |= 0x02U;
+//    PMCT3 &= 0xFDU;
+//    PM3 |= 0x02U;
     /* Set INTP10 pin */
-    PMCT7 &= 0xBFU;
-    PM7 |= 0x40U;
+//    PMCT7 &= 0xBFU;
+//    PM7 |= 0x40U;
     /* Set INTP11 pin */
-    PMCT7 &= 0x7FU;
-    PM7 |= 0x80U;
+//    PMCT7 &= 0x7FU;
+//    PM7 |= 0x80U;
 
     R_Config_INTC_Create_UserInit();
 }

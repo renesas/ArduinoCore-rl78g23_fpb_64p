@@ -44,6 +44,7 @@ Includes
 #include "r_cg_sau_common.h"
 #include "r_cg_tau_common.h"
 #include "r_cg_itl_common.h"
+#include "Config_Through.h"
 /* Start user code for include. Do not edit comment generated here */
 #include "wiring_private.h"
 #include "api/Common.h"
@@ -79,4 +80,6 @@ void R_Systeminit(void)
 
     /* The RTC initializes when using the function. */
     R_Config_RTC_Create();
+    R_Config_Through_Create();
+    R_Config_Through_Start();
 }

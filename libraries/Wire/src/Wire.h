@@ -33,8 +33,6 @@
 
 namespace arduino {
 
-// 2023/02/15
-//class TwoWire : public Stream
 class TwoWire : public HardwareI2C
 {
   private:
@@ -60,9 +58,7 @@ class TwoWire : public HardwareI2C
     void initializeProps(void);
 
   public:
-// 2023/02/15
     TwoWire(uint8_t ch = 0);
-//    TwoWire(uint8_t ch);
 
     void begin() override;
     void end() override;

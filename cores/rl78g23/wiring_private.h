@@ -39,6 +39,7 @@
 extern "C"{
 #endif
 fInterruptFunc_t g_afInterruptFuncTable[EXTERNAL_NUM_INTERRUPTS] __attribute__((weak));
+
 #define CYCLE_VALUE	(0)
 #define TAU_OPERATION_CLOCK		(0xC000U)    /* operation clock set by PRS register */
 #define CK00_CK01_OPERATION		(0x000F)	/* Selection of operation clock CK00, CK01 */
@@ -47,6 +48,8 @@ fInterruptFunc_t g_afInterruptFuncTable[EXTERNAL_NUM_INTERRUPTS] __attribute__((
 #define TIMEOUT_MAX_VAL			(65535)
 #define PULSE_INTERUPT			(1)
 
+#define MICROSEC_OVFL_FLAG   (TMIF01)
+#define MICROSEC_TIMER_CNT      (TCR01)
 typedef struct {
     uint8_t valid:1;
     uint8_t pin:7;
@@ -58,8 +61,13 @@ typedef struct {
 
 typedef struct {
     void (*open)();
-	void (*start)();
-	uint16_t cycle;
+    void (*open_slave)();
+    void (*start)();
+    void (*start_slave)();
+    void (*stop_slave)();
+    void (*enable_interrupt)();
+    uint16_t cycle;
+
 } Pwm_func;
 
 int8_t get_pwm_channel(uint8_t pwm_num);

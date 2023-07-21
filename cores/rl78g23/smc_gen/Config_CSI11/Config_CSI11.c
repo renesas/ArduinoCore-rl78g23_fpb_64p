@@ -48,6 +48,7 @@ volatile uint16_t g_csi11_tx_count;        /* csi11 send data count */
 volatile uint8_t * gp_csi11_rx_address;    /* csi11 receive buffer address */
 /* Start user code for global. Do not edit comment generated here */
 volatile uint16_t g_csi11_status_flag;
+uint32_t R_BSP_GetFclkFreqHz(void);
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -221,8 +222,6 @@ void R_Config_CSI11_SetDataMode(uint8_t dataMode) {
 
     ST0     |= _0008_SAU_CH3_STOP_TRG_ON;                       /* Stop channel 3 */
     SOE0    &= (uint16_t)~_0008_SAU_CH3_OUTPUT_ENABLE;          /* disable CSI11 output */
-// 20220928 temporary removal
-//    #warning XXX: Check whether this register setting mapping is correct.
     /*
      * This mapping is obeying the base code.
      * Fix the `SPI_MODEx` macros together.

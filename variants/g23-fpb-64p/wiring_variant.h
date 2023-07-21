@@ -57,7 +57,7 @@ extern "C"{
 #define EXTERNAL_INTERRUPT_5    13
 #define EXTERNAL_INTERRUPT_6    26
 
-#define	PWM_CH_NUM	(4)
+#define	PWM_CH_NUM	(6)
 
 #define FREQUENCY_MIN_VAL	(500)
 #define FREQUENCY_MAX_VAL	(8000000)
@@ -74,7 +74,7 @@ extern volatile uint8_t g_tau0_ch4_interrupt_flag;
 extern volatile uint8_t g_tau0_ch5_interrupt_flag;
 extern volatile uint8_t g_tau0_ch6_interrupt_flag;
 extern volatile uint8_t g_tau0_ch7_interrupt_flag;
-extern uint32_t R_BSP_GetFclkFreqHz(void);
+// extern uint32_t R_BSP_GetFclkFreqHz(void);
 
 extern volatile uint8_t g_pulse_enable_interrupt_flag;
 extern volatile unsigned short *g_timer_pulse_mode_reg[PULSE_IN_CH_NUM];

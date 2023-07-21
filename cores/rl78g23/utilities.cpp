@@ -4,8 +4,8 @@
 #include "pintable.h"
 #include "r_cg_interrupt_handlers.h"
 
-#define	ADS_TEMP_SENSOR			(0x80)
-#define	ADS_REF_VOLTAGE			(0x81)
+#define    ADS_TEMP_SENSOR            (0x80)
+#define    ADS_REF_VOLTAGE            (0x81)
 
 uint8_t g_u8ResetFlag;
 uint8_t g_u8PowerManagementMode = PM_NORMAL_MODE;
@@ -23,11 +23,8 @@ extern volatile unsigned long g_u32delay_micros_timer;
 extern uint16_t g_u16ADUL;
 extern uint16_t g_u16ADLL;
 
-// Add 20221005
-volatile unsigned long g_u32timer_periodic = 0u;	// ms周期処理用インターバルタイマ変数
-volatile unsigned long g_u32microtimer_periodic = 0u;	// us周期処理用インターバルタイマ変数
-
-// void (*INT_TM_HOOK)() ;
+volatile unsigned long g_u32timer_periodic = 0u;
+volatile unsigned long g_u32microtimer_periodic = 0u;
 
 extern "C" {
 #include "r_smc_entry.h"
@@ -37,17 +34,28 @@ extern "C" {
 
 // 周期起動ハンドラ関数テーブル
 static struct {
-	fITInterruptFunc_t afCyclicHandler;
-	uint32_t au32CyclicTime;
-	uint32_t au32RemainTime;
-	uint32_t au32LastTime;
+    fITInterruptFunc_t afCyclicHandler;
+    uint32_t au32CyclicTime;
+    uint32_t au32RemainTime;
+    uint32_t au32LastTime;
 } g_CyclicHandlerTable[MAX_CYCLIC_HANDLER] = {
-	{NULL, 0, 0, 0},
+    {NULL, 0, 0, 0},
 };
-fITInterruptFunc_t	g_fITInterruptFunc = NULL;	//!< ユーザー定義インターバルタイマハンドラ
+fITInterruptFunc_t    g_fITInterruptFunc = NULL;    //!< ユーザー定義インターバルタイマハンドラ
 
 fInterruptFunc_t g_fMicroInterruptFunc = NULL;
 
+extern volatile unsigned long g_u32timer_periodic;
+
+static void PeriodicMillisIntervalFunc()
+{
+    if (g_u32timer_periodic > 0) {
+        if (g_fITInterruptFunc) {
+            g_fITInterruptFunc(g_u32timer_periodic);
+        }
+        g_u32timer_periodic = 0;
+    }
+}
 
 /**
  * タイマーアレイユニットの停止
@@ -58,16 +66,16 @@ fInterruptFunc_t g_fMicroInterruptFunc = NULL;
  ***************************************************************************/
 void _stopTAU0()
 {
-	// タイマ・アレイ・ユニットが動作しているか？
-	if (TAU0EN != 0) {
-		if (TE0 == 0x00000) {
+    // タイマ・アレイ・ユニットが動作しているか？
+    if (TAU0EN != 0) {
+        if (TE0 == 0x00000) {
 #ifdef WORKAROUND_READ_MODIFY_WRITE
-			CBI2(SFR2_PER0, SFR2_BIT_TAU0EN);// タイマ・アレイ・ユニットにクロック供
-#else	/* WORKAROUND_READ_MODIFY_WRITE*/
-			TAU0EN    = 0;   			// タイマ・アレイ・ユニットにクロック供給停止
+            CBI2(SFR2_PER0, SFR2_BIT_TAU0EN);// タイマ・アレイ・ユニットにクロック供
+#else    /* WORKAROUND_READ_MODIFY_WRITE*/
+            TAU0EN    = 0;               // タイマ・アレイ・ユニットにクロック供給停止
 #endif
-		}
-	}
+        }
+    }
 }
 
 /**
@@ -81,35 +89,35 @@ void _stopTAU0()
  ***************************************************************************/
 void _modifyTimerPeriodic(uint8_t u8TimerChannel, uint16_t u16Interval)
 {
-	switch (u8TimerChannel) {
-	case 1:
-		TDR01 = u16Interval;	// インターバル（周期）の設定
-		break;
+    switch (u8TimerChannel) {
+    case 1:
+        TDR01 = u16Interval;    // インターバル（周期）の設定
+        break;
 
-	case 2:
-		TDR02 = u16Interval;	// インターバル（周期）の設定
-		break;
+    case 2:
+        TDR02 = u16Interval;    // インターバル（周期）の設定
+        break;
 
-	case 3:
-		TDR03 = u16Interval;	// インターバル（周期）の設定
-		break;
+    case 3:
+        TDR03 = u16Interval;    // インターバル（周期）の設定
+        break;
 
-	case 4:
-		TDR04 = u16Interval;	// インターバル（周期）の設定
-		break;
+    case 4:
+        TDR04 = u16Interval;    // インターバル（周期）の設定
+        break;
 
-	case 5:
-		TDR05 = u16Interval;	// インターバル（周期）の設定
-		break;
+    case 5:
+        TDR05 = u16Interval;    // インターバル（周期）の設定
+        break;
 
-	case 6:
-		TDR06 = u16Interval;	// インターバル（周期）の設定
-		break;
+    case 6:
+        TDR06 = u16Interval;    // インターバル（周期）の設定
+        break;
 
-	case 7:
-		TDR07 = u16Interval;	// インターバル（周期）の設定
-		break;
-	}
+    case 7:
+        TDR07 = u16Interval;    // インターバル（周期）の設定
+        break;
+    }
 
 }
 
@@ -124,22 +132,22 @@ void _modifyTimerPeriodic(uint8_t u8TimerChannel, uint16_t u16Interval)
  ***************************************************************************/
 void _stopTimerChannel(uint8_t u8TimerChannel)
 {
-	TT0   |=  (1 << u8TimerChannel);	// タイマ動作停止
-	TOE0 &=  ~(1 << u8TimerChannel);	// タイマ出力禁止の設定
-	TO0   &= ~(1 << u8TimerChannel);	// タイマ出力の設定
-	// 割り込みマスクを禁止に設定
-	switch (u8TimerChannel) {
-	case 1:	TMMK01  = 1; break;
-	case 2:	TMMK02  = 1; break;
-	case 3:	TMMK03  = 1; break;
-	case 4:	TMMK04  = 1; break;
-	case 5:	TMMK05  = 1; break;
-	case 6:	TMMK06  = 1; break;
-	case 7:	TMMK07  = 1; break;
-	}
-	if (!(TE0 & 0x009E)) {
-		TT0 |= 0x0001;		// Master チャンネルの停止
-	}
+    TT0   |=  (1 << u8TimerChannel);    // タイマ動作停止
+    TOE0 &=  ~(1 << u8TimerChannel);    // タイマ出力禁止の設定
+    TO0   &= ~(1 << u8TimerChannel);    // タイマ出力の設定
+    // 割り込みマスクを禁止に設定
+    switch (u8TimerChannel) {
+    case 1:    TMMK01  = 1; break;
+    case 2:    TMMK02  = 1; break;
+    case 3:    TMMK03  = 1; break;
+    case 4:    TMMK04  = 1; break;
+    case 5:    TMMK05  = 1; break;
+    case 6:    TMMK06  = 1; break;
+    case 7:    TMMK07  = 1; break;
+    }
+    if (!(TE0 & 0x009E)) {
+        TT0 |= 0x0001;        // Master チャンネルの停止
+    }
 }
 
 /**
@@ -156,7 +164,7 @@ void _stopTimerChannel(uint8_t u8TimerChannel)
  ***************************************************************************/
 
 void softwareReset(void) {
-	__asm __volatile(" .byte 0xff");
+    __asm __volatile(" .byte 0xff");
 }
 
 /**
@@ -176,7 +184,7 @@ void softwareReset(void) {
  ***************************************************************************/
 
 uint8_t getResetFlag() {
-	return g_u8ResetFlag;
+    return g_u8ResetFlag;
 }
 
 /**
@@ -188,10 +196,13 @@ uint8_t getResetFlag() {
  ***************************************************************************/
 uint16_t getVersion()
 {
-	return RLDUINO78_VERSION;
+    return RLDUINO78_VERSION;
 }
-
+#if defined(G22_FPB) || defined(G23_FPB)
 #define USE_POWER_MANAGEMENT (1) // Set 1 when issue was solved. //KAD change from 0 to 1
+#else
+#define USE_POWER_MANAGEMENT (0) // Set 1 when issue was solved.
+#endif // defined(G22_FPB) || defined(G23_FPB)
 
 #if USE_POWER_MANAGEMENT == 1
 /** @} group14 その他 */
@@ -216,7 +227,7 @@ uint16_t getVersion()
  ***************************************************************************/
 uint8_t getPowerManagementMode()
 {
-	return g_u8PowerManagementMode;
+    return g_u8PowerManagementMode;
 }
 
 /**
@@ -248,43 +259,43 @@ uint8_t getPowerManagementMode()
 void setPowerManagementMode(uint8_t u8PowerManagementMode, uint16_t u16ADLL, uint16_t u16ADUL)
 {
 
-	switch (u8PowerManagementMode) {
-	case PM_NORMAL_MODE:
-	case PM_HALT_MODE:
+    switch (u8PowerManagementMode) {
+    case PM_NORMAL_MODE:
+    case PM_HALT_MODE:
         g_u16ADLL = 0;
         g_u16ADUL = 1023;
-		g_u8PowerManagementMode = u8PowerManagementMode;
-		break;
+        g_u8PowerManagementMode = u8PowerManagementMode;
+        break;
 
-	case PM_STOP_MODE:
-		if (CLS == 0) {
-		    g_u16ADLL = 0;
-		    g_u16ADUL = 1023;
-			g_u8PowerManagementMode = u8PowerManagementMode;
-		}
-		break;
+    case PM_STOP_MODE:
+        if (CLS == 0) {
+            g_u16ADLL = 0;
+            g_u16ADUL = 1023;
+            g_u8PowerManagementMode = u8PowerManagementMode;
+        }
+        break;
 
-	case PM_SNOOZE_MODE:
-		if ((CLS == 0) && (MCS == 0)) {
-			if (u16ADLL > 1023) {
-				u16ADLL = 1023;
-			}
-			if (u16ADUL > 1023) {
-				u16ADUL = 1023;
-			}
-			if (u16ADLL > u16ADUL) {
-				u16ADLL = 0;
-				u16ADUL = 1023;
-			}
+    case PM_SNOOZE_MODE:
+        if ((CLS == 0) && (MCS == 0)) {
+            if (u16ADLL > 1023) {
+                u16ADLL = 1023;
+            }
+            if (u16ADUL > 1023) {
+                u16ADUL = 1023;
+            }
+            if (u16ADLL > u16ADUL) {
+                u16ADLL = 0;
+                u16ADUL = 1023;
+            }
             g_u16ADLL = u16ADLL;
             g_u16ADUL = u16ADUL;
-			g_u8PowerManagementMode = u8PowerManagementMode;
-		}
-		break;
+            g_u8PowerManagementMode = u8PowerManagementMode;
+        }
+        break;
 
-	default:
-		break;
-	}
+    default:
+        break;
+    }
 }
 
 
@@ -301,7 +312,7 @@ void setPowerManagementMode(uint8_t u8PowerManagementMode, uint16_t u16ADLL, uin
  ***************************************************************************/
 uint8_t getOperationClockMode()
 {
-	return g_u8OperationClockMode;
+    return g_u8OperationClockMode;
 }
 
 
@@ -330,7 +341,7 @@ uint8_t getOperationClockMode()
  ***************************************************************************/
 void setOperationClockMode(uint8_t u8ClockMode)
 {
-	if (g_u8OperationClockMode == u8ClockMode)
+    if (g_u8OperationClockMode == u8ClockMode)
     {
         // If there is no change from the existing mode, it will not be processed.
         return;
@@ -401,7 +412,7 @@ void setOperationClockMode(uint8_t u8ClockMode)
 
 void attachIntervalTimerHandler(void (*fFunction)(unsigned long u32Milles))
 {
-	g_fITInterruptFunc = fFunction;
+    g_fITInterruptFunc = fFunction;
 }
 
 /**
@@ -413,17 +424,16 @@ void attachIntervalTimerHandler(void (*fFunction)(unsigned long u32Milles))
  ***************************************************************************/
 void detachIntervalTimerHandler()
 {
-	g_fITInterruptFunc = NULL;
+    g_fITInterruptFunc = NULL;
 }
 
 void attachMicroIntervalTimerHandler(void (*fFunction)(void), uint16_t interval)
 {
-	g_fMicroInterruptFunc = fFunction;
-//  R_Config_TAU0_7_MSTimer2_Create();
-//	R_Config_TAU0_7_MSTimer2_SetPeriod(interval);
-//	R_Config_TAU0_7_MSTimer2_Start();
+    g_fMicroInterruptFunc = fFunction;
+//    R_Config_TAU0_7_MSTimer2_Create();
+//    R_Config_TAU0_7_MSTimer2_SetPeriod(interval);
+//    R_Config_TAU0_7_MSTimer2_Start();
 }
-
 
 /**
  * 周期起動コールバック関数を登録します。
@@ -441,13 +451,13 @@ void attachMicroIntervalTimerHandler(void (*fFunction)(void), uint16_t interval)
  ***************************************************************************/
 void attachCyclicHandler(uint8_t u8HandlerNumber, void (*fFunction)(unsigned long u32Milles), uint32_t u32CyclicTime)
 {
-	if (u8HandlerNumber < MAX_CYCLIC_HANDLER) {
-		detachCyclicHandler(u8HandlerNumber);
-		g_CyclicHandlerTable[u8HandlerNumber].au32CyclicTime  = u32CyclicTime;
-		g_CyclicHandlerTable[u8HandlerNumber].au32RemainTime = u32CyclicTime;
-		g_CyclicHandlerTable[u8HandlerNumber].au32LastTime = millis();
-		g_CyclicHandlerTable[u8HandlerNumber].afCyclicHandler = fFunction;
-	}
+    if (u8HandlerNumber < MAX_CYCLIC_HANDLER) {
+        detachCyclicHandler(u8HandlerNumber);
+        g_CyclicHandlerTable[u8HandlerNumber].au32CyclicTime  = u32CyclicTime;
+        g_CyclicHandlerTable[u8HandlerNumber].au32RemainTime = u32CyclicTime;
+        g_CyclicHandlerTable[u8HandlerNumber].au32LastTime = millis();
+        g_CyclicHandlerTable[u8HandlerNumber].afCyclicHandler = fFunction;
+    }
 }
 
 
@@ -462,12 +472,12 @@ void attachCyclicHandler(uint8_t u8HandlerNumber, void (*fFunction)(unsigned lon
  ***************************************************************************/
 void detachCyclicHandler(uint8_t u8HandlerNumber)
 {
-	if (u8HandlerNumber < MAX_CYCLIC_HANDLER) {
-		g_CyclicHandlerTable[u8HandlerNumber].afCyclicHandler = NULL;
-		g_CyclicHandlerTable[u8HandlerNumber].au32CyclicTime  = 0;
-		g_CyclicHandlerTable[u8HandlerNumber].au32RemainTime = 0;
-		g_CyclicHandlerTable[u8HandlerNumber].au32LastTime = 0;
-	}
+    if (u8HandlerNumber < MAX_CYCLIC_HANDLER) {
+        g_CyclicHandlerTable[u8HandlerNumber].afCyclicHandler = NULL;
+        g_CyclicHandlerTable[u8HandlerNumber].au32CyclicTime  = 0;
+        g_CyclicHandlerTable[u8HandlerNumber].au32RemainTime = 0;
+        g_CyclicHandlerTable[u8HandlerNumber].au32LastTime = 0;
+    }
 }
 
 extern "C" {
@@ -480,38 +490,38 @@ extern "C" {
  ***************************************************************************/
 void execCyclicHandler(void)
 {
-	int i;
+    int i;
 
-	for (i = 0; i < MAX_CYCLIC_HANDLER; i++) {
-		if (g_CyclicHandlerTable[i].afCyclicHandler != NULL) {
-			unsigned long currentTime = millis();
-			unsigned long elapsedTime = currentTime - g_CyclicHandlerTable[i].au32LastTime;
-			g_CyclicHandlerTable[i].au32LastTime = currentTime;
-			bool exec = g_CyclicHandlerTable[i].au32RemainTime <= elapsedTime;
-			g_CyclicHandlerTable[i].au32RemainTime -= elapsedTime;
-			if (exec) {
-				g_CyclicHandlerTable[i].au32RemainTime += g_CyclicHandlerTable[i].au32CyclicTime;
-				g_CyclicHandlerTable[i].afCyclicHandler(currentTime);
-			}
-		}
-	}
+    for (i = 0; i < MAX_CYCLIC_HANDLER; i++) {
+        if (g_CyclicHandlerTable[i].afCyclicHandler != NULL) {
+            unsigned long currentTime = millis();
+            unsigned long elapsedTime = currentTime - g_CyclicHandlerTable[i].au32LastTime;
+            g_CyclicHandlerTable[i].au32LastTime = currentTime;
+            bool exec = g_CyclicHandlerTable[i].au32RemainTime <= elapsedTime;
+            g_CyclicHandlerTable[i].au32RemainTime -= elapsedTime;
+            if (exec) {
+                g_CyclicHandlerTable[i].au32RemainTime += g_CyclicHandlerTable[i].au32CyclicTime;
+                g_CyclicHandlerTable[i].afCyclicHandler(currentTime);
+            }
+        }
+    }
 }
 
 }
-
+#if defined(G22_FPB) || defined(G23_FPB)
 /**
  * MCUに内蔵されている温度センサから温度（摂氏/華氏）を取得します。
  *
  * @param[in] u8Mode 摂氏/華氏を指定します。
- *			@arg TEMP_MODE_CELSIUS    ： 摂氏
- *			@arg TEMP_MODE_FAHRENHEIT ： 華氏
+ *            @arg TEMP_MODE_CELSIUS    ： 摂氏
+ *            @arg TEMP_MODE_FAHRENHEIT ： 華氏
   *
  * @return 温度を返却します。
  *
  ***************************************************************************/
 int getTemperature(uint8_t u8Mode)
 {
-	extern uint8_t  g_adc_int_flg;
+    extern uint8_t  g_adc_int_flg;
     uint8_t u8count;
     uint16_t u16temp;
     uint16_t u16temp1; //温度センサ出力の値を入れる変数
@@ -526,19 +536,19 @@ int getTemperature(uint8_t u8Mode)
 
     for (u8count = 0; u8count < 2; u8count ++)
     {
-    	g_adc_int_flg = 0;
-    	R_Config_ADC_Start();
+        g_adc_int_flg = 0;
+        R_Config_ADC_Start();
         while(1)
         {
             if(g_adc_int_flg == 1)
             {
- 	            R_Config_ADC_Get_Result_10bit(&u16temp);
- 	            u16temp1 = u16temp;//温度センサ出力の値を入れる
-   	            g_adc_int_flg = 0;
-   	            break;
-             }
+                delay(5);
+                R_Config_ADC_Get_Result_10bit(&u16temp);
+                u16temp1 = u16temp;//温度センサ出力の値を入れる
+                g_adc_int_flg = 0;
+                break;
+            }
         }
-
      }
 
     u8count = 0;
@@ -548,42 +558,45 @@ int getTemperature(uint8_t u8Mode)
 
     for (u8count = 0; u8count < 2; u8count ++)
     {
-    	g_adc_int_flg = 0;
-    	R_Config_ADC_Start();
+        g_adc_int_flg = 0;
+        R_Config_ADC_Start();
         while(1)
         {
             if(g_adc_int_flg == 1)
             {
-    	         R_Config_ADC_Get_Result_10bit(&u16temp);
-    	         u16temp2 = u16temp;//内部基準電圧出力の値を入れる
-      	         g_adc_int_flg = 0;
-      	         break;
+                delay(5);
+                 R_Config_ADC_Get_Result_10bit(&u16temp);
+                 u16temp2 = u16temp;//内部基準電圧出力の値を入れる
+                   g_adc_int_flg = 0;
+                   break;
             }
         }
     }
 
     //取得した値を使用し、温度を導きます。
     volatile long n14800L = 14800L;
-	s32Temp = n14800L *u16temp1 / u16temp2 - 10500L;
-	if (u8Mode == TEMP_MODE_FAHRENHEIT)
-	{
-		//華氏
-		s16Result = s32Temp / -33 * 18 / 10;
-		s16Result += 77;
-	}
-	else
-	{
-		//摂氏
-        s16Result = s32Temp / -33;
-		s16Result += 25;
-	}
-	return s16Result;
+    s32Temp = n14800L *u16temp1 / u16temp2 - 10500L;
+    if (u8Mode == TEMP_MODE_FAHRENHEIT)
+    {
+        //華氏
+        s16Result = s32Temp / -33 * 18 / 10;
+        s16Result += 77;
+    }
+    else
+    {
+        //摂氏
+        s16Result = (s32Temp *10) / -33;
+        s16Result += 250;
+    }
+    return s16Result;
 
 }
+#endif // defined(G22_FPB) || defined(G23_FPB)
+
 
 void enterPowerManagementMode(unsigned long u32ms)
 {
-	uint8_t u8PMmode;
+    uint8_t u8PMmode;
 
     /* Check the set power saving mode and the status of RL78,
        and determine the instruction that can be actually issued.
@@ -669,6 +682,6 @@ void _readResetFlag()
         g_u8ResetFlag = 0x00;
     }
 
-	return;
+    return;
 }
 

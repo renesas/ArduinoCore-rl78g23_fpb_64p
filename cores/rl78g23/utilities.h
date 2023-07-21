@@ -65,7 +65,6 @@ void _turnOffPwmPin(uint8_t u8Pin);
 void _softwarePWM(void);
 void enterPowerManagementMode(unsigned long u32ms);
 void _readResetFlag();
-// 2022/10/11
 void execCyclicHandler(void);
 #ifdef __cplusplus
 }

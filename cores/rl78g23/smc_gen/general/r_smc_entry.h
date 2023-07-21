@@ -70,22 +70,16 @@ Typedef definitions
 Global functions
 ***********************************************************************************************************************/
 /* Start user code for function. Do not edit comment generated here */
-#include "Config_TAU0_01_PWM.h"
-#include "Config_TAU0_23_PWM.h"
-#include "Config_TAU0_45_PWM.h"
-#include "Config_TAU0_67_PWM.h"
-#include "Config_INTC.h"
+#include "Config_TAU0_0_PWM.h"
+// #include "Config_INTC.h"
 
-#include "Config_TAU0_1_Square_Wave.h"
 #include "Config_TAU0_2_Square_Wave.h"
 #include "Config_TAU0_3_Square_Wave.h"
 #include "Config_TAU0_4_Square_Wave.h"
 #include "Config_TAU0_5_Square_Wave.h"
 #include "Config_TAU0_6_Square_Wave.h"
 #include "Config_TAU0_7_Square_Wave.h"
-
 #include "Config_TAU0_0_Measure_Signal.h"
-#include "Config_TAU0_1_Measure_Signal.h"
 #include "Config_TAU0_2_Measure_Signal.h"
 #include "Config_TAU0_3_Measure_Signal.h"
 #include "Config_TAU0_4_Measure_Signal.h"
@@ -93,7 +87,7 @@ Global functions
 #include "Config_TAU0_6_Measure_Signal.h"
 #include "Config_TAU0_7_Measure_Signal.h"
 
-#include "Config_TAU0_6_Micros.h"
+#include "Config_TAU0_1_Micros.h"
 /* End user code. Do not edit comment generated here */
 #endif
 

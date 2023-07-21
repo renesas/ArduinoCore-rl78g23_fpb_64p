@@ -54,7 +54,6 @@ void R_Config_TAU0_0_Measure_Signal_Start(void);
 void R_Config_TAU0_0_Measure_Signal_Stop(void);
 void R_Config_TAU0_0_Measure_Signal_Create_UserInit(void);
 /* Start user code for function. Do not edit comment generated here */
-void R_Config_TAU0_0_1_Measure_Signal_Create(void);
 void R_Config_TAU0_0_2_Measure_Signal_Create(void);
 void R_Config_TAU0_0_3_Measure_Signal_Create(void);
 void R_Config_TAU0_0_4_Measure_Signal_Create(void);
@@ -63,7 +62,6 @@ void R_Config_TAU0_0_6_Measure_Signal_Create(void);
 void R_Config_TAU0_0_7_Measure_Signal_Create(void);
 void R_Config_TAU0_0_1_Measure_Signal_Create(void);
 
-void R_Config_TAU0_0_1_Measure_Signal_Start(void);
 void R_Config_TAU0_0_2_Measure_Signal_Start(void);
 void R_Config_TAU0_0_3_Measure_Signal_Start(void);
 void R_Config_TAU0_0_4_Measure_Signal_Start(void);
@@ -71,7 +69,6 @@ void R_Config_TAU0_0_5_Measure_Signal_Start(void);
 void R_Config_TAU0_0_6_Measure_Signal_Start(void);
 void R_Config_TAU0_0_7_Measure_Signal_Start(void);
 
-void R_Config_TAU0_0_1_Measure_Signal_Stop(void);
 void R_Config_TAU0_0_2_Measure_Signal_Stop(void);
 void R_Config_TAU0_0_3_Measure_Signal_Stop(void);
 void R_Config_TAU0_0_4_Measure_Signal_Stop(void);

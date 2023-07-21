@@ -73,12 +73,14 @@ void R_Config_TAU0_2_Square_Wave_Create(void)
     TO0 &= (uint16_t)~_0004_TAU_CH2_OUTPUT_VALUE_1;
     TOE0 |= _0004_TAU_CH2_OUTPUT_ENABLE;
     /* Set TO02 pin */
+    /*
     POM1 &= 0x7FU;
     PMCE1 &= 0x7FU;
     PFOE0 |= 0x04U;
     CCDE &= 0xFDU;
     P1 &= 0x7FU;
     PM1 &= 0x7FU;
+    */
     
     R_Config_TAU0_2_Square_Wave_Create_UserInit();
 }

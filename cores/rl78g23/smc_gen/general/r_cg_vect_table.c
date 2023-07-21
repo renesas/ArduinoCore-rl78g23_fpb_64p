@@ -63,7 +63,7 @@ const void *Vectors[] VECT_SECT = {
  * INT_P0 (0x8)
  */
 //    INT_P0,
-	r_Config_INTC_intp0_interrupt,
+    r_Config_INTC_intp0_interrupt,
     /* 1112 Ueeda add */
 /*
  * INT_P1 (0xA)
@@ -96,22 +96,22 @@ const void *Vectors[] VECT_SECT = {
  */
 #if defined(CSI_CHANNEL4)
 #else
-	#if (UART2_CHANNEL==2)
-		r_Config_UART2_interrupt_send,
-	#else
-		INT_ST2,
-	#endif
+    #if (UART2_CHANNEL==2)
+        r_Config_UART2_interrupt_send,
+    #else
+        INT_ST2,
+    #endif
 #endif
 /*
  * INT_CSI21/INT_IIC21/INT_SR2 (0x16)
  */
 #if defined(CSI_CHANNEL5)
 #else
-	#if (UART2_CHANNEL==2)
-		r_Config_UART2_interrupt_receive,
-	#else
-		INT_SR2,
-	#endif
+    #if (UART2_CHANNEL==2)
+        r_Config_UART2_interrupt_receive,
+    #else
+        INT_SR2,
+    #endif
 #endif
 /*
  * INT_SRE2/INT_TM11H (0x18)
@@ -119,7 +119,7 @@ const void *Vectors[] VECT_SECT = {
 #if (UART2_CHANNEL==2)
     r_Config_UART2_interrupt_error,
 #else
-	INT_SRE2,
+    INT_SRE2,
 #endif
 
 /*
@@ -138,13 +138,13 @@ const void *Vectors[] VECT_SECT = {
 #if defined(UART_CHANNEL) & (UART_CHANNEL==0)
     r_Config_UART0_interrupt_send,
 #else
-	INT_ST0,
+    INT_ST0,
 #endif
 
 /*
  * INT_TM00 (0x20)
  */
-	r_Config_TAU0_0_Measure_Signal_interrupt,
+    r_Config_TAU0_0_Measure_Signal_interrupt,
 
 /*
  * INT_SRE0/INT_TM01H (0x22)
@@ -152,7 +152,7 @@ const void *Vectors[] VECT_SECT = {
 #if defined(UART_CHANNEL) & (UART_CHANNEL==0)
     r_Config_UART0_interrupt_error,
 #else
-	INT_SRE0,
+    INT_SRE0,
 #endif
 
 /*
@@ -161,16 +161,16 @@ const void *Vectors[] VECT_SECT = {
 #if ( UART1_CHANNEL == 1 )
     r_Config_UART1_interrupt_send,
 #else
-	INT_ST1,
+    INT_ST1,
 #endif
 
 /*
  * INT_CSI11/INT_IIC11/INT_SR1 (0x26)
  */
 #if defined(CSI_CHANNEL3) | (defined(UART1_CHANNEL) & UART1_CHANNEL == 1 )
-	r_Config_CSI11_UART1_interrupt_switching,
+    r_Config_CSI11_UART1_interrupt_switching,
 #else
-	INT_SR1,
+    INT_SR1,
 #endif
 
 /*
@@ -179,7 +179,7 @@ const void *Vectors[] VECT_SECT = {
 #if ( UART1_CHANNEL == 1 )
     r_Config_UART1_interrupt_error,
 #else
-	INT_SRE1,
+    INT_SRE1,
 #endif
 
 /*
@@ -191,27 +191,28 @@ const void *Vectors[] VECT_SECT = {
  * INT_CSI01/INT_IIC01/INT_SR0 (0x2C)
  */
 #if defined(CSI_CHANNEL1)
-	INT_CSI01,
+    INT_CSI01,
 #else
-	#if defined(UART_CHANNEL) & (UART_CHANNEL==0)
-		r_Config_UART0_interrupt_receive,
-	#else
-		INT_SR0,
-	#endif
+    #if defined(UART_CHANNEL) & (UART_CHANNEL==0)
+        r_Config_UART0_interrupt_receive,
+    #else
+        INT_SR0,
+    #endif
 #endif
 
 /*
  * INT_TM01 (0x2E)
  */
-	r_Config_TAU0_1_Measure_Signal_interrupt,
-/* 1118 nhu add */
+//		INT_TM01,
+    r_Config_TAU0_1_Micros_interrupt,
 
 /*
  * INT_TM02 (0x30)
  */
 //    r_Config_TAU0_2_channel2_interrupt,
 /* 1118 nhu add */
-	r_Config_TAU0_2_Measure_Signal_interrupt,
+    r_Config_TAU0_2_Measure_Signal_interrupt,
+//    (void*)0xFFFF,
 /* 1118 nhu add */
 
 /*
@@ -219,7 +220,7 @@ const void *Vectors[] VECT_SECT = {
  */
 //    INT_TM03,
 /* 1118 nhu add */
-	r_Config_TAU0_3_Measure_Signal_interrupt,
+    r_Config_TAU0_3_Measure_Signal_interrupt,
 /* 1118 nhu add */
 /*
  * INT_AD (0x34)
@@ -265,35 +266,28 @@ const void *Vectors[] VECT_SECT = {
  */
 //    r_Config_TAU0_2_channel4_interrupt,
 /* 1118 nhu add */
-	r_Config_TAU0_4_Measure_Signal_interrupt,
+    r_Config_TAU0_4_Measure_Signal_interrupt,
 /* 1118 nhu add */
 
 /*
  * INT_TM05 (0x44)
  */
-//    r_Config_TAU0_5_interrupt,
-/* 1118 nhu add */
-	r_Config_TAU0_5_Measure_Signal_interrupt,
-/* 1118 nhu add */
+    r_Config_TAU0_5_Measure_Signal_interrupt,
 
 /*
  * INT_TM06 (0x46)
  */
 //    r_Config_TAU0_6_channel6_interrupt,
-/* 1118 nhu add */
-//	r_Config_TAU0_6_Measure_Signal_interrupt,
-	r_Config_TAU0_6_Micros_interrupt,
-/* 1118 nhu add */
+    r_Config_TAU0_6_Measure_Signal_interrupt,
+//    r_Config_TAU0_6_Micros_interrupt,
+
 
 /*
  * INT_TM07 (0x48)
  */
 //    r_Config_TAU0_6_channel7_interrupt,
-/* 1118 nhu add */
-//	r_Config_TAU0_7_Measure_Signal_interrupt,
-/* 1118 nhu add */
-	// 20221006 KAD
-	r_Config_TAU0_7_MSTimer2_interrupt,
+    r_Config_TAU0_7_Measure_Signal_interrupt,
+//    r_Config_TAU0_7_MSTimer2_interrupt,
 
 /*
  * INT_P6 (0x4A)

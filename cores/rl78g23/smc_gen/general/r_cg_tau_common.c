@@ -36,7 +36,7 @@ Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
 
-// #include "r_cg_tau_common.h"
+#include "r_cg_tau_common.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"

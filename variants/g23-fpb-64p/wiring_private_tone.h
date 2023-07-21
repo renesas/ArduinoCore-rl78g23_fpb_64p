@@ -38,12 +38,12 @@ extern "C"{
 
 #define TONE_CH_NUM				(7)
 
-#define TAU_OPERATION_CLOCK		(0xC000U)    /* operation clock set by PRS register */
-#define CK00_CK01_OPERATION		(0x000F)	/* Selection of operation clock CK00, CK01 */
-#define CK02_OPERATION			(0x0300)	/* Selection of operation clock CK02 */
-#define CK03_OPERATION			(0x3000)	/* Selection of operation clock CK03 */
-#define TIMEOUT_MAX_VAL			(65535)
-#define PULSE_INTERUPT			(1)
+// #define TAU_OPERATION_CLOCK		(0xC000U)    /* operation clock set by PRS register */
+// #define CK00_CK01_OPERATION		(0x000F)	/* Selection of operation clock CK00, CK01 */
+// #define CK02_OPERATION			(0x0300)	/* Selection of operation clock CK02 */
+// #define CK03_OPERATION			(0x3000)	/* Selection of operation clock CK03 */
+// #define TIMEOUT_MAX_VAL			(65535)
+// #define PULSE_INTERUPT			(1)
 
 #define _4000_TAU_CLOCK_SELECT_CKM2       (0x4000U)    /* operation clock CK2 set by PRS register */
 #define _0000_TAU_CKM2_FCLK_1             (0x0000U)    /* ckm2 - fCLK/2^1 */
@@ -70,10 +70,6 @@ extern const uint8_t  tone_channel_table[TONE_CH_NUM];
 
 //#include "Config_TAU0_1_Square_Wave.h"
 extern "C"{
-void R_Config_TAU0_1_Square_Wave_Create(void);
-void R_Config_TAU0_1_Square_Wave_Start(void);
-void R_Config_TAU0_1_Square_Wave_Stop(void);
-void R_Config_TAU0_1_Square_Wave_Create_UserInit(void);
 void R_Config_TAU0_2_Square_Wave_Create(void);
 void R_Config_TAU0_2_Square_Wave_Start(void);
 void R_Config_TAU0_2_Square_Wave_Stop(void);

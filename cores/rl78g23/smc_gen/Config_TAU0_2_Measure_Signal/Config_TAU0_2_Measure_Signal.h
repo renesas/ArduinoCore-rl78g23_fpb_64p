@@ -54,12 +54,6 @@ void R_Config_TAU0_2_Measure_Signal_Stop(void);
 void R_Config_TAU0_2_Measure_Signal_Get_PulseWidth(uint32_t * const width);
 void R_Config_TAU0_2_Measure_Signal_Create_UserInit(void);
 /* Start user code for function. Do not edit comment generated here */
-void R_Config_TAU0_1_Servo_Stop(void);
-void R_Config_TAU0_2_Servo_Stop(void);
-void R_Config_TAU0_3_Servo_Stop(void);
-void R_Config_TAU0_4_Servo_Stop(void);
-void R_Config_TAU0_5_Servo_Stop(void);
-void R_Config_TAU0_6_Servo_Stop(void);
-void R_Config_TAU0_7_Servo_Stop(void);
+
 /* End user code. Do not edit comment generated here */
 #endif

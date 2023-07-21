@@ -37,7 +37,6 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "Config_TAU0_0_Measure_Signal.h"
 /* Start user code for include. Do not edit comment generated here */
-#include "Config_TAU0_1_Measure_Signal.h"
 #include "Config_TAU0_2_Measure_Signal.h"
 #include "Config_TAU0_3_Measure_Signal.h"
 #include "Config_TAU0_4_Measure_Signal.h"
@@ -109,12 +108,6 @@ void R_Config_TAU0_0_Measure_Signal_Stop(void)
 }
 
 /* Start user code for adding. Do not edit comment generated here */
-void R_Config_TAU0_0_1_Measure_Signal_Create(void)
-{
-	R_Config_TAU0_0_Measure_Signal_Create();
-	R_Config_TAU0_1_Measure_Signal_Create();
-}
-
 void R_Config_TAU0_0_2_Measure_Signal_Create(void)
 {
 	R_Config_TAU0_0_Measure_Signal_Create();
@@ -151,14 +144,6 @@ void R_Config_TAU0_0_7_Measure_Signal_Create(void)
 	R_Config_TAU0_7_Measure_Signal_Create();
 }
 
-void R_Config_TAU0_0_1_Measure_Signal_Start(void)
-{
-    TMIF00 = 0U;    /* clear INTTM00 interrupt flag */
-    TMIF01 = 0U;    /* clear INTTM01 interrupt flag */
-    TMMK00 = 0U;    /* enable INTTM00 interrupt */
-    TMMK01 = 0U;    /* enable INTTM01 interrupt */
-    TS0 |= (_0001_TAU_CH0_START_TRG_ON | _0002_TAU_CH1_START_TRG_ON);
-}
 
 void R_Config_TAU0_0_2_Measure_Signal_Start(void)
 {
@@ -212,15 +197,6 @@ void R_Config_TAU0_0_7_Measure_Signal_Start(void)
     TMMK00 = 0U;    /* enable INTTM00 interrupt */
     TMMK07 = 0U;    /* enable INTTM07 interrupt */
     TS0 |= (_0001_TAU_CH0_START_TRG_ON | _0080_TAU_CH7_START_TRG_ON);
-}
-
-void R_Config_TAU0_0_1_Measure_Signal_Stop(void)
-{
-    TMMK00 = 1U;    /* disable INTTM00 interrupt */
-    TMMK01 = 1U;    /* disable INTTM01 interrupt */
-    TMIF00 = 0U;    /* clear INTTM00 interrupt flag */
-    TMIF01 = 0U;    /* clear INTTM01 interrupt flag */
-    TT0 |= (_0001_TAU_CH0_STOP_TRG_ON | _0002_TAU_CH1_STOP_TRG_ON);
 }
 
 void R_Config_TAU0_0_2_Measure_Signal_Stop(void)

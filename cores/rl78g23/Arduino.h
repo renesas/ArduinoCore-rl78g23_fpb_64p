@@ -23,8 +23,15 @@
 #include "api/ArduinoAPI.h"
 #include <stdbool.h>
 #include "utilities.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "r_cg_macrodriver.h"
+#ifdef __cplusplus
+}
+#endif
 #include "pintable.h"
+#include "pins_variant.h"
 
 #define RLDUINO78_VERSION 0x0203
 #define INTERRUPT
@@ -70,10 +77,8 @@ extern "C"{
 #define INPUT_TTL	0x5
 #define INPUT_TTL_PULLUP	0x6
 
-// 2023/02/17 need confirm
 /* PWM setting. */
 #define PWM_MASTER_CLOCK    (32000000)
-//#define PWM_MASTER_CLOCK    (1000000)
 #if PWM_MASTER_CLOCK == 32000000
 #define PWM_MASTER_MODE     (0x0801)    // CK0を選択
 #define PWM_SLAVE_MODE      (0x0409)

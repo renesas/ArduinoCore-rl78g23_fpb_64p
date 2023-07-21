@@ -25,8 +25,6 @@
  * Pins descriptions
  */
 
-
-// 2023/02/20
 const uint8_t SS   = PIN_SPI_SS;
 const uint8_t MOSI = PIN_SPI_MOSI;
 const uint8_t MISO = PIN_SPI_MISO;
@@ -46,19 +44,13 @@ const uint8_t A5 = PIN_A5;
 const uint8_t A6 = PIN_A6;
 const uint8_t A7 = PIN_A7;
 
-// 2023/02/24 moved from wiring_tone.cpp
 /* tone pin set */
-volatile unsigned short *g_tone_period_reg[TONE_CH_NUM] = {&TDR01,&TDR02,&TDR03,&TDR04,&TDR05,&TDR06,&TDR07};
-volatile unsigned short *g_timer_tone_mode_reg[TONE_CH_NUM] = {&TMR01,&TMR02,&TMR03,&TMR04,&TMR05,&TMR06,&TMR07};
+volatile unsigned short *g_tone_period_reg[TONE_CH_NUM] = {&TDR02,&TDR03,&TDR04,&TDR05,&TDR06,&TDR07};
+volatile unsigned short *g_timer_tone_mode_reg[TONE_CH_NUM] = {&TMR02,&TMR03,&TMR04,&TMR05,&TMR06,&TMR07};
 volatile unsigned short *g_timer_tone_clock_select_reg = &TPS0;
-const uint8_t  tone_channel_table[TONE_CH_NUM]  = {PWM_PIN_32,PWM_PIN_31,PWM_PIN_6,PWM_PIN_3,PWM_PIN_10,PWM_PIN_9,PWM_PIN_5};
+const uint8_t  tone_channel_table[TONE_CH_NUM]  = {TONE_PIN_11,TONE_PIN_6,TONE_PIN_3,TONE_PIN_10,TONE_PIN_9,TONE_PIN_5};
 tone_func tone_ch[TONE_CH_NUM] =
 {
-    {
-        .open  = R_Config_TAU0_1_Square_Wave_Create,
-        .start = R_Config_TAU0_1_Square_Wave_Start,
-        .stop = R_Config_TAU0_1_Square_Wave_Stop
-    },
     {
         .open  = R_Config_TAU0_2_Square_Wave_Create,
         .start = R_Config_TAU0_2_Square_Wave_Start,

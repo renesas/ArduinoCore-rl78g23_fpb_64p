@@ -143,10 +143,11 @@ void r_Config_UART0_interrupt_receive(void) __attribute__ ((interrupt));
  */
 //void r_Config_TAU0_0_channel1_interrupt(void) __attribute__ ((interrupt));
 /* 1118 nhu add */
-void r_Config_TAU0_01_PWM_channel1_interrupt(void) __attribute__ ((interrupt));
-void r_Config_TAU0_1_Measure_Signal_interrupt(void) __attribute__ ((interrupt));
-void r_Config_TAU0_1_Square_Wave_interrupt(void) __attribute__ ((interrupt));
+// void r_Config_TAU0_01_PWM_channel1_interrupt(void) __attribute__ ((interrupt));
+// void r_Config_TAU0_1_Measure_Signal_interrupt(void) __attribute__ ((interrupt));
+// void r_Config_TAU0_1_Square_Wave_interrupt(void) __attribute__ ((interrupt));
 void INT_TM01(void) __attribute__ ((interrupt));
+void r_Config_TAU0_1_Micros_interrupt(void) __attribute__ ((interrupt));
 /* 1118 nhu add */
 /*
  * INT_TM02 (0x30)
@@ -240,9 +241,8 @@ void INT_TM05(void) __attribute__ ((interrupt));
 void r_Config_TAU0_67_PWM_channel6_interrupt(void) __attribute__ ((interrupt));
 void r_Config_TAU0_6_Measure_Signal_interrupt(void) __attribute__ ((interrupt));
 void r_Config_TAU0_6_Square_Wave_interrupt(void) __attribute__ ((interrupt));
-void r_Config_TAU0_6_Micros_interrupt(void) __attribute__ ((interrupt));
+// void r_Config_TAU0_6_Micros_interrupt(void) __attribute__ ((interrupt));
 void INT_TM06(void) __attribute__ ((interrupt));
-/* 1118 nhu add */
 
 /*
  * INT_TM07 (0x48)
@@ -253,9 +253,7 @@ void r_Config_TAU0_67_PWM_channel7_interrupt(void) __attribute__ ((interrupt));
 void r_Config_TAU0_7_Measure_Signal_interrupt(void) __attribute__ ((interrupt));
 void r_Config_TAU0_7_Square_Wave_interrupt(void) __attribute__ ((interrupt));
 void INT_TM07(void) __attribute__ ((interrupt));
-/* 1118 nhu add */
-// 20221006 KAD
-void r_Config_TAU0_7_MSTimer2_interrupt(void) __attribute__ ((interrupt));
+// void r_Config_TAU0_7_MSTimer2_interrupt(void) __attribute__ ((interrupt));
 /*
  * INT_P6 (0x4A)
  */
