@@ -72,10 +72,13 @@ void R_Config_CSI11_Create(void)
     SIR03 = _0004_SAU_SIRMN_FECTMN | _0002_SAU_SIRMN_PECTMN | _0001_SAU_SIRMN_OVCTMN;    /* clear error flag */
     SMR03 = _0020_SAU_SMRMN_INITIALVALUE | _8000_SAU_CLOCK_SELECT_CK01 | _0000_SAU_CLOCK_MODE_CKS | 
             _0000_SAU_TRIGGER_SOFTWARE | _0000_SAU_MODE_CSI | _0000_SAU_TRANSFER_END;
-    SCR03 = _0004_SAU_SCRMN_INITIALVALUE | _C000_SAU_RECEPTION_TRANSMISSION | _0000_SAU_TIMING_1 | _0080_SAU_LSB | 
+//    SCR03 = _0004_SAU_SCRMN_INITIALVALUE | _C000_SAU_RECEPTION_TRANSMISSION | _0000_SAU_TIMING_1 | _0080_SAU_LSB |
+    SCR03 = _0004_SAU_SCRMN_INITIALVALUE | _C000_SAU_RECEPTION_TRANSMISSION | _3000_SAU_TIMING_4 | _0000_SAU_MSB |
             _0003_SAU_LENGTH_8;
-    SDR03 = _0C00_SAU0_CH3_BAUDRATE_DIVISOR;
-    SO0 |= _0800_SAU_CH3_CLOCK_OUTPUT_1;    /* CSI11 clock initial level */
+    SDR03 = _0600_SAU0_CH3_BAUDRATE_DIVISOR;
+//    SO0 |= _0800_SAU_CH3_CLOCK_OUTPUT_1;    /* CSI11 clock initial level */
+    SO0 &= (uint16_t)~_0800_SAU_CH3_CLOCK_OUTPUT_1;    /* CSI11 clock initial level */
+
     SO0 &= (uint16_t)~_0008_SAU_CH3_DATA_OUTPUT_1;    /* CSI11 SO initial level */
     SOE0 |= _0008_SAU_CH3_OUTPUT_ENABLE;    /* enable CSI11 output */
     /* Set SI11 pin */
@@ -104,8 +107,8 @@ void R_Config_CSI11_Create(void)
 ***********************************************************************************************************************/
 void R_Config_CSI11_Start(void)
 {
-    SO0 |= _0800_SAU_CH3_CLOCK_OUTPUT_1;    /* CSI11 clock initial level */
-    SO0 &= (uint16_t)~_0008_SAU_CH3_DATA_OUTPUT_1;    /* CSI11 SO initial level */
+//    SO0 |= _0800_SAU_CH3_CLOCK_OUTPUT_1;    /* CSI11 clock initial level */
+//    SO0 &= (uint16_t)~_0008_SAU_CH3_DATA_OUTPUT_1;    /* CSI11 SO initial level */
     SOE0 |= _0008_SAU_CH3_OUTPUT_ENABLE;    /* enable CSI11 output */
     SS0 |= _0008_SAU_CH3_START_TRG_ON;    /* enable CSI11 */
     CSIIF11 = 0U;    /* clear INTCSI11 interrupt flag */
@@ -202,8 +205,8 @@ void R_Config_CSI11_SetBitOrder(uint8_t bitOrder) {
 
     CSIIF11  = 0U;                                              /* clear INTCSI11 interrupt flag */
 
-    SO0     |= _0800_SAU_CH3_CLOCK_OUTPUT_1;                    /* CSI11 clock initial level */
-    SO0     &= (uint16_t)~_0008_SAU_CH3_DATA_OUTPUT_1;          /* CSI11 SO initial level */
+//    SO0     |= _0800_SAU_CH3_CLOCK_OUTPUT_1;                    /* CSI11 clock initial level */
+//    SO0     &= (uint16_t)~_0008_SAU_CH3_DATA_OUTPUT_1;          /* CSI11 SO initial level */
     SOE0    |= _0008_SAU_CH3_OUTPUT_ENABLE;                     /* enable CSI11 output */
     SS0     |= _0008_SAU_CH3_START_TRG_ON;                      /* enable CSI11 */
 }
@@ -227,17 +230,29 @@ void R_Config_CSI11_SetDataMode(uint8_t dataMode) {
      * Fix the `SPI_MODEx` macros together.
      */
     switch (dataMode) {
-    case SPI_MODE3:     SCR03 = (SCR03 & (uint16_t)~SPI_MODE_MASK) | _0000_SAU_TIMING_1; break;
-    case SPI_MODE2:     SCR03 = (SCR03 & (uint16_t)~SPI_MODE_MASK) | _2000_SAU_TIMING_3; break;
-    case SPI_MODE1:     SCR03 = (SCR03 & (uint16_t)~SPI_MODE_MASK) | _1000_SAU_TIMING_2; break;
+    case SPI_MODE3:
+        SCR03 = (SCR03 & (uint16_t)~SPI_MODE_MASK) | _0000_SAU_TIMING_1;
+        SO0     |= _0800_SAU_CH3_CLOCK_OUTPUT_1;                    /* CSI11 clock initial level */
+        break;
+    case SPI_MODE2:
+        SCR03 = (SCR03 & (uint16_t)~SPI_MODE_MASK) | _2000_SAU_TIMING_3;
+        SO0     |= _0800_SAU_CH3_CLOCK_OUTPUT_1;                    /* CSI11 clock initial level */
+        break;
+    case SPI_MODE1:
+        SCR03 = (SCR03 & (uint16_t)~SPI_MODE_MASK) | _1000_SAU_TIMING_2;
+        SO0     &= (uint16_t)~_0800_SAU_CH3_CLOCK_OUTPUT_1;                    /* CSI11 clock initial level */
+        break;
     case SPI_MODE0:
-    default:            SCR03 = (SCR03 & (uint16_t)~SPI_MODE_MASK) | _3000_SAU_TIMING_4; break;
+    default:
+        SCR03 = (SCR03 & (uint16_t)~SPI_MODE_MASK) | _3000_SAU_TIMING_4;
+        SO0     &= (uint16_t)~_0800_SAU_CH3_CLOCK_OUTPUT_1;                    /* CSI11 clock initial level */
+        break;
     }
 
     CSIIF11  = 0U;                                              /* clear INTCSI11 interrupt flag */
 
-    SO0     |= _0800_SAU_CH3_CLOCK_OUTPUT_1;                    /* CSI11 clock initial level */
-    SO0     &= (uint16_t)~_0008_SAU_CH3_DATA_OUTPUT_1;          /* CSI11 SO initial level */
+//    SO0     |= _0800_SAU_CH3_CLOCK_OUTPUT_1;                    /* CSI11 clock initial level */
+//    SO0     &= (uint16_t)~_0008_SAU_CH3_DATA_OUTPUT_1;          /* CSI11 SO initial level */
     SOE0    |= _0008_SAU_CH3_OUTPUT_ENABLE;                     /* enable CSI11 output */
     SS0     |= _0008_SAU_CH3_START_TRG_ON;                      /* enable CSI11 */
 }
@@ -260,7 +275,8 @@ void R_Config_CSI11_SetClockDivider(uint16_t clockDiv) {
     ST0     |= _0008_SAU_CH3_STOP_TRG_ON;                       /* Stop channel 3 */
     SOE0    &= (uint16_t)~_0008_SAU_CH3_OUTPUT_ENABLE;          /* disable CSI11 output */
 
-    clockDiv = clockDiv <   2 ?   2U
+//    clockDiv = clockDiv <   2 ?   2U
+    clockDiv = clockDiv <   4 ?   4U
              : clockDiv > 256 ? 256U
              :                  clockDiv + (clockDiv & 1U);
 
@@ -268,8 +284,8 @@ void R_Config_CSI11_SetClockDivider(uint16_t clockDiv) {
 
     CSIIF11  = 0U;                                              /* clear INTCSI11 interrupt flag */
 
-    SO0     |= _0800_SAU_CH3_CLOCK_OUTPUT_1;                    /* CSI11 clock initial level */
-    SO0     &= (uint16_t)~_0008_SAU_CH3_DATA_OUTPUT_1;          /* CSI11 SO initial level */
+//    SO0     |= _0800_SAU_CH3_CLOCK_OUTPUT_1;                    /* CSI11 clock initial level */
+//    SO0     &= (uint16_t)~_0008_SAU_CH3_DATA_OUTPUT_1;          /* CSI11 SO initial level */
     SOE0    |= _0008_SAU_CH3_OUTPUT_ENABLE;                     /* enable CSI11 output */
     SS0     |= _0008_SAU_CH3_START_TRG_ON;                      /* enable CSI11 */
 }
@@ -285,7 +301,7 @@ void R_Config_CSI11_SetClock(uint32_t clock) {
     uint32_t spi_frequency = R_BSP_GetFclkFreqHz() >> ((SPS0 >> 4) & 0x0F);
 
     for (clockDiv = 2; clockDiv < 256; clockDiv += 2) {
-    	if (clock >= spi_frequency / clockDiv) {
+        if (clock >= spi_frequency / clockDiv) {
             break;
         }
     }

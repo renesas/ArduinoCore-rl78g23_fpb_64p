@@ -79,13 +79,6 @@ Global functions
 #include "Config_TAU0_5_Square_Wave.h"
 #include "Config_TAU0_6_Square_Wave.h"
 #include "Config_TAU0_7_Square_Wave.h"
-#include "Config_TAU0_0_Measure_Signal.h"
-#include "Config_TAU0_2_Measure_Signal.h"
-#include "Config_TAU0_3_Measure_Signal.h"
-#include "Config_TAU0_4_Measure_Signal.h"
-#include "Config_TAU0_5_Measure_Signal.h"
-#include "Config_TAU0_6_Measure_Signal.h"
-#include "Config_TAU0_7_Measure_Signal.h"
 
 #include "Config_TAU0_1_Micros.h"
 /* End user code. Do not edit comment generated here */

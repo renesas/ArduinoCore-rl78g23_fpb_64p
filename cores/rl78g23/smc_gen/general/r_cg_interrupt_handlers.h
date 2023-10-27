@@ -102,7 +102,7 @@ void r_Config_UART0_interrupt_send(void) __attribute__ ((interrupt));
 /*
  * INT_TM00 (0x20)
  */
-void r_Config_TAU0_0_Measure_Signal_interrupt(void) __attribute__ ((interrupt));
+void r_Config_TAU0_0_PWM_interrupt(void) __attribute__ ((interrupt));
 
 /*
  * INT_SRE0/INT_TM01H (0x22)
@@ -155,7 +155,6 @@ void r_Config_TAU0_1_Micros_interrupt(void) __attribute__ ((interrupt));
 //void r_Config_TAU0_2_channel2_interrupt(void) __attribute__ ((interrupt));
 /* 1118 nhu add */
 void r_Config_TAU0_23_PWM_channel2_interrupt(void) __attribute__ ((interrupt));
-void r_Config_TAU0_2_Measure_Signal_interrupt(void) __attribute__ ((interrupt));
 void r_Config_TAU0_2_Square_Wave_interrupt(void) __attribute__ ((interrupt));
 void INT_TM02(void) __attribute__ ((interrupt));
 /* 1118 nhu add */
@@ -166,7 +165,6 @@ void INT_TM02(void) __attribute__ ((interrupt));
 //void INT_TM03(void) __attribute__ ((interrupt));
 /* 1118 nhu add */
 void r_Config_TAU0_23_PWM_channel3_interrupt(void) __attribute__ ((interrupt));
-void r_Config_TAU0_3_Measure_Signal_interrupt(void) __attribute__ ((interrupt));
 void r_Config_TAU0_3_Square_Wave_interrupt(void) __attribute__ ((interrupt));
 void INT_TM03(void) __attribute__ ((interrupt));
 /* 1118 nhu add */
@@ -217,7 +215,6 @@ void INT_TM13(void) __attribute__ ((interrupt));
 //void r_Config_TAU0_2_channel4_interrupt(void) __attribute__ ((interrupt));
 /* 1118 nhu add */
 void r_Config_TAU0_45_PWM_channel4_interrupt(void) __attribute__ ((interrupt));
-void r_Config_TAU0_4_Measure_Signal_interrupt(void) __attribute__ ((interrupt));
 void r_Config_TAU0_4_Square_Wave_interrupt(void) __attribute__ ((interrupt));
 void INT_TM04(void) __attribute__ ((interrupt));
 /* 1118 nhu add */
@@ -228,7 +225,6 @@ void INT_TM04(void) __attribute__ ((interrupt));
 //void r_Config_TAU0_5_interrupt(void) __attribute__ ((interrupt));
 /* 1118 nhu add */
 void r_Config_TAU0_45_PWM_channel5_interrupt(void) __attribute__ ((interrupt));
-void r_Config_TAU0_5_Measure_Signal_interrupt(void) __attribute__ ((interrupt));
 void r_Config_TAU0_5_Square_Wave_interrupt(void) __attribute__ ((interrupt));
 void INT_TM05(void) __attribute__ ((interrupt));
 /* 1118 nhu add */
@@ -239,7 +235,6 @@ void INT_TM05(void) __attribute__ ((interrupt));
 //void r_Config_TAU0_6_channel6_interrupt(void) __attribute__ ((interrupt));
 /* 1118 nhu add */
 void r_Config_TAU0_67_PWM_channel6_interrupt(void) __attribute__ ((interrupt));
-void r_Config_TAU0_6_Measure_Signal_interrupt(void) __attribute__ ((interrupt));
 void r_Config_TAU0_6_Square_Wave_interrupt(void) __attribute__ ((interrupt));
 // void r_Config_TAU0_6_Micros_interrupt(void) __attribute__ ((interrupt));
 void INT_TM06(void) __attribute__ ((interrupt));
@@ -250,7 +245,6 @@ void INT_TM06(void) __attribute__ ((interrupt));
 //void r_Config_TAU0_6_channel7_interrupt(void) __attribute__ ((interrupt));
 /* 1118 nhu add */
 void r_Config_TAU0_67_PWM_channel7_interrupt(void) __attribute__ ((interrupt));
-void r_Config_TAU0_7_Measure_Signal_interrupt(void) __attribute__ ((interrupt));
 void r_Config_TAU0_7_Square_Wave_interrupt(void) __attribute__ ((interrupt));
 void INT_TM07(void) __attribute__ ((interrupt));
 // void r_Config_TAU0_7_MSTimer2_interrupt(void) __attribute__ ((interrupt));

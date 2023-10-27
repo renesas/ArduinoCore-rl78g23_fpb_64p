@@ -43,13 +43,13 @@ Macro definitions
 #define _00_RTC_COUNTER_SEC                  (0x00U)
 #define _00_RTC_COUNTER_MIN                  (0x00U)
 #define _00_RTC_COUNTER_HOUR                 (0x00U)
-#define _06_RTC_COUNTER_WEEK                 (0x06U)
+#define _01_RTC_COUNTER_WEEK                 (0x01U)
 #define _01_RTC_COUNTER_DAY                  (0x01U)
 #define _01_RTC_COUNTER_MONTH                (0x01U)
-#define _00_RTC_COUNTER_YEAR                 (0x00U)
+#define _01_RTC_COUNTER_YEAR                 (0x01U)
 #define _00_RTC_ALARM_MIN                    (0x00U)
 #define _00_RTC_ALARM_HOUR                   (0x00U)
-#define _02_RTC_ALARM_WEEK                   (0x02U)
+#define _01_RTC_ALARM_WEEK                   (0x01U)
 #define RTC_WAITTIME_2CYCLE                  (163U)
 
 /***********************************************************************************************************************

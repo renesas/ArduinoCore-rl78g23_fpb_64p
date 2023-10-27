@@ -24,7 +24,9 @@ extern uint16_t g_u16ADUL;
 extern uint16_t g_u16ADLL;
 
 volatile unsigned long g_u32timer_periodic = 0u;
+#if 0
 volatile unsigned long g_u32microtimer_periodic = 0u;
+#endif
 
 extern "C" {
 #include "r_smc_entry.h"
@@ -44,7 +46,7 @@ static struct {
 fITInterruptFunc_t    g_fITInterruptFunc = NULL;    //!< ユーザー定義インターバルタイマハンドラ
 
 fInterruptFunc_t g_fMicroInterruptFunc = NULL;
-
+#if 0
 extern volatile unsigned long g_u32timer_periodic;
 
 static void PeriodicMillisIntervalFunc()
@@ -56,6 +58,7 @@ static void PeriodicMillisIntervalFunc()
         g_u32timer_periodic = 0;
     }
 }
+#endif
 
 /**
  * タイマーアレイユニットの停止
@@ -429,6 +432,7 @@ void detachIntervalTimerHandler()
 
 void attachMicroIntervalTimerHandler(void (*fFunction)(void), uint16_t interval)
 {
+    (void)interval;  //Warning measures
     g_fMicroInterruptFunc = fFunction;
 //    R_Config_TAU0_7_MSTimer2_Create();
 //    R_Config_TAU0_7_MSTimer2_SetPeriod(interval);

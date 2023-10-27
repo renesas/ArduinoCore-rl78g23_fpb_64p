@@ -94,7 +94,6 @@ extern "C"
 
 // tone_func
 
-#define PULSE_IN_CH_NUM			(5)
 int8_t get_tone_channel(uint8_t tone_num);
 
 typedef struct {

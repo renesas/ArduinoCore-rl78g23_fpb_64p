@@ -4,7 +4,7 @@
 # For more info:
 # LLVM Prototype Package for Tools Test
 name=Renesas RL78/G23
-version=2.1.0
+version=2.2.0
 
 # --------------------- 
 # Compile variables
@@ -167,7 +167,7 @@ recipe.S.o.pattern="{compiler.path}{compiler.S.cmd}" {includes} {compiler.includ
 # --------------------
 # Create archives
 # --------------------
-compiler.ar.cmd=llvm-ar.exe
+compiler.ar.cmd=llvm-ar
 compiler.ar.flags=rcs
 recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} "{archive_file_path}" "{object_file}"
 

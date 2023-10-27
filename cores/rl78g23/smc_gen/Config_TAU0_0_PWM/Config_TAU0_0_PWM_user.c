@@ -44,6 +44,8 @@ Includes
 Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
+extern uint8_t g_analogWrite_enable_interrupt_flag;
+extern volatile uint8_t g_tau_output_enable;
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -59,4 +61,20 @@ void R_Config_TAU0_0_PWM_Create_UserInit(void)
 }
 
 /* Start user code for adding. Do not edit comment generated here */
+void r_Config_TAU0_0_PWM_interrupt(void)
+{
+	if(g_analogWrite_enable_interrupt_flag == 1UL)
+    {
+    	TOE0 |= g_tau_output_enable;
+    	g_tau_output_enable = 0;
+    	g_analogWrite_enable_interrupt_flag = 0;
+        TMMK00 = 1U;    /* disable INTTM00 interrupt */
+        TMIF00 = 0U;    /* clear INTTM00 interrupt flag */
+    }
+	else
+	{
+		;
+	}
+
+}
 /* End user code. Do not edit comment generated here */

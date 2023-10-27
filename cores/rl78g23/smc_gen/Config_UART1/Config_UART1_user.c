@@ -77,7 +77,7 @@ void R_Config_UART1_Create_UserInit(void)
 static void r_Config_UART1_callback_sendend(void)
 {
     /* Start user code for r_Config_UART1_callback_sendend. Do not edit comment generated here */
-	Set_Char_Serial_from_buf(1);
+    Set_Char_Serial_from_buf(1);
     if(0 != uart_transmit_callback_table[1])
     {
         (*uart_transmit_callback_table[1])();
@@ -94,7 +94,7 @@ static void r_Config_UART1_callback_sendend(void)
 static void r_Config_UART1_callback_receiveend(void)
 {
     /* Start user code for r_Config_UART1_callback_receiveend. Do not edit comment generated here */
-	Set_Char_Serial_to_buf(1);
+    Set_Char_Serial_to_buf(1);
     if(0 != uart_receive_callback_table[1])
     {
         (*uart_receive_callback_table[1])();
@@ -112,6 +112,7 @@ static void r_Config_UART1_callback_receiveend(void)
 static void r_Config_UART1_callback_error(uint8_t err_type)
 {
     /* Start user code for r_Config_UART1_callback_error. Do not edit comment generated here */
+    (void)err_type;  //Warning measures
     /* End user code. Do not edit comment generated here */
 }
 
@@ -125,6 +126,7 @@ static void r_Config_UART1_callback_error(uint8_t err_type)
 static void r_Config_UART1_callback_softwareoverrun(uint16_t rx_data)
 {
     /* Start user code for r_Config_UART1_callback_softwareoverrun. Do not edit comment generated here */
+    (void)rx_data;  //Warning measures
     /* End user code. Do not edit comment generated here */
 }
 

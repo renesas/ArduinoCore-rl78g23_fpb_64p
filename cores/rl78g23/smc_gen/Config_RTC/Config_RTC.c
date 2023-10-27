@@ -68,22 +68,22 @@ void R_Config_RTC_Create(void)
     /* Set fRTCCK */
     RTCC0 = _00_RTC_CLK_32KHZ;
     /* Set 12-/24-hour system and period of Constant-period interrupt (INTRTC) */
-    RTCC0 |= (_00_RTC_RTC1HZ_DISABLE | _08_RTC_24HOUR_MODE | _00_RTC_INTRTC_NOT_GENERATE);
+    RTCC0 |= (_00_RTC_RTC1HZ_DISABLE | _08_RTC_24HOUR_MODE | _02_RTC_INTRTC_CLOCK_1SEC);
     /* Set real-time clock initial value */
     SEC = _00_RTC_COUNTER_SEC;
     MIN = _00_RTC_COUNTER_MIN;
     HOUR = _00_RTC_COUNTER_HOUR;
-    WEEK = _06_RTC_COUNTER_WEEK;
+    WEEK = _01_RTC_COUNTER_WEEK;
     DAY = _01_RTC_COUNTER_DAY;
     MONTH = _01_RTC_COUNTER_MONTH;
-    YEAR = _00_RTC_COUNTER_YEAR;
+    YEAR = _01_RTC_COUNTER_YEAR;
     /* Set alarm detect function */
     WALE = 0U;
-    WALIE = 0U;
+    WALIE = 1U;
     /* Alarm function setting */
     ALARMWM = _00_RTC_ALARM_MIN;
     ALARMWH = _00_RTC_ALARM_HOUR;
-    ALARMWW = _02_RTC_ALARM_WEEK;
+    ALARMWW = _01_RTC_ALARM_WEEK;
 
     R_Config_RTC_Create_UserInit();
 }

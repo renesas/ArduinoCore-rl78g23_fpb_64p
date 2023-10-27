@@ -144,7 +144,7 @@ const void *Vectors[] VECT_SECT = {
 /*
  * INT_TM00 (0x20)
  */
-    r_Config_TAU0_0_Measure_Signal_interrupt,
+	r_Config_TAU0_0_PWM_interrupt,
 
 /*
  * INT_SRE0/INT_TM01H (0x22)
@@ -211,17 +211,14 @@ const void *Vectors[] VECT_SECT = {
  */
 //    r_Config_TAU0_2_channel2_interrupt,
 /* 1118 nhu add */
-    r_Config_TAU0_2_Measure_Signal_interrupt,
 //    (void*)0xFFFF,
 /* 1118 nhu add */
+	INT_TM02,
 
 /*
  * INT_TM03 (0x32)
  */
-//    INT_TM03,
-/* 1118 nhu add */
-    r_Config_TAU0_3_Measure_Signal_interrupt,
-/* 1118 nhu add */
+    INT_TM03,
 /*
  * INT_AD (0x34)
  */
@@ -265,29 +262,27 @@ const void *Vectors[] VECT_SECT = {
  * INT_TM04 (0x42)
  */
 //    r_Config_TAU0_2_channel4_interrupt,
-/* 1118 nhu add */
-    r_Config_TAU0_4_Measure_Signal_interrupt,
-/* 1118 nhu add */
+	INT_TM04,
 
 /*
  * INT_TM05 (0x44)
  */
-    r_Config_TAU0_5_Measure_Signal_interrupt,
+	INT_TM05,
 
 /*
  * INT_TM06 (0x46)
  */
 //    r_Config_TAU0_6_channel6_interrupt,
-    r_Config_TAU0_6_Measure_Signal_interrupt,
 //    r_Config_TAU0_6_Micros_interrupt,
+	INT_TM06,
 
 
 /*
  * INT_TM07 (0x48)
  */
 //    r_Config_TAU0_6_channel7_interrupt,
-    r_Config_TAU0_7_Measure_Signal_interrupt,
 //    r_Config_TAU0_7_MSTimer2_interrupt,
+	INT_TM07,
 
 /*
  * INT_P6 (0x4A)

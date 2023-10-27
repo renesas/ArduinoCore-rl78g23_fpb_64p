@@ -40,7 +40,7 @@ Macro definitions (Register bit)
 /***********************************************************************************************************************
 Macro definitions
 ***********************************************************************************************************************/
-#define _0C00_SAU0_CH3_BAUDRATE_DIVISOR    (0x0C00U)    /* transfer clock set by dividing the operating clock */
+#define _0600_SAU0_CH3_BAUDRATE_DIVISOR    (0x0600U)    /* transfer clock set by dividing the operating clock */
 
 /***********************************************************************************************************************
 Typedef definitions

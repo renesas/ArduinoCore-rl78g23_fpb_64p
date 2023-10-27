@@ -62,27 +62,15 @@ extern "C"{
 #define FREQUENCY_MIN_VAL	(500)
 #define FREQUENCY_MAX_VAL	(8000000)
 
+/* pulseIn define. */
+#define PULSEIN_CLOCK_CYCLE 41
+
+
 #ifdef __cplusplus
 } // extern "C"
 #endif
 
-extern volatile uint8_t g_tau0_ch0_interrupt_flag;
-extern volatile uint8_t g_tau0_ch1_interrupt_flag;
-extern volatile uint8_t g_tau0_ch2_interrupt_flag;
-extern volatile uint8_t g_tau0_ch3_interrupt_flag;
-extern volatile uint8_t g_tau0_ch4_interrupt_flag;
-extern volatile uint8_t g_tau0_ch5_interrupt_flag;
-extern volatile uint8_t g_tau0_ch6_interrupt_flag;
-extern volatile uint8_t g_tau0_ch7_interrupt_flag;
 // extern uint32_t R_BSP_GetFclkFreqHz(void);
-
-extern volatile uint8_t g_pulse_enable_interrupt_flag;
-extern volatile unsigned short *g_timer_pulse_mode_reg[PULSE_IN_CH_NUM];
-extern volatile unsigned short *g_timer_pulse_clock_select_reg;
-extern volatile unsigned short *g_timer_timeout_data_reg;
-extern volatile unsigned short *g_timer_timeout_mode_reg;
-extern const uint8_t  pulse_in_channel_table[PULSE_IN_CH_NUM];
-extern pulse_in_func pulse_in_ch[PULSE_IN_CH_NUM];
 
 #endif /* WiringVariante_h */
 

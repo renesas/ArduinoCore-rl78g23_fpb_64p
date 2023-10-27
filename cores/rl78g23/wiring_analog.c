@@ -284,6 +284,9 @@ void analogWritePinFrequency(uint8_t pin, uint32_t Hz) {
     {
         pwm_ch[pwm_channel].cycle = _analogFrequency(pin, Hz);
     }
+#else
+    (void)pin;  //Warning measures
+    (void)Hz;   //Warning measures
 #endif
 }
 

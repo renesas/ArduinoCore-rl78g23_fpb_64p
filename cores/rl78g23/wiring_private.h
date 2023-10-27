@@ -72,7 +72,6 @@ typedef struct {
 
 int8_t get_pwm_channel(uint8_t pwm_num);
 int8_t get_analog_channel(uint8_t analog_num);
-int8_t get_pulse_in_channel(uint8_t pulse_in_num);
 
 #ifdef __cplusplus
 } // extern "C"

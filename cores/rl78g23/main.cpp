@@ -52,7 +52,7 @@ int main(void)
 
     /* Start RTC Timer */
 #if defined(G22_FPB) || defined(G23_FPB)
-//    R_Config_RTC_Start();
+    R_Config_RTC_Start();
     R_Config_ITL013_SetCompareMatch(0x20, 0x0);
     R_Config_ITL013_Start();
 #endif

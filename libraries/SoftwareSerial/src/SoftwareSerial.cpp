@@ -424,7 +424,6 @@ const int XMIT_START_ADJUSTMENT = 4;
 
 size_t SoftwareSerial::write(uint8_t b)
 {
-    uint8_t bak_ITLCTL0;
     if (_tx_delay == 0)
         return 0;
 

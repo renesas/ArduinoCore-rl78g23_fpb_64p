@@ -175,6 +175,6 @@ void r_Config_CSI11_interrupt(void)
  * Return Value : -
  *********************************************************************************************************************/
 void R_Config_CSI11_ClearStatus(void) {
-//    g_csi11_status_flag = _0000_SPI_STATUS_CLEAR;
+    g_csi11_status_flag = _0000_SPI_STATUS_CLEAR;
 }
 /* End user code. Do not edit comment generated here */
