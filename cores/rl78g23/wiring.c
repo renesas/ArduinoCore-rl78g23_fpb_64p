@@ -151,7 +151,8 @@ void delayMicroseconds(unsigned int us)
         return;
     }
     g_delay_cnt_micros_flg  = 1U;
-    if (g_u8PowerManagementMode == PM_NORMAL_MODE) {
+    if (g_u8PowerManagementMode == PM_NORMAL_MODE
+            ||g_u8PowerManagementMode == PM_SNOOZE_MODE) {
         unsigned long s, w, d;
         s = micros();
         w = us - DELAYMICROSECONDS_ADJUST2 ;

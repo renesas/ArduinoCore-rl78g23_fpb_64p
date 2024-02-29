@@ -116,15 +116,9 @@ typedef struct {
 
 
 #define PIN_SPI_SS    (10)
-#define PIN_SPI_MOSI  (36)
-#define PIN_SPI_MISO  (37)
-#define PIN_SPI_SCK   (38)
-
-#define PIN_SPI3_SS    (27)
-#define PIN_SPI3_MOSI  (11)
-#define PIN_SPI3_MISO  (12)
-#define PIN_SPI3_SCK   (13)
-
+#define PIN_SPI_MOSI  (11)
+#define PIN_SPI_MISO  (12)
+#define PIN_SPI_SCK   (13)
 
 extern const uint8_t SS;
 extern const uint8_t MOSI;
@@ -1087,7 +1081,7 @@ extern const uint8_t A9;
 // #define IS_PIN_SERIAL1(p)        (0)
 // #define IS_PIN_SERIAL2(p)        ((p) == PIN_SERIAL2_RX || (p) == PIN_SERIAL2_TX)
 
-#define IS_PIN_DIGITAL(p)       ((p) >= 0 && (p) < NUM_DIGITAL_PINS && (!(IS_PIN_SERIAL(p))))
+#define IS_PIN_DIGITAL(p)       ((p) >= 0 && (p) < NUM_DIGITAL_PINS && (!(IS_PIN_SERIAL(p))) && !((p) == 14) && !((p) == 27) && !((p) == 28) && !((p) == 41) )
 #define IS_PIN_ANALOG(p)        ((p) >= 51 && (p) < 57)
 #define IS_PIN_PWM(p)           digitalPinHasPWM(p)
 #define IS_PIN_SERVO(p)         ((p) >= 0 && (p) < MAX_SERVOS)

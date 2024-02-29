@@ -222,32 +222,21 @@ void INT_TM04(void) __attribute__ ((interrupt));
 /*
  * INT_TM05 (0x44)
  */
-//void r_Config_TAU0_5_interrupt(void) __attribute__ ((interrupt));
-/* 1118 nhu add */
-void r_Config_TAU0_45_PWM_channel5_interrupt(void) __attribute__ ((interrupt));
+void r_Config_TAU0_5_Servo_interrupt(void) __attribute__ ((interrupt));
 void r_Config_TAU0_5_Square_Wave_interrupt(void) __attribute__ ((interrupt));
-void INT_TM05(void) __attribute__ ((interrupt));
-/* 1118 nhu add */
 
 /*
  * INT_TM06 (0x46)
  */
-//void r_Config_TAU0_6_channel6_interrupt(void) __attribute__ ((interrupt));
-/* 1118 nhu add */
-void r_Config_TAU0_67_PWM_channel6_interrupt(void) __attribute__ ((interrupt));
+void r_Config_TAU0_6_Servo_interrupt(void) __attribute__ ((interrupt));
 void r_Config_TAU0_6_Square_Wave_interrupt(void) __attribute__ ((interrupt));
-// void r_Config_TAU0_6_Micros_interrupt(void) __attribute__ ((interrupt));
-void INT_TM06(void) __attribute__ ((interrupt));
 
 /*
  * INT_TM07 (0x48)
  */
-//void r_Config_TAU0_6_channel7_interrupt(void) __attribute__ ((interrupt));
-/* 1118 nhu add */
-void r_Config_TAU0_67_PWM_channel7_interrupt(void) __attribute__ ((interrupt));
+void r_Config_TAU0_7_Servo_interrupt(void) __attribute__ ((interrupt));
 void r_Config_TAU0_7_Square_Wave_interrupt(void) __attribute__ ((interrupt));
-void INT_TM07(void) __attribute__ ((interrupt));
-// void r_Config_TAU0_7_MSTimer2_interrupt(void) __attribute__ ((interrupt));
+
 /*
  * INT_P6 (0x4A)
  */

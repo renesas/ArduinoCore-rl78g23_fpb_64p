@@ -261,28 +261,22 @@ const void *Vectors[] VECT_SECT = {
 /*
  * INT_TM04 (0x42)
  */
-//    r_Config_TAU0_2_channel4_interrupt,
 	INT_TM04,
 
 /*
  * INT_TM05 (0x44)
  */
-	INT_TM05,
+    r_Config_TAU0_5_Servo_interrupt,
 
 /*
  * INT_TM06 (0x46)
  */
-//    r_Config_TAU0_6_channel6_interrupt,
-//    r_Config_TAU0_6_Micros_interrupt,
-	INT_TM06,
-
+    r_Config_TAU0_6_Servo_interrupt,
 
 /*
  * INT_TM07 (0x48)
  */
-//    r_Config_TAU0_6_channel7_interrupt,
-//    r_Config_TAU0_7_MSTimer2_interrupt,
-	INT_TM07,
+    r_Config_TAU0_7_Servo_interrupt,
 
 /*
  * INT_P6 (0x4A)

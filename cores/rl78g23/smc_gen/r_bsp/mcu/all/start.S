@@ -189,6 +189,25 @@ _bss_zero_done:
 
 _bssf_zero_done:
 
+;; block fill to heap
+    movw    ax, #__stack
+    ;movw    bc, #__stack_size
+    ;subw    ax, bc   ; ax = top of stack area
+    movw    bc, #__end
+    subw    ax, bc  ;  ax = heap size
+    movw    bc, ax
+
+    movw    ax, #0
+    cmpw    ax, bc
+    bz      $_heap_zero_done
+1:
+    decw    bc
+    decw    bc
+    movw    __end[bc], ax
+    cmpw    ax, bc
+    bnz      $1b
+
+_heap_zero_done:
 
 /* call the hardware initialiser */
     call    !!_bsp_init_hardware

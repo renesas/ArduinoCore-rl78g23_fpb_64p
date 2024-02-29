@@ -53,6 +53,7 @@ int main(void)
     /* Start RTC Timer */
 #if defined(G22_FPB) || defined(G23_FPB)
     R_Config_RTC_Start();
+    delayMicroseconds(62);    /* Wait more than 2 clocks of fRTCCK */
     R_Config_ITL013_SetCompareMatch(0x20, 0x0);
     R_Config_ITL013_Start();
 #endif
@@ -83,11 +84,6 @@ int main(void)
 #if (IIC_CHANNEL1!=1)
 //    R_IICA1_Set_Reset();
 //    R_IICA1_Set_PowerOff();
-#endif
-
-/* RTC */
-#if !defined(RTC_ON) | (RTC_ON!=0)
-    R_RTC_Set_PowerOff();
 #endif
 
 #if WDT_EN==1

@@ -44,7 +44,7 @@ Includes
 Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
-uint8_t g_adc_int_flg=0;
+volatile uint8_t g_adc_int_flg=0;
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************

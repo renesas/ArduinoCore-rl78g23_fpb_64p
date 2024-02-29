@@ -36,7 +36,7 @@
 #endif // G23_FPB
 
 extern const PinTableType * pinTablelist[NUM_DIGITAL_PINS];
-extern uint8_t g_adc_int_flg;
+extern volatile uint8_t g_adc_int_flg;
 static uint8_t g_u8AnalogReference = DEFAULT;
 boolean g_bAdcInterruptFlag = false;
 uint16_t g_u16ADUL;
