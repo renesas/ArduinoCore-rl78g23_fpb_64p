@@ -101,6 +101,7 @@ inc33="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp/mcu/rl78_g23"
 inc34="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp/mcu/rl78_g23/register_access"
 inc35="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_bsp/mcu/rl78_g23/register_access/llvm"
 inc36="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_config"
+inc37="-I{runtime.platform.path}/cores/rl78g23/api/deprecated"
 
 
 #Libinc0="-I{runtime.platform.path}/libraries/Ethernet3/src" 
@@ -124,7 +125,7 @@ inc36="-I{runtime.platform.path}/cores/rl78g23/smc_gen/r_config"
 incA={inc0}  {inc1}  {inc2}  {inc3}  {inc4}  {inc5}  {inc6}  {inc7}  {inc8}  {inc9} 
 incB={inc10} {inc11} {inc12} {inc13} {inc14} {inc15} {inc16} {inc17} {inc18} {inc19} 
 incC={inc20} {inc21} {inc22} {inc23} {inc24} {inc25} {inc26} {inc27} {inc28} {inc29} 
-incD={inc30} {inc31} {inc32} {inc33} {inc34} {inc35} {inc36} 
+incD={inc30} {inc31} {inc32} {inc33} {inc34} {inc35} {inc36} {inc37} 
 incE= 
 incF=
 
