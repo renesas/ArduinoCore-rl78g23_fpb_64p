@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_UART1.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_UART1.
-* Creation Date: 2021-05-14
+* File Name        : Config_UART1.c
+* Component Version: 1.3.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_UART1.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -79,19 +79,27 @@ void R_Config_UART1_Create(void)
     SREPR01 = 1U;
     SMR02 = _0020_SAU_SMRMN_INITIALVALUE | _8000_SAU_CLOCK_SELECT_CK01 | _0000_SAU_TRIGGER_SOFTWARE | 
             _0002_SAU_MODE_UART | _0000_SAU_TRANSFER_END;
-    SCR02 = _8000_SAU_TRANSMISSION | _0000_SAU_INTSRE_MASK | _0000_SAU_PARITY_NONE | _0080_SAU_LSB | 
-            _0010_SAU_STOP_1 | _0007_SAU_LENGTH_8;
+    SCR02 = _0004_SAU_SCRMN_INITIALVALUE | _8000_SAU_TRANSMISSION | _0000_SAU_INTSRE_MASK | _0000_SAU_PARITY_NONE | 
+            _0080_SAU_LSB | _0010_SAU_STOP_1 | _0003_SAU_LENGTH_8;
     SDR02 = _CE00_SAU0_CH2_TRANSMIT_DIVISOR;
     NFEN0 |= _04_SAU_RXD1_FILTER_ON;
     SIR03 = _0004_SAU_SIRMN_FECTMN | _0002_SAU_SIRMN_PECTMN | _0001_SAU_SIRMN_OVCTMN;    /* clear error flag */
     SMR03 = _0020_SAU_SMRMN_INITIALVALUE | _8000_SAU_CLOCK_SELECT_CK01 | _0100_SAU_TRIGGER_RXD | _0000_SAU_EDGE_FALL | 
             _0002_SAU_MODE_UART | _0000_SAU_TRANSFER_END;
-    SCR03 = _4000_SAU_RECEPTION | _0400_SAU_INTSRE_ENABLE | _0000_SAU_PARITY_NONE | _0080_SAU_LSB | _0010_SAU_STOP_1 | 
-            _0007_SAU_LENGTH_8;
+    SCR03 = _0004_SAU_SCRMN_INITIALVALUE | _4000_SAU_RECEPTION | _0400_SAU_INTSRE_ENABLE | _0000_SAU_PARITY_NONE | 
+            _0080_SAU_LSB | _0010_SAU_STOP_1 | _0003_SAU_LENGTH_8;
     SDR03 = _CE00_SAU0_CH3_RECEIVE_DIVISOR;
     SO0 |= _0004_SAU_CH2_DATA_OUTPUT_1;
     SOL0 |= _0000_SAU_CHANNEL2_NORMAL;    /* output level normal */
     SOE0 |= _0004_SAU_CH2_OUTPUT_ENABLE;    /* enable UART1 output */
+    /* Set TxD1 pin */
+//    PMCA0 &= 0xFBU;
+//   PFOE1 |= 0x02U;
+//    P0 |= 0x04U;
+//    PM0 &= 0xFBU;
+    /* Set RxD1 pin */
+//    PMCA0 &= 0xF7U;
+//    PM0 |= 0x08U;
 
     R_Config_UART1_Create_UserInit();
 }

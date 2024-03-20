@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_tau.h
-* Version      : 1.0.1
-* Device(s)    : R7F100GLGxFB
-* Description  : General header file for TAU peripheral.
-* Creation Date: 2021-05-14
+* File Name        : r_cg_tau.h
+* Version          : 1.0.11
+* Device(s)        : R7F100GLGxFB
+* Description      : General header file for TAU peripheral.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 #ifndef TAU_H
@@ -262,15 +262,16 @@ Macro definitions (Register bit)
 #define _03_TAU_CH5_INPUT_FIMP            (0x03U)    /* internal Medium speed oscillation colock (fIMP) */
 #define _04_TAU_CH5_INPUT_FIL             (0x04U)    /* internal low speed oscillation colock (fIL) */
 #define _05_TAU_CH5_INPUT_FSUB            (0x05U)    /* sub colock (fSUB) */
+#define _F8_TAU_CH5_INPUT_CLEAR           (0xF8U)    /* bits of TIS02 - TIS00 clear */
 
 /*
     Timer Input Select Register m (TIS1)
 */
 /* Selection of timer input used with channel 1 of unit 0 (TIS11) */
-#define _00_TAU_CH1_INPUT_TI01            (0x00U)    /* input signal of timer input pin (TI01) */
+#define _01_TAU_CH1_INPUT_TI01            (0x01U)    /* input signal of timer input pin (TI01) */
 #define _02_TAU_CH1_INPUT_ELCL            (0x02U)    /* input signal of ELCL */
 /* Selection of timer input used with channel 0 of unit 0 (TIS10) */
-#define _00_TAU_CH0_INPUT_TI00            (0x00U)    /* input signal of timer input pin (TI00) */
+#define _02_TAU_CH0_INPUT_TI00            (0x02U)    /* input signal of timer input pin (TI00) */
 #define _01_TAU_CH0_INPUT_ELCL            (0x01U)    /* input signal of ELCL */
 
 /*

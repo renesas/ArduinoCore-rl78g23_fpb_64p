@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_TAU0_6_Square_Wave.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxLA
-* Description  : This file implements device driver for Config_TAU0_6_Square_Wave.
-* Creation Date: 2021-11-12
+* File Name        : Config_TAU0_6_Square_Wave.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_TAU0_6_Square_Wave.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -61,6 +61,9 @@ void R_Config_TAU0_6_Square_Wave_Create(void)
     /* Mask channel 6 interrupt */
     TMMK06 = 1U;    /* disable INTTM06 interrupt */
     TMIF06 = 0U;    /* clear INTTM06 interrupt flag */
+    /* Set INTTM06 low priority */
+//    TMPR106 = 1U;
+//    TMPR006 = 1U;
     /* TAU06 used as square output function */
     TMR06 = _0000_TAU_CLOCK_SELECT_CKM0 | _0000_TAU_CLOCK_MODE_CKS | _0000_TAU_COMBINATION_SLAVE | 
             _0000_TAU_TRIGGER_SOFTWARE | _0000_TAU_MODE_INTERVAL_TIMER | _0001_TAU_START_INT_USED;
@@ -86,6 +89,8 @@ void R_Config_TAU0_6_Square_Wave_Create(void)
 ***********************************************************************************************************************/
 void R_Config_TAU0_6_Square_Wave_Start(void)
 {
+//    TMIF06 = 0U;    /* clear INTTM06 interrupt flag */
+//    TMMK06 = 0U;    /* enable INTTM06 interrupt */
     TOE0 |= _0040_TAU_CH6_OUTPUT_ENABLE;
     TS0 |= _0040_TAU_CH6_START_TRG_ON;
 }
@@ -100,6 +105,9 @@ void R_Config_TAU0_6_Square_Wave_Stop(void)
 {
     TT0 |= _0040_TAU_CH6_STOP_TRG_ON;
     TOE0 &= (uint16_t)~_0040_TAU_CH6_OUTPUT_ENABLE;
+    /* Mask channel 6 interrupt */
+//    TMMK06 = 1U;    /* disable INTTM06 interrupt */
+//    TMIF06 = 0U;    /* clear INTTM06 interrupt flag */
 }
 
 /* Start user code for adding. Do not edit comment generated here */

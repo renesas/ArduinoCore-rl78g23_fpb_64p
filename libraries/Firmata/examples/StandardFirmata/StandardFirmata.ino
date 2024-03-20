@@ -1,32 +1,9 @@
-/*
-  Firmata is a generic protocol for communicating with microcontrollers
-  from software on a host computer. It is intended to work with
-  any host computer software package.
-
-  To download a host software package, please click on the following link
-  to open the list of Firmata client libraries in your default browser.
-
-  https://github.com/firmata/arduino#firmata-client-libraries
-
-  Copyright (C) 2006-2008 Hans-Christoph Steiner.  All rights reserved.
-  Copyright (C) 2010-2011 Paul Stoffregen.  All rights reserved.
-  Copyright (C) 2009 Shigeru Kobayashi.  All rights reserved.
-  Copyright (C) 2009-2016 Jeff Hoefs.  All rights reserved.
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  See file LICENSE.txt for further informations on licensing terms.
-
-  Last updated August 17th, 2017
-*/
-
-#include "Arduino.h"
-#include "Wire.h"
-#include "Servo.h"
-#include "Firmata.h"
+#define SERVO_INCLUDE (1)
+#if (SERVO_INCLUDE == 1)
+#include <Servo.h>
+#endif
+#include <Wire.h>
+#include <Firmata.h>
 
 #define I2C_WRITE                   B00000000
 #define I2C_READ                    B00001000
@@ -84,7 +61,9 @@ signed char queryIndex = -1;
 // default delay time between i2c read request and Wire.requestFrom()
 unsigned int i2cReadDelayTime = 0;
 
+#if (SERVO_INCLUDE == 1)
 Servo servos[MAX_SERVOS];
+#endif
 byte servoPinMap[TOTAL_PINS];
 byte detachedServos[MAX_SERVOS];
 byte detachedServoCount = 0;
@@ -123,6 +102,7 @@ byte wireRead(void)
 
 void attachServo(byte pin, int minPulse, int maxPulse)
 {
+#if (SERVO_INCLUDE == 1)
   if (servoCount < MAX_SERVOS) {
     // reuse indexes of detached servos until all have been reallocated
     if (detachedServoCount > 0) {
@@ -140,10 +120,12 @@ void attachServo(byte pin, int minPulse, int maxPulse)
   } else {
     Firmata.sendString("Max servos attached");
   }
+#endif
 }
 
 void detachServo(byte pin)
 {
+#if (SERVO_INCLUDE == 1)
   servos[servoPinMap[pin]].detach();
   // if we're detaching the last servo, decrement the count
   // otherwise store the index of the detached servo
@@ -157,6 +139,7 @@ void detachServo(byte pin)
   }
 
   servoPinMap[pin] = 255;
+#endif
 }
 
 void enableI2CPins()
@@ -207,6 +190,7 @@ void readAndReportData(byte address, int theRegister, byte numBytes, byte stopTX
     Firmata.sendString("I2C: Too many bytes received");
   } else if (numBytes > Wire.available()) {
     Firmata.sendString("I2C: Too few bytes received");
+    numBytes = Wire.available();
   }
 
   i2cRxData[0] = address;
@@ -271,11 +255,13 @@ void setPinModeCallback(byte pin, int mode)
     // the following if statements should reconfigure the pins properly
     disableI2CPins();
   }
+#if (SERVO_INCLUDE == 1)
   if (IS_PIN_DIGITAL(pin) && mode != PIN_MODE_SERVO) {
     if (servoPinMap[pin] < MAX_SERVOS && servos[servoPinMap[pin]].attached()) {
       detachServo(pin);
     }
   }
+#endif
   if (IS_PIN_ANALOG(pin)) {
     reportAnalogCallback(PIN_TO_ANALOG(pin), mode == PIN_MODE_ANALOG ? 1 : 0); // turn on/off reporting
   }
@@ -334,6 +320,7 @@ void setPinModeCallback(byte pin, int mode)
         Firmata.setPinMode(pin, PIN_MODE_PWM);
       }
       break;
+#if (SERVO_INCLUDE == 1)
     case PIN_MODE_SERVO:
       if (IS_PIN_DIGITAL(pin)) {
         Firmata.setPinMode(pin, PIN_MODE_SERVO);
@@ -344,6 +331,7 @@ void setPinModeCallback(byte pin, int mode)
         }
       }
       break;
+#endif
     case PIN_MODE_I2C:
       if (IS_PIN_I2C(pin)) {
         // mark the pin as i2c
@@ -382,11 +370,13 @@ void analogWriteCallback(byte pin, int value)
 {
   if (pin < TOTAL_PINS) {
     switch (Firmata.getPinMode(pin)) {
+#if (SERVO_INCLUDE == 1)
       case PIN_MODE_SERVO:
         if (IS_PIN_DIGITAL(pin))
           servos[servoPinMap[pin]].write(value);
         Firmata.setPinState(pin, value);
         break;
+#endif
       case PIN_MODE_PWM:
         if (IS_PIN_PWM(pin))
           analogWrite(PIN_TO_PWM(pin), value);
@@ -596,6 +586,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
       }
 
       break;
+#if (SERVO_INCLUDE == 1)
     case SERVO_CONFIG:
       if (argc > 4) {
         // these vars are here for clarity, they'll optimized away by the compiler
@@ -612,6 +603,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
         }
       }
       break;
+#endif
     case SAMPLING_INTERVAL:
       if (argc > 1) {
         samplingInterval = argv[0] + (argv[1] << 7);

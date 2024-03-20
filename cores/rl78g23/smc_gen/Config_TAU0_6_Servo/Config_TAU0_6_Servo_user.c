@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2023 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_TAU0_6_Servo_user.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_TAU0_6_Servo.
-* Creation Date: 
+* File Name        : Config_TAU0_6_Servo_user.c
+* Component Version: 1.4.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_TAU0_6_Servo.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -44,11 +44,12 @@ Includes
 Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
+void (*g_fServoInterruptFunc6)(void);
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
 * Function Name: R_Config_TAU0_6_Servo_Create_UserInit
-* Description  : This function adds user code after initializing the TAU0 channel6.
+* Description  : This function adds user code after initializing the TAU0 channel 6.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
@@ -66,7 +67,10 @@ void R_Config_TAU0_6_Servo_Create_UserInit(void)
 ***********************************************************************************************************************/
 void r_Config_TAU0_6_Servo_interrupt(void)
 {
-    /* Start user code for r_Config_TAU0_6_Servo_interrupt. Do not edit comment generated here */
+    /* Start user code for r_Config_TAU0_5_interrupt. Do not edit comment generated here */
+    if (g_fServoInterruptFunc6) {
+        g_fServoInterruptFunc6();
+    }
     /* End user code. Do not edit comment generated here */
 }
 

@@ -1,9 +1,9 @@
 #ifndef ethernetclient_h
 #define ethernetclient_h
 #include "Arduino.h"	
-#include "Print.h"
-#include "Client.h"
-#include "IPAddress.h"
+#include "api/Print.h"
+#include "api/Client.h"
+#include "api/IPAddress.h"
 
 class EthernetClient : public Client {
 

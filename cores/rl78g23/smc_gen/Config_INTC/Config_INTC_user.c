@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_INTC_user.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_INTC.
-* Creation Date: 2021-11-04
+* File Name        : Config_INTC_user.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_INTC.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -35,9 +35,11 @@ Pragma directive
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "Config_INTC.h"
+
 /* Start user code for include. Do not edit comment generated here */
 #include "wiring_private.h"
+#include "api/Common.h"
+#include "Config_INTC.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
@@ -74,7 +76,6 @@ void r_Config_INTC_intp0_interrupt(void)
     }
     /* End user code. Do not edit comment generated here */
 }
-
 
 /***********************************************************************************************************************
 * Function Name: r_Config_INTC_intp1_interrupt
@@ -150,6 +151,7 @@ void r_Config_INTC_intp10_interrupt(void)
     }
     /* End user code. Do not edit comment generated here */
 }
+
 /***********************************************************************************************************************
 * Function Name: r_Config_INTC_intp11_interrupt
 * Description  : This function is INTP11 interrupt service routine

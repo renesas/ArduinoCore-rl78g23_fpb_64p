@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_CSI11_user.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_CSI11.
-* Creation Date: 2021-05-14
+* File Name        : Config_CSI11_user.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_CSI11.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -168,7 +168,6 @@ void r_Config_CSI11_interrupt(void)
 }
 
 /* Start user code for adding. Do not edit comment generated here */
-
 /**********************************************************************************************************************
  * Function Name: R_Config_CSI11_ClearStatus
  * Description  : Clear the CSI module's status.
@@ -176,7 +175,6 @@ void r_Config_CSI11_interrupt(void)
  * Return Value : -
  *********************************************************************************************************************/
 void R_Config_CSI11_ClearStatus(void) {
-//    g_csi11_status_flag = _0000_SPI_STATUS_CLEAR;
+    g_csi11_status_flag = _0000_SPI_STATUS_CLEAR;
 }
-
 /* End user code. Do not edit comment generated here */

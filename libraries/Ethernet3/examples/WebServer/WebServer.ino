@@ -31,6 +31,8 @@ IPAddress ip(192, 168, 1, 177);
 EthernetServer server(80);
 
 void setup() {
+  Ethernet.setRstPin(9);
+  Ethernet.setCsPin(10);
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
   while (!Serial) {
@@ -71,8 +73,8 @@ void loop() {
           client.println("<html>");
           // output the value of each analog input pin
           for (int analogChannel = 0; analogChannel < 6; analogChannel++) {
-            int sensorReading = analogRead(analogChannel);
-            client.print("analog input ");
+            int sensorReading = analogRead(A0 + analogChannel);
+            client.print("analog input A");
             client.print(analogChannel);
             client.print(" is ");
             client.print(sensorReading);

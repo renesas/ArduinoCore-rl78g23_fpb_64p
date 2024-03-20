@@ -37,6 +37,8 @@ boolean alreadyConnected = false; // whether or not the client was connected pre
 
 void setup() {
   // initialize the ethernet device
+  Ethernet.setRstPin(9);
+  Ethernet.setCsPin(10);  
   Ethernet.begin(mac, ip, subnet, gateway);
   // start listening for clients
   server.begin();

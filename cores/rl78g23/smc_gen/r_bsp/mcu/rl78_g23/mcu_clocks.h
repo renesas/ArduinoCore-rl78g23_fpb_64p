@@ -23,6 +23,9 @@
 /***********************************************************************************************************************
 * History : DD.MM.YYYY Version  Description
 *         : 08.03.2021 1.00     First Release
+*         : 28.02.2022 1.20     Added the following function.
+*                               - change_clock_setting
+*                               Changed to enable/disable for each API function.
 
 ***********************************************************************************************************************/
 
@@ -40,15 +43,23 @@
 /*************************************************
  * Function declaration
  *************************************************/
-#if BSP_CFG_API_FUNCTIONS_DISABLE == 0
-e_bsp_err_t start_clock(e_clock_mode_t mode);
-e_bsp_err_t stop_clock(e_clock_mode_t mode);
-
-e_bsp_err_t set_fclk_clock_source(e_clock_mode_t mode);
-uint32_t get_fclk_freq_hz(void);
+#if BSP_CFG_CLOCK_OPERATION_API_FUNCTIONS_DISABLE == 0
+e_bsp_err_t start_clock (e_clock_mode_t mode);
+e_bsp_err_t stop_clock (e_clock_mode_t mode);
 #endif
 
-void mcu_clock_setup(void);
+#if BSP_CFG_SET_CLOCK_SOURCE_API_FUNCTIONS_DISABLE == 0
+e_bsp_err_t set_fclk_clock_source (e_clock_mode_t mode);
+#endif
 
-#endif    // #ifndef MCU_CLOCKS_H
+#if BSP_CFG_GET_FREQ_API_FUNCTIONS_DISABLE == 0
+uint32_t get_fclk_freq_hz (void);
+#endif
 
+#if BSP_CFG_CHANGE_CLOCK_SETTING_API_FUNCTIONS_DISABLE == 0
+e_bsp_err_t change_clock_setting (e_clock_mode_t mode, uint8_t * set_values);
+#endif
+
+void mcu_clock_setup (void);
+
+#endif /* #ifndef MCU_CLOCKS_H */

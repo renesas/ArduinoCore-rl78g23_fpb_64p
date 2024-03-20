@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2023 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_TAU0_6_Servo.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_TAU0_6_Servo.
-* Creation Date: 
+* File Name        : Config_TAU0_6_Servo.c
+* Component Version: 1.4.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_TAU0_6_Servo.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -48,14 +48,14 @@ Global variables and functions
 
 /***********************************************************************************************************************
 * Function Name: R_Config_TAU0_6_Servo_Create
-* Description  : This function initializes the TAU0 channel6 module.
+* Description  : This function initializes the TAU0 channel 6 module.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
 void R_Config_TAU0_6_Servo_Create(void)
 {
-    TPS0 &= _FFF0_TAU_CKM0_CLEAR;
-    TPS0 |= _0003_TAU_CKM0_FCLK_3;
+    TPS0 &= _FF0F_TAU_CKM1_CLEAR;
+    TPS0 |= _0050_TAU_CKM1_FCLK_5;
     /* Stop channel 6 */
     TT0 |= _0040_TAU_CH6_STOP_TRG_ON;
     /* Mask channel 6 interrupt */
@@ -64,26 +64,21 @@ void R_Config_TAU0_6_Servo_Create(void)
     /* Set INTTM06 low priority */
     TMPR106 = 1U;
     TMPR006 = 1U;
-    /* TAU06 used as square output function */
-    TMR06 = _0000_TAU_CLOCK_SELECT_CKM0 | _0000_TAU_CLOCK_MODE_CKS | _0000_TAU_COMBINATION_SLAVE | 
+    /* TAU06 used as interval timer */
+    TMR06 = _8000_TAU_CLOCK_SELECT_CKM1 | _0000_TAU_CLOCK_MODE_CKS | _0000_TAU_COMBINATION_SLAVE | 
             _0000_TAU_TRIGGER_SOFTWARE | _0000_TAU_MODE_INTERVAL_TIMER | _0000_TAU_START_INT_UNUSED;
-    TDR06 = _0897_TAU_TDR06_VALUE;
+    TDR06 = _4E1F_TAU_TDR06_VALUE;
     TOM0 &= (uint16_t)~_0040_TAU_CH6_SLAVE_OUTPUT;
     TOL0 &= (uint16_t)~_0040_TAU_CH6_OUTPUT_LEVEL_L;
-    TO0 |= (uint16_t)_0040_TAU_CH6_OUTPUT_VALUE_1;
-    TOE0 |= _0040_TAU_CH6_OUTPUT_ENABLE;
-    /* Set TO06 pin */
-    PMCT0 &= 0xBFU;
-    PFOE0 |= 0x40U;
-    P0 &= 0xBFU;
-    PM0 &= 0xBFU;
+    TO0 &= (uint16_t)~_0040_TAU_CH6_OUTPUT_VALUE_1;
+    TOE0 &= (uint16_t)~_0040_TAU_CH6_OUTPUT_ENABLE;
     
     R_Config_TAU0_6_Servo_Create_UserInit();
 }
 
 /***********************************************************************************************************************
 * Function Name: R_Config_TAU0_6_Servo_Start
-* Description  : This function starts the TAU0 channel6 counter.
+* Description  : This function starts the TAU0 channel 6 counter.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
@@ -91,20 +86,18 @@ void R_Config_TAU0_6_Servo_Start(void)
 {
     TMIF06 = 0U;    /* clear INTTM06 interrupt flag */
     TMMK06 = 0U;    /* enable INTTM06 interrupt */
-    TOE0 |= _0040_TAU_CH6_OUTPUT_ENABLE;
     TS0 |= _0040_TAU_CH6_START_TRG_ON;
 }
 
 /***********************************************************************************************************************
 * Function Name: R_Config_TAU0_6_Servo_Stop
-* Description  : This function stops the TAU0 channel6 counter.
+* Description  : This function stops the TAU0 channel 6 counter.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
 void R_Config_TAU0_6_Servo_Stop(void)
 {
     TT0 |= _0040_TAU_CH6_STOP_TRG_ON;
-    TOE0 &= (uint16_t)~_0040_TAU_CH6_OUTPUT_ENABLE;
     /* Mask channel 6 interrupt */
     TMMK06 = 1U;    /* disable INTTM06 interrupt */
     TMIF06 = 0U;    /* clear INTTM06 interrupt flag */

@@ -14,19 +14,19 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2023 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_TAU0_5_Servo.h
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_TAU0_5_Servo.
-* Creation Date: 
+* File Name        : Config_TAU0_5_Servo.h
+* Component Version: 1.4.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_TAU0_5_Servo.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
-#ifndef Config_TAU0_5_Servo_H
-#define Config_TAU0_5_Servo_H
+#ifndef CFG_Config_TAU0_5_Servo_H
+#define CFG_Config_TAU0_5_Servo_H
 
 /***********************************************************************************************************************
 Includes
@@ -40,7 +40,7 @@ Macro definitions (Register bit)
 /***********************************************************************************************************************
 Macro definitions
 ***********************************************************************************************************************/
-#define _257F_TAU_TDR05_VALUE               (0x257FU)    /* 16-bit timer data register 05 (TDR05) */
+#define _4E1F_TAU_TDR05_VALUE               (0x4E1FU)    /* 16-bit timer data register 05 (TDR05) */
 
 /***********************************************************************************************************************
 Typedef definitions

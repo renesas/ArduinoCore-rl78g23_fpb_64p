@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_rtc.h
-* Version      : 1.0.3
-* Device(s)    : R7F100GLGxFB
-* Description  : General header file for RTC peripheral.
-* Creation Date: 
+* File Name        : r_cg_rtc.h
+* Version          : 1.0.11
+* Device(s)        : R7F100GLGxFB
+* Description      : General header file for RTC peripheral.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 #ifndef RTC_H

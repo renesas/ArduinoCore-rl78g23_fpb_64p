@@ -14,19 +14,19 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_TAU0_2_Square_Wave.h
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxLA
-* Description  : This file implements device driver for Config_TAU0_2_Square_Wave.
-* Creation Date: 2021-11-12
+* File Name        : Config_TAU0_2_Square_Wave.h
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_TAU0_2_Square_Wave.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
-#ifndef Config_TAU0_2_Square_Wave_H
-#define Config_TAU0_2_Square_Wave_H
+#ifndef CFG_Config_TAU0_2_Square_Wave_H
+#define CFG_Config_TAU0_2_Square_Wave_H
 
 /***********************************************************************************************************************
 Includes
@@ -40,8 +40,8 @@ Macro definitions (Register bit)
 /***********************************************************************************************************************
 Macro definitions
 ***********************************************************************************************************************/
+#define _F9FF_TAU_TDR02_VALUE               (0xF9FFU)    /* 16-bit timer data register 02 (TDR02) */
 #define _0C7F_TAU_TDR02_VALUE               (0x0C7FU)    /* 16-bit timer data register 02 (TDR02) */
-
 /***********************************************************************************************************************
 Typedef definitions
 ***********************************************************************************************************************/

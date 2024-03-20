@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_INTC.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_INTC.
-* Creation Date: 2021-11-04
+* File Name        : Config_INTC.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_INTC.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -35,9 +35,11 @@ Pragma directive
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "Config_INTC.h"
+
 /* Start user code for include. Do not edit comment generated here */
-#include "wiring_private.h"
+#include "wiring_variant.h"
+#include "Config_INTC.h"
+
 #include <stdio.h>
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -49,11 +51,11 @@ Global variables and functions
 typedef struct {
     uint8_t intNum;
     uint8_t pinNum;
-    int modeNum;
+    PinStatus modeNum;
 } Num;
 Num value;
-
 /* End user code. Do not edit comment generated here */
+
 /***********************************************************************************************************************
 * Function Name: R_Config_INTC_Create
 * Description  : This function initializes the INTC module.
@@ -62,6 +64,8 @@ Num value;
 ***********************************************************************************************************************/
 void R_Config_INTC_Create(void)
 {
+    PMK0 = 1U;    /* disable INTP0 operation */
+    PIF0 = 0U;    /* clear INTP0 interrupt flag */
     PMK1 = 1U;    /* disable INTP1 operation */
     PIF1 = 0U;    /* clear INTP1 interrupt flag */
     PMK2 = 1U;    /* disable INTP2 operation */
@@ -75,8 +79,8 @@ void R_Config_INTC_Create(void)
     PMK11 = 1U;    /* disable INTP11 operation */
     PIF11 = 0U;    /* clear INTP11 interrupt flag */
     /* Set INTP0 low priority */
-	PPR10 = 1U;
-	PPR00 = 1U;
+    PPR10 = 1U;
+    PPR00 = 1U;
     /* Set INTP1 low priority */
     PPR11 = 1U;
     PPR01 = 1U;
@@ -99,31 +103,31 @@ void R_Config_INTC_Create(void)
     EGN0 = _10_INTP4_EDGE_FALLING_SEL | _08_INTP3_EDGE_FALLING_SEL | _04_INTP2_EDGE_FALLING_SEL | 
            _02_INTP1_EDGE_FALLING_SEL | _01_INTP0_EDGE_FALLING_SEL;
     EGP0 = _00_INTP4_EDGE_RISING_UNSEL | _00_INTP3_EDGE_RISING_UNSEL | _00_INTP2_EDGE_RISING_UNSEL | 
-           _00_INTP1_EDGE_RISING_UNSEL | _00_INTP0_EDGE_RISING_UNSEL ;
+           _00_INTP1_EDGE_RISING_UNSEL | _00_INTP0_EDGE_RISING_UNSEL;
     EGN1 = _08_INTP11_EDGE_FALLING_SEL | _04_INTP10_EDGE_FALLING_SEL;
     EGP1 = _00_INTP11_EDGE_RISING_UNSEL | _00_INTP10_EDGE_RISING_UNSEL;
- */
+*/
     /* Set INTP1 pin */
-    PMCT5 &= 0xFEU;
-    PMCE5 &= 0xFEU;
-    CCDE &= 0xF7U;
-    PM5 |= 0x01U;
+//    PMCT5 &= 0xFEU;
+//    PMCE5 &= 0xFEU;
+//    CCDE &= 0xF7U;
+//    PM5 |= 0x01U;
     /* Set INTP2 pin */
-    PMCE5 &= 0xFDU;
-    CCDE &= 0xFBU;
-    PM5 |= 0x02U;
+////    PMCE5 &= 0xFDU;
+////    CCDE &= 0xFBU;
+////    PM5 |= 0x02U;
     /* Set INTP3 pin */
-    PMCT3 &= 0xFEU;
-    PM3 |= 0x01U;
+//    PMCT3 &= 0xFEU;
+//    PM3 |= 0x01U;
     /* Set INTP4 pin */
-    PMCT3 &= 0xFDU;
-    PM3 |= 0x02U;
+//    PMCT3 &= 0xFDU;
+//    PM3 |= 0x02U;
     /* Set INTP10 pin */
-    PMCT7 &= 0xBFU;
-    PM7 |= 0x40U;
+//    PMCT7 &= 0xBFU;
+//    PM7 |= 0x40U;
     /* Set INTP11 pin */
-    PMCT7 &= 0x7FU;
-    PM7 |= 0x80U;
+//    PMCT7 &= 0x7FU;
+//    PM7 |= 0x80U;
 
     R_Config_INTC_Create_UserInit();
 }
@@ -297,14 +301,15 @@ void R_Config_INTC_INTP11_Stop(void)
 }
 
 /* Start user code for adding. Do not edit comment generated here */
-void R_Config_INTC_Create_Mode(uint8_t interruptNum, int mode)
+
+void R_Config_INTC_Create_Mode(uint8_t interruptNum, PinStatus mode)
 {
     switch (interruptNum) {
     case 0:
         value.intNum = interruptNum;
         value.pinNum = EXTERNAL_INTERRUPT_0;
         value.modeNum = mode;
-        /* 割り込みモードの設定 */
+
         if (value.modeNum == FALLING) {
             EGP1_bit.no3 = 0U;
             EGN1_bit.no3 = 1U;
@@ -326,7 +331,7 @@ void R_Config_INTC_Create_Mode(uint8_t interruptNum, int mode)
         value.intNum = interruptNum;
         value.pinNum = EXTERNAL_INTERRUPT_1;
         value.modeNum = mode;
-        /* 割り込みモードの設定 */
+
         if (value.modeNum == FALLING) {
             EGP0_bit.no4 = 0U;
             EGN0_bit.no4 = 1U;
@@ -348,7 +353,7 @@ void R_Config_INTC_Create_Mode(uint8_t interruptNum, int mode)
         value.intNum = interruptNum;
         value.pinNum = EXTERNAL_INTERRUPT_2;
         value.modeNum = mode;
-        /* 割り込みモードの設定 */
+
         if (value.modeNum == FALLING) {
             EGP1_bit.no2 = 0U;
             EGN1_bit.no2 = 1U;
@@ -370,7 +375,7 @@ void R_Config_INTC_Create_Mode(uint8_t interruptNum, int mode)
         value.intNum = interruptNum;
         value.pinNum = EXTERNAL_INTERRUPT_3;
         value.modeNum = mode;
-        /* 割り込みモードの設定 */
+
         if (value.modeNum == FALLING) {
             EGP0_bit.no2 = 0U;
             EGN0_bit.no2 = 1U;
@@ -392,7 +397,7 @@ void R_Config_INTC_Create_Mode(uint8_t interruptNum, int mode)
         value.intNum = interruptNum;
         value.pinNum = EXTERNAL_INTERRUPT_4;
         value.modeNum = mode;
-        /* 割り込みモードの設定 */
+
         if (value.modeNum == FALLING) {
             EGP0_bit.no1 = 0U;
             EGN0_bit.no1 = 1U;
@@ -414,7 +419,7 @@ void R_Config_INTC_Create_Mode(uint8_t interruptNum, int mode)
         value.intNum = interruptNum;
         value.pinNum = EXTERNAL_INTERRUPT_5;
         value.modeNum = mode;
-        /* 割り込みモードの設定 */
+
         if (value.modeNum == FALLING) {
             EGP0_bit.no3 = 0U;
             EGN0_bit.no3 = 1U;
@@ -437,7 +442,7 @@ void R_Config_INTC_Create_Mode(uint8_t interruptNum, int mode)
         value.intNum = interruptNum;
         value.pinNum = EXTERNAL_INTERRUPT_6;
         value.modeNum = mode;
-        /* 割り込みモードの設定 */
+
         if (value.modeNum == FALLING) {
             EGP0_bit.no0 = 0U;
             EGN0_bit.no0 = 1U;
@@ -457,8 +462,6 @@ void R_Config_INTC_Create_Mode(uint8_t interruptNum, int mode)
         break;
     }
 }
-
-
 
 void R_Config_INTC_INTP_Start(void){
     if(value.pinNum == EXTERNAL_INTERRUPT_0){

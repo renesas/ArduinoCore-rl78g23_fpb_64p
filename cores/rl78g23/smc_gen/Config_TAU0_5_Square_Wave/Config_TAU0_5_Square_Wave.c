@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_TAU0_5_Square_Wave.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxLA
-* Description  : This file implements device driver for Config_TAU0_5_Square_Wave.
-* Creation Date: 2021-11-12
+* File Name        : Config_TAU0_5_Square_Wave.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_TAU0_5_Square_Wave.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -61,6 +61,9 @@ void R_Config_TAU0_5_Square_Wave_Create(void)
     /* Mask channel 5 interrupt */
     TMMK05 = 1U;    /* disable INTTM05 interrupt */
     TMIF05 = 0U;    /* clear INTTM05 interrupt flag */
+    /* Set INTTM05 low priority */
+//    TMPR105 = 1U;
+//    TMPR005 = 1U;
     /* TAU05 used as square output function */
     TMR05 = _0000_TAU_CLOCK_SELECT_CKM0 | _0000_TAU_CLOCK_MODE_CKS | _0000_TAU_TRIGGER_SOFTWARE | 
             _0000_TAU_MODE_INTERVAL_TIMER | _0001_TAU_START_INT_USED;
@@ -86,6 +89,8 @@ void R_Config_TAU0_5_Square_Wave_Create(void)
 ***********************************************************************************************************************/
 void R_Config_TAU0_5_Square_Wave_Start(void)
 {
+//    TMIF05 = 0U;    /* clear INTTM05 interrupt flag */
+//    TMMK05 = 0U;    /* enable INTTM05 interrupt */
     TOE0 |= _0020_TAU_CH5_OUTPUT_ENABLE;
     TS0 |= _0020_TAU_CH5_START_TRG_ON;
 }
@@ -100,6 +105,9 @@ void R_Config_TAU0_5_Square_Wave_Stop(void)
 {
     TT0 |= _0020_TAU_CH5_STOP_TRG_ON;
     TOE0 &= (uint16_t)~_0020_TAU_CH5_OUTPUT_ENABLE;
+    /* Mask channel 5 interrupt */
+//    TMMK05 = 1U;    /* disable INTTM05 interrupt */
+//    TMIF05 = 0U;    /* clear INTTM05 interrupt flag */
 }
 
 /* Start user code for adding. Do not edit comment generated here */

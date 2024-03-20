@@ -39,6 +39,8 @@ EthernetServer server(23);
 EthernetClient clients[4];
 
 void setup() {
+  Ethernet.setRstPin(9);
+  Ethernet.setCsPin(10);
   // initialize the ethernet device
   Ethernet.begin(mac, ip, subnet, gateway);
   // start listening for clients

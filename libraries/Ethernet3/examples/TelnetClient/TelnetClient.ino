@@ -29,8 +29,7 @@ byte mac[] = {
 IPAddress ip(192, 168, 1, 177);
 
 // Enter the IP address of the server you're connecting to:
-IPAddress server(1, 1, 1, 1);
-
+IPAddress server(192, 168, 1, 2);
 // Initialize the Ethernet client library
 // with the IP address and port of the server
 // that you want to connect to (port 23 is default for telnet;
@@ -38,6 +37,8 @@ IPAddress server(1, 1, 1, 1);
 EthernetClient client;
 
 void setup() {
+  Ethernet.setRstPin(9);
+  Ethernet.setCsPin(10);
   // start the Ethernet connection:
   Ethernet.begin(mac, ip);
   // Open serial communications and wait for port to open:

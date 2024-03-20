@@ -7,8 +7,7 @@
 
 #include <RTC.h>
 
-#define LED_ERROR 22
-#define LED_ALARM 23
+#define LED_ALARM BUILTIN_LED1
 #define LED_ON LOW
 #define LED_OFF HIGH
 
@@ -18,13 +17,10 @@ void setup()
 {
   Serial.begin(9600);
   pinMode(LED_ALARM, OUTPUT); // LED for alarm
-  pinMode(LED_ERROR, OUTPUT); // LED for error
   digitalWrite(LED_ALARM, LED_OFF); //turn off
-  digitalWrite(LED_ERROR, LED_OFF); //turn off
   
-  if(!RTC.begin()){
-    digitalWrite(LED_ERROR, LED_ON); // error
-  }  
+  RTC.begin();
+
   RTC.setDateTime(2016, 9, 22, 23, 20, 50, RTC_WEEK_SATURDAY);
   
   RTC.attachAlarmHandler(alarm_handler);

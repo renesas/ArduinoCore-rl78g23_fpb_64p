@@ -22,9 +22,13 @@
   $Id: wiring.c 248 2007-02-03 15:36:30Z mellis $
 */
 
+#include "api/ArduinoAPI.h"
 #include "wiring_private.h"
+// #include "ArduinoClassics.h"
 
-uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder)
+
+uint8_t shiftIn(pin_size_t dataPin, pin_size_t clockPin, BitOrder bitOrder)
+// uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder)
 {
 	uint8_t value = 0;
 	uint8_t i;
@@ -47,8 +51,8 @@ uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder)
 	return value;
 }
 
-void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t value)
-{
+// void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t value)
+void shiftOut(pin_size_t dataPin, pin_size_t clockPin, BitOrder bitOrder, uint8_t value){
 	uint8_t i;
 
 	for (i = 0; i < 8; i++)
@@ -69,7 +73,7 @@ void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t value
 }
 
 /* 1112 nhu add */
-void shiftOutEx(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t len, uint32_t value)
+void shiftOutEx(uint8_t dataPin, uint8_t clockPin, BitOrder bitOrder, uint8_t len, uint32_t value)
 {
 	uint8_t i;
 

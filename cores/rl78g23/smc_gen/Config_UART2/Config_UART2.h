@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_UART2.h
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_UART2.
-* Creation Date: 2021-05-14
+* File Name        : Config_UART2.h
+* Component Version: 1.3.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_UART2.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 #ifndef CFG_Config_UART2_H

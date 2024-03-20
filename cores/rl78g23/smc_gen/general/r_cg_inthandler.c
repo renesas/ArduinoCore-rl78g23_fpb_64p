@@ -14,18 +14,21 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_inthandler.c
-* Version      : 1.0.1
-* Device(s)    : R7F100GLGxFB
-* Description  : None
-* Creation Date: 2021-05-14
+* File Name        : r_cg_inthandler.c
+* Version          : 1.0.11
+* Device(s)        : R7F100GLGxFB
+* Description      : None
+* Creation Date    : 
 ***********************************************************************************************************************/
 
-#include "r_cg_macrodriver.h"
+/***********************************************************************************************************************
+Includes
+***********************************************************************************************************************/
+#include "r_cg_interrupt_handlers.h"
 
 /*
  * INT_WDTI (0x4)
@@ -350,3 +353,8 @@ void INT_TM17 (void) { }
  * INT_BRK_I (0x7E)
  */
 void INT_BRK_I (void) { }
+
+/*
+ * INT_DUMMY for reserved interrupt source
+ */
+void INT_DUMMY (void) { }

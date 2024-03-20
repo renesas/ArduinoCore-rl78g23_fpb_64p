@@ -21,10 +21,8 @@ int pin = 0;
 
 void analogWriteCallback(byte pin, int value)
 {
-  if ((pin) == 5 || (pin) == 6 || (pin) == 10) {
-    pinMode(pin, OUTPUT);
+  if (digitalPinHasPWM(pin)) {
     analogWrite(pin, value);
-
   }
 }
 

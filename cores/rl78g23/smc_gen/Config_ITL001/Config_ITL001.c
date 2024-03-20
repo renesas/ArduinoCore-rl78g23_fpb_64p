@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_ITL001.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_ITL001.
-* Creation Date: 2021-05-14
+* File Name        : Config_ITL001.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_ITL001.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -58,7 +58,7 @@ void R_Config_ITL001_Create(void)
     ITLCTL0 = 0x00U;
     /* Mask INTITL interrupt */
     ITLMKF0 |= _02_ITL_CHANNEL1_COUNT_MATCH_MASK;
-    ITLS0 &= (uint16_t)~_02_ITL_CHANNEL1_COUNT_MATCH_DETECTE;
+    ITLS0 &= (uint8_t)~_02_ITL_CHANNEL1_COUNT_MATCH_DETECTE;
     ITLMK = 1U;    /* disable INTITL interrupt */
     ITLIF = 0U;    /* clear INTITL interrupt flag */
     /* Set INTITL low priority */
@@ -67,10 +67,10 @@ void R_Config_ITL001_Create(void)
     /* 32-bit interval timer used as 8-bit timer */
     ITLCTL0 |= _00_ITL_MODE_8BIT;
     ITLCSEL0 &= _F8_ITL_CLOCK_FITL0_CLEAR;
-    ITLCSEL0 |= _01_ITL_CLOCK_FITL0_FIHP;
+    ITLCSEL0 |= _04_ITL_CLOCK_FITL0_FSXP;
     ITLFDIV00 &= _8F_ITL_ITL001_FITL0_CLEAR;
     ITLFDIV00 |= _00_ITL_ITL001_FITL0_1;
-    ITLCMP001 = _1F_ITL_ITLCMP001_VALUE;
+    ITLCMP001 = _20_ITL_ITLCMP001_VALUE;
     
     R_Config_ITL001_Create_UserInit();
 }
@@ -83,8 +83,8 @@ void R_Config_ITL001_Create(void)
 ***********************************************************************************************************************/
 void R_Config_ITL001_Start(void)
 {
-    ITLS0 &= (uint16_t)~_02_ITL_CHANNEL1_COUNT_MATCH_DETECTE;
-    ITLMKF0 &= (uint16_t)~_02_ITL_CHANNEL1_COUNT_MATCH_MASK;
+    ITLS0 &= (uint8_t)~_02_ITL_CHANNEL1_COUNT_MATCH_DETECTE;
+    ITLMKF0 &= (uint8_t)~_02_ITL_CHANNEL1_COUNT_MATCH_MASK;
     ITLEN01 = 1U;
 }
 
@@ -97,7 +97,7 @@ void R_Config_ITL001_Start(void)
 void R_Config_ITL001_Stop(void)
 {
     ITLMKF0 |= _02_ITL_CHANNEL1_COUNT_MATCH_MASK;
-    ITLS0 &= (uint16_t)~_02_ITL_CHANNEL1_COUNT_MATCH_DETECTE;
+    ITLS0 &= (uint8_t)~_02_ITL_CHANNEL1_COUNT_MATCH_DETECTE;
     ITLEN01 = 0U;
 }
 
@@ -110,7 +110,7 @@ void R_Config_ITL001_Stop(void)
 void R_Config_ITL001_Set_OperationMode(void)
 {
     ITLMKF0 |= _02_ITL_CHANNEL1_COUNT_MATCH_MASK;
-    ITLS0 &= (uint16_t)~_02_ITL_CHANNEL1_COUNT_MATCH_DETECTE;
+    ITLS0 &= (uint8_t)~_02_ITL_CHANNEL1_COUNT_MATCH_DETECTE;
     /* Stop 32-bit interval timer */
     ITLCTL0 &= 0xF0U;
 }
@@ -123,14 +123,6 @@ void R_Config_ITL001_SetCompareMatch(uint8_t count,uint8_t div)
 	ITLCSEL0 &= _F8_ITL_CLOCK_FITL0_CLEAR;
     ITLCSEL0 |= _01_ITL_CLOCK_FITL0_FIHP;
     ITLFDIV00 &= _8F_ITL_ITL001_FITL0_CLEAR;
-
-//    ITLFDIV00 &= _8F_ITL_ITL001_FITL0_CLEAR;
-//    ITLFDIV00 |= _00_ITL_ITL001_FITL0_1;
-////    ITLCMP001 = _20_ITL_ITLCMP001_VALUE;
-//    ITLCMP001 = _1F_ITL_ITLCMP001_VALUE;
-
-//    ITLFDIV00 |= _40_ITL_ITL001_FITL0_16;
-//    ITLCMP001 = _01_ITL_ITLCMP001_VALUE;
 
     ITLFDIV00 |= div;
 	ITLCMP001 = count;

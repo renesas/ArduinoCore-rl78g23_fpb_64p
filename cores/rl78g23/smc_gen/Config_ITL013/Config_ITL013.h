@@ -14,19 +14,19 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_ITL013.h
-* Version      : 1.1.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_ITL013.
-* Creation Date: 
+* File Name        : Config_ITL013.h
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_ITL013.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
-#ifndef Config_ITL013_H
-#define Config_ITL013_H
+#ifndef CFG_Config_ITL013_H
+#define CFG_Config_ITL013_H
 
 /***********************************************************************************************************************
 Includes

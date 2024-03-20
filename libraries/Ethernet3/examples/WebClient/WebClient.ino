@@ -39,7 +39,8 @@ void setup() {
   while (!Serial) {
     ; // wait for serial port to connect. Needed for Leonardo only
   }
-
+  Ethernet.setRstPin(9);  
+  Ethernet.setCsPin(10);
   // start the Ethernet connection:
   if (Ethernet.begin(mac) == 0) {
     Serial.println("Failed to configure Ethernet using DHCP");

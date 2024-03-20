@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_ITL001_user.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_ITL001.
-* Creation Date: 2021-05-14
+* File Name        : Config_ITL001_user.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_ITL001.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -47,14 +47,11 @@ Global variables and functions
 extern volatile unsigned long g_u32timer_micros;
 extern volatile unsigned long g_u32delay_micros_timer;
 extern uint8_t g_delay_cnt_micros_flg;
-
-extern volatile unsigned long g_u32timer_millis;  //!< �C���^�[�o���^�C�}�ϐ�
+extern volatile unsigned long g_u32timer_millis;
 extern uint8_t g_timer_millis_overflow_cnt;
-
 extern volatile uint8_t g_u8delay_micros_timer_flg;
-extern volatile uint16_t g_u16delay_micros_timer_set;   //!< delay() �p�^�C�}�ϐ�
-extern volatile uint16_t g_u16delay_micros_timer_total;   //!< delay() �p�^�C�}�ϐ�
-
+extern volatile uint16_t g_u16delay_micros_timer_set;
+extern volatile uint16_t g_u16delay_micros_timer_total;
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -66,10 +63,8 @@ extern volatile uint16_t g_u16delay_micros_timer_total;   //!< delay() �p�^�
 void R_Config_ITL001_Create_UserInit(void)
 {
     /* Start user code for user init. Do not edit comment generated here */
-//    ITLFDIV00 |= _50_ITL_ITL001_FITL0_32;
-//    ITLCMP000 = _01_ITL_ITLCMP001_VALUE;
 	g_u32timer_micros=0;
-	/* End user code. Do not edit comment generated here */
+    /* End user code. Do not edit comment generated here */
 }
 
 /***********************************************************************************************************************
@@ -98,7 +93,7 @@ void R_Config_ITL001_Callback_Shared_Interrupt(void)
             g_timer_millis_overflow_cnt++;
         }
     }
-	/* End user code. Do not edit comment generated here */
+    /* End user code. Do not edit comment generated here */
 }
 
 /* Start user code for adding. Do not edit comment generated here */

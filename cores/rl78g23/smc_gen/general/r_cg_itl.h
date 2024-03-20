@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_itl.h
-* Version      : 1.0.1
-* Device(s)    : R7F100GLGxFB
-* Description  : General header file for ITL peripheral.
-* Creation Date: 2021-05-14
+* File Name        : r_cg_itl.h
+* Version          : 1.0.11
+* Device(s)        : R7F100GLGxFB
+* Description      : General header file for ITL peripheral.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 #ifndef ITL_H
@@ -148,7 +148,7 @@ Macro definitions (Register bit)
 /* Software capture trigger (CAPR0) */
 #define _00_ITL_CAPTURE_SOFTWARE_NOT_TRIGGER              (0x00U)    /* software trigger is not generated */
 #define _10_ITL_CAPTURE_SOFTWARE_TRIGGER                  (0x10U)    /* software trigger is generated */
-/* Selection of capture counter clearing after capturing (CAPC0CR) */
+/* Selection of 16-bit counter (ITL000 + ITL001) clearing after capturing (CAPC0CR) */
 #define _00_ITL_CAPTURE_COUNTER_RETAIN                    (0x00U)    /* held the capture counter value */
 #define _08_ITL_CAPTURE_COUNTER_CLEAR                     (0x08U)    /* clear the capture counter value */
 /* Selection of capture trigger (CTRS01,CTRS00) */

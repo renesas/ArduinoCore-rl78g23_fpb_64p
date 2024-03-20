@@ -3,7 +3,7 @@
 menu.cpu=Processor
 
 ## RL78/G23 Fast Prototyping Board 64P Board Description
-g23-fpb-64p.name=RL78-G23 Fast Prototyping Board 64Pin
+g23-fpb-64p.name=RL78-G23-64p Fast Prototyping Board
 g23-fpb-64p.upload.tool=rl78flash
 g23-fpb-64p.upload.protocol=rl78
 g23-fpb-64p.upload.maximum_size=131072
@@ -20,10 +20,10 @@ g23-fpb-64p.bootloader.file=
 
 g23-fpb-64p.build.mcu=rl78
 g23-fpb-64p.build.f_cpu=32000000L
-g23-fpb-64p.build.board=RL78-G23 Fast Prototyping Board 64Pin
+g23-fpb-64p.build.board=RL78G23_64P_FPB
 g23-fpb-64p.build.core=rl78g23
 ########## TSSR changed ##########
-g23-fpb-64p.build.ldscript=variants/linker_scripts/rl78_R7F100GLG.ld
+g23-fpb-64p.build.ldscript=variants/g23-fpb-64p/linker_scripts/gcc/linker_script.ld
 ########## TSSR changed ##########
 g23-fpb-64p.build.variant=g23-fpb-64p
 g23-fpb-64p.build.extra_flags=-DGRPROT

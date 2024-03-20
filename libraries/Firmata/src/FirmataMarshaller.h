@@ -22,7 +22,7 @@
   #include <stdint.h>
 #endif
 
-#include <Stream.h>
+#include <api/Stream.h>
 
 namespace firmata {
 

@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_ITL013_user.c
-* Version      : 1.1.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_ITL013.
-* Creation Date: 
+* File Name        : Config_ITL013_user.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_ITL013.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -37,18 +37,15 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "Config_ITL013.h"
 /* Start user code for include. Do not edit comment generated here */
-
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
 #include "utilities.h"
-
 /***********************************************************************************************************************
 Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
 extern volatile unsigned long g_u32timer_periodic;
-// void execCyclicHandler(void);
 void (*INT_TM_HOOK)() = NULL;
 /* End user code. Do not edit comment generated here */
 
@@ -66,7 +63,6 @@ void R_Config_ITL013_Create_UserInit(void)
 }
 
 extern fITInterruptFunc_t    g_fITInterruptFunc;
-
 /***********************************************************************************************************************
 * Function Name: R_Config_ITL013_Callback_Shared_Interrupt
 * Description  : This function handles the ITL013 shared interrupt.
@@ -78,12 +74,10 @@ void R_Config_ITL013_Callback_Shared_Interrupt(void)
     /* Start user code for R_Config_ITL013_Callback_Shared_Interrupt. Do not edit comment generated here */
     g_u32timer_periodic ++;
 
-// Add 20221006
     if(g_fITInterruptFunc != NULL)
     {
         g_fITInterruptFunc(g_u32timer_periodic);
     }
-
     execCyclicHandler();
 
     // for MsTImer2
@@ -93,7 +87,6 @@ void R_Config_ITL013_Callback_Shared_Interrupt(void)
     }
     /* End user code. Do not edit comment generated here */
 }
-
 
 /* Start user code for adding. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */

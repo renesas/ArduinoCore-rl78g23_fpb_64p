@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_CSI11.h
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_CSI11.
-* Creation Date: 2021-05-14
+* File Name        : Config_CSI11.h
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_CSI11.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 #ifndef CFG_Config_CSI11_H
@@ -40,7 +40,7 @@ Macro definitions (Register bit)
 /***********************************************************************************************************************
 Macro definitions
 ***********************************************************************************************************************/
-#define _0C00_SAU0_CH3_BAUDRATE_DIVISOR    (0x0C00U)    /* transfer clock set by dividing the operating clock */
+#define _0600_SAU0_CH3_BAUDRATE_DIVISOR    (0x0600U)    /* transfer clock set by dividing the operating clock */
 
 /***********************************************************************************************************************
 Typedef definitions

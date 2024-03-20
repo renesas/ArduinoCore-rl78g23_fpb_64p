@@ -43,7 +43,7 @@
 #ifndef ethernetudp3_h
 #define ethernetudp3_h
 
-#include <Udp.h>
+#include "api/Udp.h"
 
 #define UDP_TX_PACKET_MAX_SIZE 24
 

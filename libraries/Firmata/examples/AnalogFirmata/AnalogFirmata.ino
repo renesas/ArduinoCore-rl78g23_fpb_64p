@@ -34,12 +34,8 @@ unsigned long previousMillis;    // for comparison with currentMillis
 
 void analogWriteCallback(byte pin, int value)
 {
-  switch (pin) {
-    case 5:
-    case 6:
-    case 10: // PWM pins
-      analogWrite(pin, value);
-      break;
+  if (digitalPinHasPWM(pin)) {
+    analogWrite(pin, value);
   }
 }
 // -----------------------------------------------------------------------------

@@ -43,13 +43,13 @@
  * Private global variables and functions
  *************************************************/
 /* MCU I/O port configuration function declaration */
-static void output_ports_configure(void);
+static void output_ports_configure (void);
 
 /* Interrupt configuration function declaration */
-static void interrupts_configure(void);
+static void interrupts_configure (void);
 
 /* MCU peripheral module configuration function declaration */
-static void peripheral_modules_enable(void);
+static void peripheral_modules_enable (void);
 
 /*************************************************
  * Function definition
@@ -75,10 +75,10 @@ void hdwinit(void)
     IAWCTL = 0x00U;
 #else
     IAWCTL = (BSP_CFG_INVALID_MEMORY_ACCESS_DETECTION_ENABLE << 7U) |
-             (BSP_CFG_RAM_GUARD_FUNC << 4U) |
-             (BSP_CFG_PORT_FUNCTION_GUARD << 2U) |
-             (BSP_CFG_INT_FUNCTION_GUARD << 1U) |
-             (BSP_CFG_CHIP_STATE_CTRL_GUARD);
+            (BSP_CFG_RAM_GUARD_FUNC << 4U) |
+            (BSP_CFG_PORT_FUNCTION_GUARD << 2U) |
+            (BSP_CFG_INT_FUNCTION_GUARD << 1U) |
+            (BSP_CFG_CHIP_STATE_CTRL_GUARD);
 #endif
 
     /* Data flash access control */
@@ -90,7 +90,7 @@ void hdwinit(void)
         BSP_NOP();
     }
 #endif
-}
+} /* End of function hdwinit() */
 
 /*************************************************
  * Function name: output_ports_configure

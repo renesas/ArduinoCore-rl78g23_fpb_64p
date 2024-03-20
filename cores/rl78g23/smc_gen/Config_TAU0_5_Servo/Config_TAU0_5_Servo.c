@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2023 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_TAU0_5_Servo.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_TAU0_5_Servo.
-* Creation Date: 
+* File Name        : Config_TAU0_5_Servo.c
+* Component Version: 1.4.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_TAU0_5_Servo.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -48,14 +48,14 @@ Global variables and functions
 
 /***********************************************************************************************************************
 * Function Name: R_Config_TAU0_5_Servo_Create
-* Description  : This function initializes the TAU0 channel5 module.
+* Description  : This function initializes the TAU0 channel 5 module.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
 void R_Config_TAU0_5_Servo_Create(void)
 {
-    TPS0 &= _FFF0_TAU_CKM0_CLEAR;
-    TPS0 |= _0003_TAU_CKM0_FCLK_3;
+    TPS0 &= _FF0F_TAU_CKM1_CLEAR;
+    TPS0 |= _0050_TAU_CKM1_FCLK_5;
     /* Stop channel 5 */
     TT0 |= _0020_TAU_CH5_STOP_TRG_ON;
     /* Mask channel 5 interrupt */
@@ -64,26 +64,21 @@ void R_Config_TAU0_5_Servo_Create(void)
     /* Set INTTM05 low priority */
     TMPR105 = 1U;
     TMPR005 = 1U;
-    /* TAU05 used as square output function */
-    TMR05 = _0000_TAU_CLOCK_SELECT_CKM0 | _0000_TAU_CLOCK_MODE_CKS | _0000_TAU_TRIGGER_SOFTWARE | 
+    /* TAU05 used as interval timer */
+    TMR05 = _8000_TAU_CLOCK_SELECT_CKM1 | _0000_TAU_CLOCK_MODE_CKS | _0000_TAU_TRIGGER_SOFTWARE | 
             _0000_TAU_MODE_INTERVAL_TIMER | _0000_TAU_START_INT_UNUSED;
-    TDR05 = _257F_TAU_TDR05_VALUE;
+    TDR05 = _4E1F_TAU_TDR05_VALUE;
     TOM0 &= (uint16_t)~_0020_TAU_CH5_SLAVE_OUTPUT;
     TOL0 &= (uint16_t)~_0020_TAU_CH5_OUTPUT_LEVEL_L;
-    TO0 |= (uint16_t)_0020_TAU_CH5_OUTPUT_VALUE_1;
-    TOE0 |= _0020_TAU_CH5_OUTPUT_ENABLE;
-    /* Set TO05 pin */
-    PMCT0 &= 0xDFU;
-    PFOE0 |= 0x20U;
-    P0 &= 0xDFU;
-    PM0 &= 0xDFU;
+    TO0 &= (uint16_t)~_0020_TAU_CH5_OUTPUT_VALUE_1;
+    TOE0 &= (uint16_t)~_0020_TAU_CH5_OUTPUT_ENABLE;
     
     R_Config_TAU0_5_Servo_Create_UserInit();
 }
 
 /***********************************************************************************************************************
 * Function Name: R_Config_TAU0_5_Servo_Start
-* Description  : This function starts the TAU0 channel5 counter.
+* Description  : This function starts the TAU0 channel 5 counter.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
@@ -91,20 +86,18 @@ void R_Config_TAU0_5_Servo_Start(void)
 {
     TMIF05 = 0U;    /* clear INTTM05 interrupt flag */
     TMMK05 = 0U;    /* enable INTTM05 interrupt */
-    TOE0 |= _0020_TAU_CH5_OUTPUT_ENABLE;
     TS0 |= _0020_TAU_CH5_START_TRG_ON;
 }
 
 /***********************************************************************************************************************
 * Function Name: R_Config_TAU0_5_Servo_Stop
-* Description  : This function stops the TAU0 channel5 counter.
+* Description  : This function stops the TAU0 channel 5 counter.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
 void R_Config_TAU0_5_Servo_Stop(void)
 {
     TT0 |= _0020_TAU_CH5_STOP_TRG_ON;
-    TOE0 &= (uint16_t)~_0020_TAU_CH5_OUTPUT_ENABLE;
     /* Mask channel 5 interrupt */
     TMMK05 = 1U;    /* disable INTTM05 interrupt */
     TMIF05 = 0U;    /* clear INTTM05 interrupt flag */

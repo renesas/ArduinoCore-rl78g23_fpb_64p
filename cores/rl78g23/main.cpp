@@ -18,60 +18,45 @@
 */
 
 #include <Arduino.h>
-#ifdef __RL78__
 #include "utilities.h"
-#endif
-
-#if USE_SMART_CONFIGRATOR == 1
 extern "C" {
     #include "r_smc_entry.h"
 }
-#endif
 
 extern "C" {
-    #include "Config_ITL013.h"
 }
-//#include <Wire.h>
 
-// Declared weak in Arduino.h to allow user redefinitions.
-#ifndef __RL78__
-int atexit(void (* /*func*/ )()) { return 0; }
-#endif /* __RL78__ */
-
-// Weak empty variant initialization function.
-// May be redefined by variant files.
-#ifndef __RL78__
-void initVariant() __attribute__((weak));
-void initVariant() { }
-#endif /* __RL78__ */
-
-#if defined(USBCON)
-void setupUSB() __attribute__((weak));
-void setupUSB() { }
-#endif /* defined(USBCON) */
+/* This declaration is used to force the constant in
+ * r_cg_vect_table.c to be linked to the static library (*.a). */
+extern const unsigned char Option_Bytes[];
+void * p_force_link = (void * )Option_Bytes;
 
 int main(void)
 {
 /******************************************************/
     interrupts();                /* Enable Interrupt */
-
     _readResetFlag();           /* Read causes of reset */
 
 /* Start Interval Timer */
+#if defined(G22_FPB) || defined(G23_FPB)
     R_Config_ITL000_Create();    /* Create 1ms Interval Timer */
     R_Config_ITL000_Start();    /* Start 1ms Interval Timer */
     R_ITL_Start_Interrupt();    /* Start ITL Interrupt */
+#elif defined(G16_FPB)
+    R_Config_IT_Create();    /* Create 1ms Interval Timer */
+    R_Config_IT_Start();    /* Start 1ms Interval Timer */
+#endif
 
-    R_Config_TAU0_6_Micros_Create();
-    R_Config_TAU0_6_Micros_Start();
+    R_Config_TAU0_1_Micros_Create();
+    R_Config_TAU0_1_Micros_Start();
 
     /* Start RTC Timer */
-    R_Config_RTC_Start();    /*//KAD Start RTC Timer */
-
-// Add 20221005 never call Create function
-//    R_Config_ITL013_Create();
+#if defined(G22_FPB) || defined(G23_FPB)
+    R_Config_RTC_Start();
+    delayMicroseconds(62);    /* Wait more than 2 clocks of fRTCCK */
     R_Config_ITL013_SetCompareMatch(0x20, 0x0);
     R_Config_ITL013_Start();
+#endif
 
 /* Power Off unused Peripheral */
 /* SERIAL ARRAY UNIT (SAU) */
@@ -82,12 +67,12 @@ int main(void)
 #if !defined(UART1_CHANNEL) || UART1_CHANNEL == 0
     R_Config_UART1_Stop();
 #endif
-#if !defined(CSI_CHANNEL)
-    R_Config_CSI11_Stop();
-#endif
 #if !defined(UART2_CHANNEL) || (UART2_CHANNEL == 0)
+#if defined(G22_FPB) || defined(G23_FPB)
+
     R_SAU1_Set_Reset();
     R_SAU1_Set_PowerOff();
+#endif // defined(G22_FPB) || defined(G23_FPB)
 #endif
 
 /* IICA UNIT(IICA*) */
@@ -95,52 +80,66 @@ int main(void)
     R_IICA0_Set_Reset();
     R_IICA0_Set_PowerOff();
 #endif
-#if (IIC_CHANNEL1!=1)
-    R_IICA1_Set_Reset();
-    R_IICA1_Set_PowerOff();
-#endif
 
-/* RTC */
-#if !defined(RTC_ON) | (RTC_ON!=0)
-    R_RTC_Set_PowerOff();
+#if (IIC_CHANNEL1!=1)
+//    R_IICA1_Set_Reset();
+//    R_IICA1_Set_PowerOff();
 #endif
 
 #if WDT_EN==1
     R_Config_WDT_Start();
 #endif
-
+#if defined(G22_FPB) || defined(G23_FPB)
     setPowerManagementMode(PM_NORMAL_MODE);
+#endif // defined(G22_FPB) || defined(G23_FPB)
 
+#if defined(G23_FPB)
     SOE0 &= 0xf3;
     SO0 |= 0x08;
+#endif
+
+#if defined(G22_FPB)
+    /* P26,P25,P24,P23,P22 */
+    PMCA2 &= 0x83;  /* 0 : Use Digital IO */
+    PMCT2 &= 0x83;  /* 0 : Use Digital IO */
+    PM2 &= 0x83;    /* 0 : Use Output Mode */
+    P2 &= 0x83;     /* 0 : Use Output Low  */
+
+    /* P30 */
+    PMCT3 &= 0xFE;  /* 0 : Use Digital IO */
+    PM3 &= 0xFE;    /* 0 : Use Output Mode */
+    P3 &= 0xFE;     /* 0 : Use Output Low  */
+#elif defined(G16_FPB)
+    /* P07,P06,P02 */
+    POM0 &= 0x3B;   /* 0 : Use Digital IO */
+    PMC0 &= 0x3B;   /* 0 : Use Digital IO */
+    PM0 &= 0x3B;    /* 0 : Use Output Mode */
+    P0 &= 0x3B;     /* 0 : Use Output Low  */
+    TSSEL0 &= 0x3F; /* 0 : Use function other than touch terminal */
+
+    /* P23,P22 */
+    POM2 &= 0xF3;   /* 0 : Use Digital IO */
+    PMC2 &= 0xF3;   /* 0 : Use Digital IO */
+    PM2 &= 0xF3;    /* 0 : Use Output Mode */
+    P2 &= 0xF3;     /* 0 : Use Output Low  */
+    TSSEL1 &= 0x7C; /* 0 : Use function other than touch terminal */
+
+    /* P42 */
+    PM4 &= 0xFB;    /* 0 : Use Output Mode */
+    P4 &= 0xFB;     /* 0 : Use Output Low  */
+    TSSEL1 &= 0x6F; /* 0 : Use function other than touch terminal */
+#endif
 
 /******************************************************/
-
-#ifndef __RL78__
-    init();
-#endif
-
-#ifndef __RL78__
-    initVariant();
-#endif
-
-#if defined(USBCON)
-    USBDevice.attach();
-#endif
     
     setup();
     
     for (;;) {
         loop();
-#ifdef __RL78__
-//        execCyclicHandler();
-#endif
     }
-        
     return 0;
 }
 
-#ifdef __RL78__
 /**
  * Finish Function
  *
@@ -161,4 +160,3 @@ void exit(int) __attribute__ ((weak, alias ("abort")));
 
 #include <exception>
 
-#endif

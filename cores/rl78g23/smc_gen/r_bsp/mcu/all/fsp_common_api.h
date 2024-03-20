@@ -23,6 +23,25 @@
 /***********************************************************************************************************************
 * History : DD.MM.YYYY Version  Description
 *         : 08.09.2021 1.00     First Release
+*         : 28.02.2022 1.20     Added the following common error codes.
+*                               - FSP_ERR_CTSU_SCANNING
+*                               - FSP_ERR_CTSU_NOT_GET_DATA
+*                               - FSP_ERR_CTSU_INCOMPLETE_TUNING
+*                               - FSP_ERR_CTSU_DIAG_NOT_YET
+*                               - FSP_ERR_CTSU_DIAG_LDO_OVER_VOLTAGE
+*                               - FSP_ERR_CTSU_DIAG_CCO_HIGH
+*                               - FSP_ERR_CTSU_DIAG_CCO_LOW
+*                               - FSP_ERR_CTSU_DIAG_SSCG
+*                               - FSP_ERR_CTSU_DIAG_DAC
+*                               - FSP_ERR_CTSU_DIAG_OUTPUT_VOLTAGE
+*                               - FSP_ERR_CTSU_DIAG_OVER_VOLTAGE
+*                               - FSP_ERR_CTSU_DIAG_OVER_CURRENT
+*                               - FSP_ERR_CTSU_DIAG_LOAD_RESISTANCE
+*                               - FSP_ERR_CTSU_DIAG_CURRENT_SOURCE
+*                               - FSP_ERR_CTSU_DIAG_SENSCLK_GAIN
+*                               - FSP_ERR_CTSU_DIAG_SUCLK_GAIN
+*                               - FSP_ERR_CTSU_DIAG_CLOCK_RECOVERY
+*                               - FSP_ERR_CTSU_DIAG_CFC_GAIN
 ***********************************************************************************************************************/
 
 /* ${REA_DISCLAIMER_PLACEHOLDER} */
@@ -123,6 +142,26 @@ typedef enum e_fsp_err
     FSP_ERR_SENSOR_INVALID_DATA,                ///< Data is invalid.
     FSP_ERR_SENSOR_IN_STABILIZATION,            ///< Sensor is stabilizing.
     FSP_ERR_SENSOR_MEASUREMENT_NOT_FINISHED,    ///< Measurement is not finished.
+
+    /* Start of CTSU Driver specific */
+    FSP_ERR_CTSU_SCANNING              = 6000,       ///< Scanning.
+    FSP_ERR_CTSU_NOT_GET_DATA          = 6001,       ///< Not processed previous scan data.
+    FSP_ERR_CTSU_INCOMPLETE_TUNING     = 6002,       ///< Incomplete initial offset tuning.
+    FSP_ERR_CTSU_DIAG_NOT_YET          = 6003,       ///< Diagnosis of data collected no yet.
+    FSP_ERR_CTSU_DIAG_LDO_OVER_VOLTAGE = 6004,       ///< Diagnosis of LDO over voltage failed.
+    FSP_ERR_CTSU_DIAG_CCO_HIGH         = 6005,       ///< Diagnosis of CCO into 19.2uA failed.
+    FSP_ERR_CTSU_DIAG_CCO_LOW          = 6006,       ///< Diagnosis of CCO into 2.4uA failed.
+    FSP_ERR_CTSU_DIAG_SSCG             = 6007,       ///< Diagnosis of SSCG frequency failed.
+    FSP_ERR_CTSU_DIAG_DAC              = 6008,       ///< Diagnosis of non-touch count value failed.
+    FSP_ERR_CTSU_DIAG_OUTPUT_VOLTAGE   = 6009,       ///< Diagnosis of LDO output voltage failed.
+    FSP_ERR_CTSU_DIAG_OVER_VOLTAGE     = 6010,       ///< Diagnosis of over voltage detection circuit failed.
+    FSP_ERR_CTSU_DIAG_OVER_CURRENT     = 6011,       ///< Diagnosis of over current detection circuit failed.
+    FSP_ERR_CTSU_DIAG_LOAD_RESISTANCE  = 6012,       ///< Diagnosis of LDO internal resistance value failed.
+    FSP_ERR_CTSU_DIAG_CURRENT_SOURCE   = 6013,       ///< Diagnosis of Current source value failed.
+    FSP_ERR_CTSU_DIAG_SENSCLK_GAIN     = 6014,       ///< Diagnosis of SENSCLK frequency gain failed.
+    FSP_ERR_CTSU_DIAG_SUCLK_GAIN       = 6015,       ///< Diagnosis of SUCLK frequency gain failed.
+    FSP_ERR_CTSU_DIAG_CLOCK_RECOVERY   = 6016,       ///< Diagnosis of SUCLK clock recovery function failed.
+    FSP_ERR_CTSU_DIAG_CFC_GAIN         = 6017,       ///< Diagnosis of CFC oscillator gain failed.
 
     /* Start of COMMS specific */
     FSP_ERR_COMMS_BUS_NOT_OPEN,                 ///< Bus is not open.

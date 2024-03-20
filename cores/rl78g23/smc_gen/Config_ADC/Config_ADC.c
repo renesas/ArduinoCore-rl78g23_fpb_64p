@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_ADC.c
-* Version      : 1.0.1
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_ADC.
-* Creation Date: 2021-05-14
+* File Name        : Config_ADC.c
+* Component Version: 1.1.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_ADC.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -40,6 +40,7 @@ Includes
 #include <Arduino.h>
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
+// #include "ArduinoClassics.h"
 
 /***********************************************************************************************************************
 Global variables and functions
@@ -55,8 +56,6 @@ Global variables and functions
 ***********************************************************************************************************************/
 void R_Config_ADC_Create(void)
 {
-    volatile uint16_t w_count;
-    
     ADCEN = 1U;    /* supply AD clock */
     ADMK = 1U;    /* disable INTAD interrupt */
     ADIF = 0U;    /* clear INTAD interrupt flag */
@@ -64,8 +63,10 @@ void R_Config_ADC_Create(void)
     ADPR1 = 1U;
     ADPR0 = 1U;
     /* Set ANI2 pin */
+    /*
     PMCA2 |= 0x04U;
     PM2 |= 0x04U; 
+    */
     ADM0 = _00_AD_OPERMODE_SELECT | _00_AD_CONVERSION_CLOCK_32 | _00_AD_TIME_MODE_NORMAL_1;
     ADM1 = _00_AD_TRIGGER_SOFTWARE | _00_AD_FCLK_BETWEEN_4_32 | _00_AD_CONVMODE_CONSELECT;
     ADM2 = _00_AD_NEGATIVE_VSS | _00_AD_AREA_MODE_1 | _00_AD_RESOLUTION_10BIT;
@@ -180,8 +181,8 @@ MD_STATUS R_Config_ADC_Set_ADChannel(e_ad_channel_t channel)
 {
     MD_STATUS status = MD_OK;
 
-    if (((channel > ADCHANNEL7) && (channel < ADCHANNEL16)) || ((channel > ADCHANNEL19) && (channel < ADTEMPERSENSOR0))
-        || (channel > ADINTERREFVOLT))
+    if (((channel > ADCHANNEL7) && (channel < ADCHANNEL16)) || ((channel > ADCHANNEL19) && (channel != ADTSCAP)
+        && (channel < ADTEMPERSENSOR0)) || (channel > ADINTERREFVOLT))
     {
         status = MD_ARGERROR;
     }
@@ -218,22 +219,6 @@ MD_STATUS R_Config_ADC_Set_TestChannel(e_test_channel_t channel)
 }
 
 /* Start user code for adding. Do not edit comment generated here */
-
-//MD_STATUS R_Config_ADC_Set_Refference(uint8_t mode)
-//{
-//	MD_STATUS status = MD_OK;
-//
-//	if (mode == DEFAULT) {
-//		ADM2 = 0x00;	// Vdd���t�@�����X�ɐݒ�
-//	} else if (mode == INTERNAL) {
-//		ADM2 = 0x80;	// �������t�@�����X(1.45V)�ɐݒ�
-//	} else { // EXTERNAL
-//		ADM2 = 0x40;	// �O�����t�@�����X�ɐݒ�
-//	}
-//	return status;
-//}
-
-/* 1006 Nhu */
 /***********************************************************************************************************************
 * Function Name: R_Config_ADC_Set_Reference
 * Description  : This function configures the reference voltage used for analog input.
@@ -391,8 +376,4 @@ void R_Config_ADC_Set_InternalReferenceVoltage(void)
     }
 
 }
-
-
-/* 1006 Nhu add */
 /* End user code. Do not edit comment generated here */
-

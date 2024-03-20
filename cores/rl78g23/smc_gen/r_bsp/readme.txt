@@ -1,4 +1,4 @@
-Version          : RL78/G23 BSP v1.13
-Release Date     : 2021/11/25
+Version          : BSP v1.30 (MP)
+Release Date     : 2022/05/31
 Support Compiler : CCRL, LLVM, ICCRL
 

@@ -14,15 +14,15 @@
 * following link:
 * http://www.renesas.com/disclaimer
 *
-* Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+* Copyright (C) 2021, 2022 Renesas Electronics Corporation. All rights reserved.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : Config_RTC.c
-* Version      : 1.0.0
-* Device(s)    : R7F100GLGxFB
-* Description  : This file implements device driver for Config_RTC.
-* Creation Date: 
+* File Name        : Config_RTC.c
+* Component Version: 1.2.0
+* Device(s)        : R7F100GLGxFB
+* Description      : This file implements device driver for Config_RTC.
+* Creation Date    : 
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -439,7 +439,7 @@ MD_STATUS R_Config_RTC_Set_ConstPeriodInterruptOn(e_rtc_int_period_t period)
     {
         /* Disable INTRTC */
         RTCMK = 1U;
-        RTCC0 = (RTCC0 & _F8_RTC_INTRTC_CLEAR) | period;
+        RTCC0 = (RTCC0 & _F8_RTC_INTRTC_CLEAR) | (uint8_t)period;
         RTCC1 &= (uint8_t)~_08_RTC_INTC_GENERATE_FLAG;
         /* Clear INTRTC interrupt flag */
         RTCIF = 0U;

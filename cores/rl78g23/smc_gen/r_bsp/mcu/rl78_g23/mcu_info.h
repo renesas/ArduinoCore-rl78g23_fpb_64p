@@ -55,5 +55,5 @@
 /* MCU Group name. */
 #define BSP_MCU_GROUP_RL78G23     (1)
 
-#endif    // #define MCU_INFO
+#endif /* #define MCU_INFO */
 

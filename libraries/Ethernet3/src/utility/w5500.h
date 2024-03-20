@@ -349,22 +349,22 @@ private:
 extern W5500Class w5500;
 
 uint8_t W5500Class::readSn(SOCKET _s, uint16_t _addr) {
-    uint8_t cntl_byte = (_s<<5)+0x08;
+    uint8_t cntl_byte = (uint8_t)((_s<<5)+0x08);
     return read(_addr, cntl_byte);
 }
 
 uint8_t W5500Class::writeSn(SOCKET _s, uint16_t _addr, uint8_t _data) {
-    uint8_t cntl_byte = (_s<<5)+0x0C;
+    uint8_t cntl_byte = (uint8_t)((_s<<5)+0x0C);
     return write(_addr, cntl_byte, _data);
 }
 
 uint16_t W5500Class::readSn(SOCKET _s, uint16_t _addr, uint8_t *_buf, uint16_t _len) {
-    uint8_t cntl_byte = (_s<<5)+0x08;
+    uint8_t cntl_byte = (uint8_t)((_s<<5)+0x08);
     return read(_addr, cntl_byte, _buf, _len );
 }
 
 uint16_t W5500Class::writeSn(SOCKET _s, uint16_t _addr, uint8_t *_buf, uint16_t _len) {
-    uint8_t cntl_byte = (_s<<5)+0x0C;
+    uint8_t cntl_byte = (uint8_t)((_s<<5)+0x0C);
     return write(_addr, cntl_byte, _buf, _len);
 }
 

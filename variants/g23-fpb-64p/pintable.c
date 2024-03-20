@@ -1,4 +1,9 @@
-#include <Arduino.h>
+
+#include "api/ArduinoAPI.h"
+// #include "ArduinoClassics.h"
+//#include "pins_arduino_classics.h"
+#include "pins_variant.h"
+
 #include <pintable.h>
 
 #define pinTable_userled1 pinTable_16

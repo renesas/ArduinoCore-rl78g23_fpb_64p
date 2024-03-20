@@ -31,6 +31,8 @@
 ;;*         : 04.08.2021 1.12     Updated base file version 1.05 to 1.06
 ;;*                               Added processing for C++
 ;;*         : 25.11.2021 1.13     Deleted processing for C++
+;;*         : 28.02.2022 1.20     Added inclusion of r_bsp_config.inc.
+;;*                               Added RAMSAR register setting.
 ;;
 ;;***********************************************************************************************************************/
 
@@ -67,11 +69,19 @@ ___dso_handle:
         ;; DE = end of list
         ;; BC = step direction (+2 or -2)
     */
-    
+
+    .include "r_bsp_config.inc"
+
     .text
 
 /* call to _PowerON_Reset */
 _PowerON_Reset:
+/* initialise RAMSAR register */
+.ifdef BSP_CFG_ASM_RAM_GUARD_START_ADDRESS
+    movw hl, #BSP_CFG_ASM_RAMSAR_ADDRESS
+    mov  [hl], #BSP_CFG_ASM_RAM_GUARD_START_ADDRESS
+.endif
+
 /* initialise user stack pointer */
     movw sp,#__stack /* Set stack pointer */
 
@@ -179,6 +189,25 @@ _bss_zero_done:
 
 _bssf_zero_done:
 
+;; block fill to heap
+    movw    ax, #__stack
+    ;movw    bc, #__stack_size
+    ;subw    ax, bc   ; ax = top of stack area
+    movw    bc, #__end
+    subw    ax, bc  ;  ax = heap size
+    movw    bc, ax
+
+    movw    ax, #0
+    cmpw    ax, bc
+    bz      $_heap_zero_done
+1:
+    decw    bc
+    decw    bc
+    movw    __end[bc], ax
+    cmpw    ax, bc
+    bnz      $1b
+
+_heap_zero_done:
 
 /* call the hardware initialiser */
     call    !!_bsp_init_hardware
@@ -195,6 +224,7 @@ _bssf_zero_done:
 /* call to exit*/
 _exit:
      br    $_exit
+
 
 .global	_rl78_run_preinit_array
 .type	_rl78_run_preinit_array,@function
@@ -262,4 +292,3 @@ __rl78_init:
 
     .global __rl78_fini
 .end
-
