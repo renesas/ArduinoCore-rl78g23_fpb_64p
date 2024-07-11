@@ -29,9 +29,8 @@ const uint8_t  pwm_channel_table[PWM_CH_NUM]  = {PWM_PIN_11,PWM_PIN_6,PWM_PIN_3,
 
 const uint8_t g_au8AnalogPinTable[NUM_ANALOG_INPUTS] = {
 ANALOG_PIN_0, ANALOG_PIN_1, ANALOG_PIN_2, ANALOG_PIN_3,
-ANALOG_PIN_4, ANALOG_PIN_5, ANALOG_PIN_6, ANALOG_PIN_7,
-ANALOG_PIN_8, ANALOG_PIN_9};
-const uint8_t g_analog_pin_input[NUM_ANALOG_INPUTS] = {PIN_A0, PIN_A1, PIN_A2, PIN_A3, PIN_A4, PIN_A5, PIN_A6, PIN_A7, PIN_A8, PIN_A9};
+ANALOG_PIN_4, ANALOG_PIN_5};
+const uint8_t g_analog_pin_input[NUM_ANALOG_INPUTS] = {PIN_A0, PIN_A1, PIN_A2, PIN_A3, PIN_A4, PIN_A5};
 
 Pwm_func pwm_ch[PWM_CH_NUM] =
 {

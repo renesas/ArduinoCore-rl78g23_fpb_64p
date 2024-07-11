@@ -41,7 +41,7 @@ extern volatile SwPwm g_SwPwm[NUM_SWPWM_PINS];
 extern const PinTableType * pinTablelist[NUM_DIGITAL_PINS];
 extern Pwm_func pwm_ch[PWM_CH_NUM];
 extern int8_t get_pwm_channel(uint8_t pwm_num);
-
+extern bool g_u8AnalogReadAvailableTable[NUM_ANALOG_INPUTS];
 /**********************************************************************************************************************
  * Function Name: pintable setting
  * Description  : Set the pintable.
@@ -119,6 +119,11 @@ void pinMode(pin_size_t pin, PinMode pinMode)
         if (0!=p->pmca)
         {
             *p->portModeControlARegisterAddr &= (unsigned long)~(p->pmca);
+            uint8_t pin_index = pin - ANALOG_PIN_START_NUMBER;
+            if(pin_index >=0 && pin_index < NUM_ANALOG_INPUTS)
+            {
+                g_u8AnalogReadAvailableTable[pin_index] = false;
+            }
         }
 #endif //  defined(G22_FPB) || defined(G23_FPB)
 #if defined(G16_FPB)

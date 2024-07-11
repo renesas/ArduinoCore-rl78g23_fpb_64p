@@ -39,7 +39,7 @@ extern "C"{
 #endif
 
 #define ANALOG_ADPC_OFFSET	4
-#define ANALOG_PIN_START_NUMBER	(38)
+#define ANALOG_PIN_START_NUMBER	(51)
 #define MAX_CYCLIC_HANDLER 		(8)
 #define EXTERNAL_NUM_INTERRUPTS (7)
 

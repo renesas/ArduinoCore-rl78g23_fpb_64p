@@ -41,8 +41,6 @@ const uint8_t A2 = PIN_A2;
 const uint8_t A3 = PIN_A3;
 const uint8_t A4 = PIN_A4;
 const uint8_t A5 = PIN_A5;
-const uint8_t A6 = PIN_A6;
-const uint8_t A7 = PIN_A7;
 
 /* tone pin set */
 volatile unsigned short *g_tone_period_reg[TONE_CH_NUM] = {&TDR02,&TDR03,&TDR04,&TDR05,&TDR06,&TDR07};

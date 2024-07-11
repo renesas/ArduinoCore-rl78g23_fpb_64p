@@ -42,11 +42,12 @@ http://arduiniana.org.
 
 #include <Arduino.h>
 #include "SoftwareSerial.h"
-
+#include "wiring_variant.h"
 extern "C" {
     #include "pintable.h"
     extern const PinTableType * pinTablelist[NUM_DIGITAL_PINS];
 }
+extern bool g_u8AnalogReadAvailableTable[NUM_ANALOG_INPUTS];
 
 volatile int tempAXvalue=0;
 #define digitalPinToBitMask(P) ( pgm_read_byte( digital_pin_to_bit_mask_PGM + (P) ) )
@@ -491,6 +492,7 @@ void SoftwareSerial::Set_SerialPort(uint8_t txd_pin,uint8_t rxd_pin)
 {
     const PinTableType ** pp;
     PinTableType * p;
+    uint8_t pin_index;
 
     /* Set RxD pin */
     //getPinTable(rxd_pin,p);
@@ -502,6 +504,12 @@ void SoftwareSerial::Set_SerialPort(uint8_t txd_pin,uint8_t rxd_pin)
     /* Set PMCA Register */
     if (0!=p->pmca){
         *p->portModeControlARegisterAddr &= (unsigned long)~(p->pmca);
+
+        pin_index = rxd_pin - ANALOG_PIN_START_NUMBER;
+        if(pin_index >=0 && pin_index < NUM_ANALOG_INPUTS)
+        {
+            g_u8AnalogReadAvailableTable[pin_index] = false;
+        }
     }
 
     /* Set PMCT Register */
@@ -544,6 +552,12 @@ void SoftwareSerial::Set_SerialPort(uint8_t txd_pin,uint8_t rxd_pin)
     /* Set PMCA Register */
     if (0!=p->pmca){
         *p->portModeControlARegisterAddr &= (unsigned long)~(p->pmca);
+
+        pin_index = txd_pin - ANALOG_PIN_START_NUMBER;
+        if(pin_index >=0 && pin_index < NUM_ANALOG_INPUTS)
+        {
+            g_u8AnalogReadAvailableTable[pin_index] = false;
+        }
     }
 
     /* Set PMCT Register */

@@ -365,22 +365,12 @@ static uint16_t _analogDuty(int val, uint16_t frequency)
 /* 1011 Nhu add */
 static void _analogPinRead (uint8_t pin)
 {
-    uint8_t pin_index;
-    if (pin==29)
+    int8_t pin_index;
+    pin_index = (int8_t)pin - ANALOG_PIN_START_NUMBER;
+    // if pin_index is not within the accessable range do nothing
+    if(pin_index < 0 || pin_index >= NUM_ANALOG_INPUTS)
     {
-        pin_index = 8;
-    }
-    else if (pin==40)
-    {
-        pin_index = 9;
-    }
-    else if (pin<ANALOG_PIN_START_NUMBER && pin < 2)
-    {
-        pin_index = pin + 6;
-    }
-    else
-    {
-        pin_index = pin - ANALOG_PIN_START_NUMBER;
+        return;
     }
     if (g_u8AnalogReadAvailableTable[pin_index] == false) {
         const PinTableType ** pp;

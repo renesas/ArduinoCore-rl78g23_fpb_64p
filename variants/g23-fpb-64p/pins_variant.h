@@ -107,7 +107,7 @@ typedef struct {
  *----------------------------------------------------------------------------*/
 
 #define NUM_DIGITAL_PINS            57
-#define NUM_ANALOG_INPUTS           10
+#define NUM_ANALOG_INPUTS           6
 #define NUM_SWPWM_PINS              4
 // #endif
 #define analogInputToDigitalPin(p)  ((p < 6) ? (p) + 14 : -1)
@@ -165,20 +165,13 @@ extern const uint8_t SCL1;
 #define PIN_A3   (54)	/*A3 = ANI5 */
 #define PIN_A4   (55)	/*A4 = ANI6 */
 #define PIN_A5   (56)	/*A5 = ANI7 */
-#define PIN_A6	(0)		/* ANI16(P03/RxD1) */
-#define PIN_A7	(1)		/* ANI17(P02/TxD1) */
-#define PIN_A8	(29)	/* ANI19(P120) (DIGITAL_PIN_29) */
-#define PIN_A9	(40)	/* ANI18(P147) (DIGITAL_PIN_40) */
+
 extern const uint8_t A0;
 extern const uint8_t A1;
 extern const uint8_t A2;
 extern const uint8_t A3;
 extern const uint8_t A4;
 extern const uint8_t A5;
-extern const uint8_t A6;
-extern const uint8_t A7;
-extern const uint8_t A8;
-extern const uint8_t A9;
 
 #define digitalPinToInterrupt(p)  (((p) == 4) ? 0 : (((p) == 6) ? 1 : (((p) == 7) ? 2 : (((p) == 11) ? 3 : (((p) == 12) ? 4 : (((p) == 13) ? 5 : (((p) == 26) ? 6 : NOT_AN_INTERRUPT)))))))
 
@@ -206,11 +199,6 @@ extern const uint8_t A9;
 #define ANALOG_PIN_3		5		// ANI5 (DIGITAL_PIN_54)
 #define ANALOG_PIN_4		6		// ANI6 (DIGITAL_PIN_55)
 #define ANALOG_PIN_5		7		// ANI7 (DIGITAL_PIN_56)
-/* add 2021.07.29 */
-#define ANALOG_PIN_6		16		// ANI16(P03/RxD1) (DIGITAL_PIN_0)
-#define ANALOG_PIN_7		17		// ANI17(P02/TxD1) (DIGITAL_PIN_1)
-#define ANALOG_PIN_8		19		// ANI19(P120) (DIGITAL_PIN_29)
-#define ANALOG_PIN_9		18		// ANI18(P147) (DIGITAL_PIN_40)
 
 /* Port define. */
 #define PORT_0				0
@@ -294,7 +282,7 @@ extern const uint8_t A9;
 #define DIGITAL_PIN_54		PORT_2	/* P25	*/
 #define DIGITAL_PIN_55		PORT_2	/* P26	*/
 #define DIGITAL_PIN_56		PORT_2	/* P27	*/
-/* For A0-A6 */
+/* For A0-A5 */
 
 
 /* Bit Num of digital pin define */
@@ -361,7 +349,7 @@ extern const uint8_t A9;
 #define DIGITAL_PIN_BIT_54	0x05	/* P25	*/
 #define DIGITAL_PIN_BIT_55	0x06	/* P26	*/
 #define DIGITAL_PIN_BIT_56	0x07	/* P27	*/
-/* For A0-A6 */
+/* For A0-A5 */
 
 /* Bit mask of digital pin define. */
 #define DIGITAL_PIN_MASK_0		0x08	/* P03	*/
@@ -427,7 +415,7 @@ extern const uint8_t A9;
 #define DIGITAL_PIN_MASK_54		0x20	/* P25	*/
 #define DIGITAL_PIN_MASK_55		0x40	/* P26	*/
 #define DIGITAL_PIN_MASK_56		0x80	/* P27	*/
-/* For A0-A6 */
+/* For A0-A5 */
 
 /* Add for G23 PMCA & PMCT & PMCE */
 #define DIGITAL_PIN_PMCA_0		0x08	/* P03	*/
@@ -489,7 +477,7 @@ extern const uint8_t A9;
 #define DIGITAL_PIN_PMCA_54		0x20	/* P25	*/
 #define DIGITAL_PIN_PMCA_55		0x40	/* P26	*/
 #define DIGITAL_PIN_PMCA_56		0x80	/* P27	*/
-/* For A0-A6 */
+/* For A0-A5 */
 
 #define DIGITAL_PIN_PMCT_0		0x00	/* P03	*/
 #define DIGITAL_PIN_PMCT_1		0x00	/* P02	*/
@@ -550,7 +538,7 @@ extern const uint8_t A9;
 #define DIGITAL_PIN_PMCT_54		0x20	/* P25	*/
 #define DIGITAL_PIN_PMCT_55		0x40	/* P26	*/
 #define DIGITAL_PIN_PMCT_56		0x80	/* P27	*/
-/* For A0-A6 */
+/* For A0-A5 */
 
 #define DIGITAL_PIN_PMCE_0		0x00	/* P03	*/
 #define DIGITAL_PIN_PMCE_1		0x00	/* P02	*/
@@ -611,7 +599,7 @@ extern const uint8_t A9;
 #define DIGITAL_PIN_PMCE_54		0x00	/* P25	*/
 #define DIGITAL_PIN_PMCE_55		0x00	/* P26	*/
 #define DIGITAL_PIN_PMCE_56		0x00	/* P27	*/
-/* For A0-A6 */
+/* For A0-A5 */
 
 /* Define Digital Pin CCDE */
 #define DIGITAL_PIN_CCDE_0		0x00	/* P03	*/
@@ -673,7 +661,7 @@ extern const uint8_t A9;
 #define DIGITAL_PIN_CCDE_54		0x00	/* P25	*/
 #define DIGITAL_PIN_CCDE_55		0x00	/* P26	*/
 #define DIGITAL_PIN_CCDE_56		0x00	/* P27	*/
-/* For A0-A6 */
+/* For A0-A5 */
 
 /* Define Digital Pin PDIDIS */
 #define DIGITAL_PIN_PDIDIS_0	0x08	/* P03	*/
@@ -735,7 +723,7 @@ extern const uint8_t A9;
 #define DIGITAL_PIN_PDIDIS_54	0x00	/* P25	*/
 #define DIGITAL_PIN_PDIDIS_55	0x00	/* P26	*/
 #define DIGITAL_PIN_PDIDIS_56	0x00	/* P27	*/
-/* For A0-A6 */
+/* For A0-A5 */
 
 /* Define Digital Pin PM */
 #define DIGITAL_PIN_PM_0		0x08	/* P03	*/
@@ -797,7 +785,7 @@ extern const uint8_t A9;
 #define DIGITAL_PIN_PM_54		0x20	/* P25	*/
 #define DIGITAL_PIN_PM_55		0x40	/* P26	*/
 #define DIGITAL_PIN_PM_56		0x80	/* P27	*/
-/* For A0-A6 */
+/* For A0-A5 */
 
 /* Define Digital Pin PU */
 #define DIGITAL_PIN_PU_0		0x08	/* P03	*/
@@ -859,7 +847,7 @@ extern const uint8_t A9;
 #define DIGITAL_PIN_PU_54		0x00	/* P25	*/
 #define DIGITAL_PIN_PU_55		0x00	/* P26	*/
 #define DIGITAL_PIN_PU_56		0x00	/* P27	*/
-/* For A0-A6 */
+/* For A0-A5 */
 
 /* Define Digital Pin PIM */
 #define DIGITAL_PIN_PIM_0		0x08	/* P03	*/
@@ -921,7 +909,7 @@ extern const uint8_t A9;
 #define DIGITAL_PIN_PIM_54		0x00	/* P25	*/
 #define DIGITAL_PIN_PIM_55		0x00	/* P26	*/
 #define DIGITAL_PIN_PIM_56		0x00	/* P27	*/
-/* For A0-A6 */
+/* For A0-A5 */
 
 /* Define Digital Pin POM */
 #define DIGITAL_PIN_POM_0		0x08	/* P03	*/
@@ -983,7 +971,7 @@ extern const uint8_t A9;
 #define DIGITAL_PIN_POM_54		0x00	/* P25	*/
 #define DIGITAL_PIN_POM_55		0x00	/* P26	*/
 #define DIGITAL_PIN_POM_56		0x00	/* P27	*/
-/* For A0-A6 */
+/* For A0-A5 */
 
 ///* Bit mask of digital pin define. */
 //#define DIGITAL_PIN_MASK_0	0x02	// P11
