@@ -1,21 +1,3 @@
-/*
-  Copyright (c) 2014-2015 Arduino LLC.  All right reserved.
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-  See the GNU Lesser General Public License for more details.
-
-  You should have received a copy of the GNU Lesser General Public
-  License along with this library; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
 #include "pins_variant.h"
 #include "wiring_private.h"
 #include "wiring_variant.h"
@@ -36,56 +18,56 @@ Pwm_func pwm_ch[PWM_CH_NUM] =
 {
     {
         .open  = (void*)R_Config_TAU0_0_PWM_Create,
-		.open_slave  = (void*)R_Config_TAU0_2_PWM_Create,
+        .open_slave  = (void*)R_Config_TAU0_2_PWM_Create,
         .start  = (void*)R_Config_TAU0_0_PWM_Start,
         .start_slave = (void*)R_Config_TAU0_02_PWM_Start,
-		.stop_slave = (void*)R_Config_TAU0_02_PWM_Stop,
-		.enable_interrupt = (void*)R_Config_TAU0_0_PWM_Enable_IRQ,
+        .stop_slave = (void*)R_Config_TAU0_02_PWM_Stop,
+        .enable_interrupt = (void*)R_Config_TAU0_0_PWM_Enable_IRQ,
         .cycle = CYCLE_VALUE,
     },
     {
         .open  = (void*)R_Config_TAU0_0_PWM_Create,
-		.open_slave  = (void*)R_Config_TAU0_3_PWM_Create,
+        .open_slave  = (void*)R_Config_TAU0_3_PWM_Create,
         .start  = (void*)R_Config_TAU0_0_PWM_Start,
-		.start_slave = (void*)R_Config_TAU0_03_PWM_Start,
-		.stop_slave = (void*)R_Config_TAU0_03_PWM_Stop,
-		.enable_interrupt = (void*)R_Config_TAU0_0_PWM_Enable_IRQ,
+        .start_slave = (void*)R_Config_TAU0_03_PWM_Start,
+        .stop_slave = (void*)R_Config_TAU0_03_PWM_Stop,
+        .enable_interrupt = (void*)R_Config_TAU0_0_PWM_Enable_IRQ,
         .cycle = CYCLE_VALUE,
     },
     {
         .open  = (void*)R_Config_TAU0_0_PWM_Create,
-		.open_slave  = (void*)R_Config_TAU0_4_PWM_Create,
+        .open_slave  = (void*)R_Config_TAU0_4_PWM_Create,
         .start  = (void*)R_Config_TAU0_0_PWM_Start,
         .start_slave = (void*)R_Config_TAU0_04_PWM_Start,
-		.stop_slave = (void*)R_Config_TAU0_04_PWM_Stop,
-		.enable_interrupt = (void*)R_Config_TAU0_0_PWM_Enable_IRQ,
+        .stop_slave = (void*)R_Config_TAU0_04_PWM_Stop,
+        .enable_interrupt = (void*)R_Config_TAU0_0_PWM_Enable_IRQ,
         .cycle = CYCLE_VALUE,
     },
     {
         .open  = (void*)R_Config_TAU0_0_PWM_Create,
-		.open_slave  = (void*)R_Config_TAU0_5_PWM_Create,
+        .open_slave  = (void*)R_Config_TAU0_5_PWM_Create,
         .start  = (void*)R_Config_TAU0_0_PWM_Start,
         .start_slave = (void*)R_Config_TAU0_05_PWM_Start,
-		.stop_slave = (void*)R_Config_TAU0_05_PWM_Stop,
-		.enable_interrupt = (void*)R_Config_TAU0_0_PWM_Enable_IRQ,
+        .stop_slave = (void*)R_Config_TAU0_05_PWM_Stop,
+        .enable_interrupt = (void*)R_Config_TAU0_0_PWM_Enable_IRQ,
         .cycle = CYCLE_VALUE,
     },
     {
         .open  = (void*)R_Config_TAU0_0_PWM_Create,
-		.open_slave  = (void*)R_Config_TAU0_6_PWM_Create,
+        .open_slave  = (void*)R_Config_TAU0_6_PWM_Create,
         .start  = (void*)R_Config_TAU0_0_PWM_Start,
         .start_slave = (void*)R_Config_TAU0_06_PWM_Start,
-		.stop_slave = (void*)R_Config_TAU0_06_PWM_Stop,
-		.enable_interrupt = (void*)R_Config_TAU0_0_PWM_Enable_IRQ,
+        .stop_slave = (void*)R_Config_TAU0_06_PWM_Stop,
+        .enable_interrupt = (void*)R_Config_TAU0_0_PWM_Enable_IRQ,
         .cycle = CYCLE_VALUE,
     },
     {
         .open  = (void*)R_Config_TAU0_0_PWM_Create,
-		.open_slave  = (void*)R_Config_TAU0_7_PWM_Create,
+        .open_slave  = (void*)R_Config_TAU0_7_PWM_Create,
         .start  = (void*)R_Config_TAU0_0_PWM_Start,
         .start_slave = (void*)R_Config_TAU0_07_PWM_Start,
-		.stop_slave = (void*)R_Config_TAU0_07_PWM_Stop,
-		.enable_interrupt = (void*)R_Config_TAU0_0_PWM_Enable_IRQ,
+        .stop_slave = (void*)R_Config_TAU0_07_PWM_Stop,
+        .enable_interrupt = (void*)R_Config_TAU0_0_PWM_Enable_IRQ,
         .cycle = CYCLE_VALUE,
     }
 };

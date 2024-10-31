@@ -1,36 +1,11 @@
-/*
-  Copyright (c) 2014-2016 Arduino LLC.  All right reserved.
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-  See the GNU Lesser General Public License for more details.
-
-  You should have received a copy of the GNU Lesser General Public
-  License along with this library; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
 #ifndef _PINS_VARIANT_H_
 #define _PINS_VARIANT_H_
 
-/*----------------------------------------------------------------------------
- *        Definitions
- *----------------------------------------------------------------------------*/
-
-/*----------------------------------------------------------------------------
- *        Headers
- *----------------------------------------------------------------------------*/
 #include <stdint.h>
 #include <stdlib.h>
 
 #ifndef configCPU_CLOCK_HZ
-#define configCPU_CLOCK_HZ 					(32000000)	//!< CPUの動作周波数（RTOS未使用時に定義）
+#define configCPU_CLOCK_HZ                  (32000000)  // CPU frequency used for only I2C setting
 #endif
 
 #define F_CPU (32 * 1000 * 1000L)
@@ -41,6 +16,7 @@
 #define UART_CHANNEL 		0		// UART0(Serial0)
 #define UART1_CHANNEL       1       // UART1(Serial1)
 #define UART2_CHANNEL       2       // UART2(Serial2)
+#define UART_TOTAL_NUM      3
 
 /* SPI(CSI) Definition */
 #define USE_CSI      (1) // Set to '1' when Use SPI Hardware.
@@ -68,49 +44,15 @@
 #define CHECK_OUTPUT_INHIBIT_RL78(p) ((p) == 14 || (p) == 27 || (p) == 28 || (p) == 41)
 
 
-#ifdef __cplusplus
-extern "C"
-{
-
-// moved from wiring_private.h
-#define FREQUENCY_MIN_VAL	(500)
-#define FREQUENCY_MAX_VAL	(8000000)
-
-#define TONE_CH_NUM				(7)
-
-// #define TAU_OPERATION_CLOCK		(0xC000U)    /* operation clock set by PRS register */
-// #define CK00_CK01_OPERATION		(0x000F)	/* Selection of operation clock CK00, CK01 */
-// #define CK02_OPERATION			(0x0300)	/* Selection of operation clock CK02 */
-// #define CK03_OPERATION			(0x3000)	/* Selection of operation clock CK03 */
-// #define TIMEOUT_MAX_VAL			(65535)
-// #define PULSE_INTERUPT			(1)
-
-#define _4000_TAU_CLOCK_SELECT_CKM2       (0x4000U)    /* operation clock CK2 set by PRS register */
-#define _0000_TAU_CKM2_FCLK_1             (0x0000U)    /* ckm2 - fCLK/2^1 */
-#define _C000_TAU_CLOCK_SELECT_CKM3       (0xC000U)    /* operation clock CK3 set by PRS register */
-
-}
-#endif // __cplusplus
-
-// tone_func
-
-int8_t get_tone_channel(uint8_t tone_num);
-
-typedef struct {
-    void (*open)();
-	void (*start)();
-	void (*stop)();
-	void (*get_width)(uint32_t * const width);
-} pulse_in_func;
 /*----------------------------------------------------------------------------
  *        Pins
  *----------------------------------------------------------------------------*/
 
 #define NUM_DIGITAL_PINS            57
 #define NUM_ANALOG_INPUTS           6
-#define NUM_SWPWM_PINS              4
+
 // #endif
-#define analogInputToDigitalPin(p)  ((p < 6) ? (p) + 14 : -1)
+#define analogInputToDigitalPin(p)  ((p < 6) ? (p) + 51 : -1)
 
 #define digitalPinHasPWM(p)         ((p) == 3 || (p) == 5 || (p) == 6 || (p) == 9 || (p) == 10 || (p) == 11)
 
@@ -125,33 +67,14 @@ extern const uint8_t MOSI;
 extern const uint8_t MISO;
 extern const uint8_t SCK;
 
-extern const uint8_t SS3;
-extern const uint8_t MOSI3;
-extern const uint8_t MISO3;
-extern const uint8_t SCK3;
-
-extern const uint8_t SS4;
-extern const uint8_t MOSI4;
-extern const uint8_t MISO4;
-extern const uint8_t SCK4;
-
-extern const uint8_t SS5;
-extern const uint8_t MOSI5;
-extern const uint8_t MISO5;
-extern const uint8_t SCK5;
-#define PIN_WIRE_SDA0        (48) // P61
-#define PIN_WIRE_SCL0        (47) // P60
+#define PIN_WIRE_SDA        (48) // P61
+#define PIN_WIRE_SCL        (47) // P60
 #define PIN_WIRE_SDA1        (50) // P63
 #define PIN_WIRE_SCL1        (49) // P62
 
-#define PIN_WIRE_SDA0_MASK   0x02 // P61
-#define PIN_WIRE_SCL0_MASK   0x01 // P60
-#define PIN_WIRE_SDA1_MASK   0x08 // P63
-#define PIN_WIRE_SCL1_MASK   0x04 // P62
-extern const uint8_t SDA0;
-extern const uint8_t SCL0;
-extern const uint8_t SDA1;
-extern const uint8_t SCL1;
+extern const uint8_t SDA;
+extern const uint8_t SCL;
+
 #define BUILTIN_LED1 16
 #define BUILTIN_LED2 15
 #define LED_BUILTIN  BUILTIN_LED1
@@ -233,7 +156,7 @@ extern const uint8_t A5;
 #define DIGITAL_PIN_11		PORT_5	/* P51	*/
 #define DIGITAL_PIN_12		PORT_5	/* P50	*/
 #define DIGITAL_PIN_13		PORT_3	/* P30	*/
-#define DIGITAL_PIN_14		PORT_2	/* P40(REF)	*/ // P20->P40
+#define DIGITAL_PIN_14		PORT_4	/* P40  */ // P20->P40
 #define DIGITAL_PIN_15		PORT_5	/* P52	*/
 #define DIGITAL_PIN_16		PORT_5	/* P53	*/
 #define DIGITAL_PIN_17		PORT_5	/* P54	*/
@@ -300,7 +223,7 @@ extern const uint8_t A5;
 #define DIGITAL_PIN_BIT_11	0x01	/* P51	*/
 #define DIGITAL_PIN_BIT_12	0x00	/* P50	*/
 #define DIGITAL_PIN_BIT_13	0x00	/* P30	*/
-#define DIGITAL_PIN_BIT_14	0x00	/* P40(REF)	*/ // P20->P40
+#define DIGITAL_PIN_BIT_14	0x00	/* P40	*/ // P20->P40
 #define DIGITAL_PIN_BIT_15	0x02	/* P52	*/
 #define DIGITAL_PIN_BIT_16	0x03	/* P53	*/
 #define DIGITAL_PIN_BIT_17	0x04	/* P54	*/
@@ -366,7 +289,7 @@ extern const uint8_t A5;
 #define DIGITAL_PIN_MASK_11		0x02	/* P51	*/
 #define DIGITAL_PIN_MASK_12		0x01	/* P50	*/
 #define DIGITAL_PIN_MASK_13		0x01	/* P30	*/
-#define DIGITAL_PIN_MASK_14		0x01	/* P40(REF)	*/  // P20->P40
+#define DIGITAL_PIN_MASK_14		0x01	/* P40	*/  // P20->P40
 #define DIGITAL_PIN_MASK_15		0x04	/* P52	*/
 #define DIGITAL_PIN_MASK_16		0x08	/* P53	*/
 #define DIGITAL_PIN_MASK_17		0x10	/* P54	*/
@@ -432,7 +355,7 @@ extern const uint8_t A5;
 #define DIGITAL_PIN_PMCA_11		0x00	/* P51	*/
 #define DIGITAL_PIN_PMCA_12		0x00	/* P50	*/
 #define DIGITAL_PIN_PMCA_13		0x00	/* P30	*/
-#define DIGITAL_PIN_PMCA_14		0x01	/* P20(REF)	*/
+#define DIGITAL_PIN_PMCA_14		0x00	/* P40	*/
 #define DIGITAL_PIN_PMCA_15		0x00	/* P52	*/
 #define DIGITAL_PIN_PMCA_16		0x00	/* P53	*/
 #define DIGITAL_PIN_PMCA_17		0x00	/* P54	*/
@@ -461,8 +384,8 @@ extern const uint8_t A5;
 #define DIGITAL_PIN_PMCA_40		0x80	/* P147	*/
 #define DIGITAL_PIN_PMCA_41		0x02	/* P21 	*/
 #define DIGITAL_PIN_PMCA_42		0x00	/* P130	*/
-#define DIGITAL_PIN_PMCA_43		0x00	/* P01 	*/
-#define DIGITAL_PIN_PMCA_44		0x00	/* P00 	*/
+#define DIGITAL_PIN_PMCA_43		0x02	/* P01 	*/
+#define DIGITAL_PIN_PMCA_44		0x01	/* P00 	*/
 #define DIGITAL_PIN_PMCA_45		0x00	/* P141	*/
 #define DIGITAL_PIN_PMCA_46		0x00	/* P140	*/
 #define DIGITAL_PIN_PMCA_47		0x00	/* P60	*/
@@ -479,8 +402,8 @@ extern const uint8_t A5;
 #define DIGITAL_PIN_PMCA_56		0x80	/* P27	*/
 /* For A0-A5 */
 
-#define DIGITAL_PIN_PMCT_0		0x00	/* P03	*/
-#define DIGITAL_PIN_PMCT_1		0x00	/* P02	*/
+#define DIGITAL_PIN_PMCT_0		0x08	/* P03	*/
+#define DIGITAL_PIN_PMCT_1		0x04	/* P02	*/
 #define DIGITAL_PIN_PMCT_2		0x00	/* P43	*/
 #define DIGITAL_PIN_PMCT_3		0x00	/* P42	*/
 #define DIGITAL_PIN_PMCT_4		0x80	/* P77	*/
@@ -493,7 +416,7 @@ extern const uint8_t A5;
 #define DIGITAL_PIN_PMCT_11		0x00	/* P51	*/
 #define DIGITAL_PIN_PMCT_12		0x01	/* P50	*/
 #define DIGITAL_PIN_PMCT_13		0x01	/* P30	*/
-#define DIGITAL_PIN_PMCT_14		0x00	/* P20(REF)	*/
+#define DIGITAL_PIN_PMCT_14		0x00	/* P40	*/
 #define DIGITAL_PIN_PMCT_15		0x00	/* P52	*/
 #define DIGITAL_PIN_PMCT_16		0x00	/* P53	*/
 #define DIGITAL_PIN_PMCT_17		0x00	/* P54	*/
@@ -522,8 +445,8 @@ extern const uint8_t A5;
 #define DIGITAL_PIN_PMCT_40		0x00	/* P147	*/
 #define DIGITAL_PIN_PMCT_41		0x00	/* P21 	*/
 #define DIGITAL_PIN_PMCT_42		0x00	/* P130	*/
-#define DIGITAL_PIN_PMCT_43		0x00	/* P01 	*/
-#define DIGITAL_PIN_PMCT_44		0x00	/* P00 	*/
+#define DIGITAL_PIN_PMCT_43		0x02	/* P01 	*/
+#define DIGITAL_PIN_PMCT_44		0x01	/* P00 	*/
 #define DIGITAL_PIN_PMCT_45		0x00	/* P141	*/
 #define DIGITAL_PIN_PMCT_46		0x00	/* P140	*/
 #define DIGITAL_PIN_PMCT_47		0x00	/* P60	*/
@@ -554,7 +477,7 @@ extern const uint8_t A5;
 #define DIGITAL_PIN_PMCE_11		0x02	/* P51	*/
 #define DIGITAL_PIN_PMCE_12		0x01	/* P50	*/
 #define DIGITAL_PIN_PMCE_13		0x00	/* P30	*/
-#define DIGITAL_PIN_PMCE_14		0x00	/* P20(REF)	*/
+#define DIGITAL_PIN_PMCE_14		0x00	/* P40	*/
 #define DIGITAL_PIN_PMCE_15		0x00	/* P52	*/
 #define DIGITAL_PIN_PMCE_16		0x00	/* P53	*/
 #define DIGITAL_PIN_PMCE_17		0x00	/* P54	*/
@@ -616,7 +539,7 @@ extern const uint8_t A5;
 #define DIGITAL_PIN_CCDE_11		0x04	/* P51	*/
 #define DIGITAL_PIN_CCDE_12		0x08	/* P50	*/
 #define DIGITAL_PIN_CCDE_13		0x00	/* P30	*/
-#define DIGITAL_PIN_CCDE_14		0x00	/* P20(REF)	*/
+#define DIGITAL_PIN_CCDE_14		0x00	/* P40	*/
 #define DIGITAL_PIN_CCDE_15		0x00	/* P52	*/
 #define DIGITAL_PIN_CCDE_16		0x00	/* P53	*/
 #define DIGITAL_PIN_CCDE_17		0x00	/* P54	*/
@@ -666,7 +589,7 @@ extern const uint8_t A5;
 /* Define Digital Pin PDIDIS */
 #define DIGITAL_PIN_PDIDIS_0	0x08	/* P03	*/
 #define DIGITAL_PIN_PDIDIS_1	0x04	/* P02	*/
-#define DIGITAL_PIN_PDIDIS_2	0x00	/* P43	*/
+#define DIGITAL_PIN_PDIDIS_2	0x08	/* P43	*/
 #define DIGITAL_PIN_PDIDIS_3	0x04	/* P42	*/
 #define DIGITAL_PIN_PDIDIS_4	0x00	/* P77	*/
 #define DIGITAL_PIN_PDIDIS_5	0x00	/* P41	*/
@@ -678,10 +601,10 @@ extern const uint8_t A5;
 #define DIGITAL_PIN_PDIDIS_11	0x00	/* P51	*/
 #define DIGITAL_PIN_PDIDIS_12	0x01	/* P50	*/
 #define DIGITAL_PIN_PDIDIS_13	0x00	/* P30	*/
-#define DIGITAL_PIN_PDIDIS_14	0x00	/* P20(REF)	*/
-#define DIGITAL_PIN_PDIDIS_15	0x00	/* P52	*/
-#define DIGITAL_PIN_PDIDIS_16	0x00	/* P53	*/
-#define DIGITAL_PIN_PDIDIS_17	0x00	/* P54	*/
+#define DIGITAL_PIN_PDIDIS_14	0x00	/* P40	*/
+#define DIGITAL_PIN_PDIDIS_15	0x04	/* P52	*/
+#define DIGITAL_PIN_PDIDIS_16	0x08	/* P53	*/
+#define DIGITAL_PIN_PDIDIS_17	0x10	/* P54	*/
 #define DIGITAL_PIN_PDIDIS_18	0x20	/* P55	*/
 #define DIGITAL_PIN_PDIDIS_19	0x00	/* P70	*/
 #define DIGITAL_PIN_PDIDIS_20	0x02	/* P71	*/
@@ -740,7 +663,7 @@ extern const uint8_t A5;
 #define DIGITAL_PIN_PM_11		0x02	/* P51	*/
 #define DIGITAL_PIN_PM_12		0x01	/* P50	*/
 #define DIGITAL_PIN_PM_13		0x01	/* P30	*/
-#define DIGITAL_PIN_PM_14		0x01	/* P20(REF)	*/
+#define DIGITAL_PIN_PM_14		0x01	/* P40	*/
 #define DIGITAL_PIN_PM_15		0x04	/* P52	*/
 #define DIGITAL_PIN_PM_16		0x08	/* P53	*/
 #define DIGITAL_PIN_PM_17		0x10	/* P54	*/
@@ -802,7 +725,7 @@ extern const uint8_t A5;
 #define DIGITAL_PIN_PU_11		0x02	/* P51	*/
 #define DIGITAL_PIN_PU_12		0x01	/* P50	*/
 #define DIGITAL_PIN_PU_13		0x01	/* P30	*/
-#define DIGITAL_PIN_PU_14		0x00	/* P20(REF)	*/
+#define DIGITAL_PIN_PU_14		0x01	/* P40	*/
 #define DIGITAL_PIN_PU_15		0x04	/* P52	*/
 #define DIGITAL_PIN_PU_16		0x08	/* P53	*/
 #define DIGITAL_PIN_PU_17		0x10	/* P54	*/
@@ -852,7 +775,7 @@ extern const uint8_t A5;
 /* Define Digital Pin PIM */
 #define DIGITAL_PIN_PIM_0		0x08	/* P03	*/
 #define DIGITAL_PIN_PIM_1		0x00	/* P02	*/
-#define DIGITAL_PIN_PIM_2		0x00	/* P43	*/
+#define DIGITAL_PIN_PIM_2		0x08	/* P43	*/
 #define DIGITAL_PIN_PIM_3		0x00	/* P42	*/
 #define DIGITAL_PIN_PIM_4		0x00	/* P77	*/
 #define DIGITAL_PIN_PIM_5		0x02	/* P41	*/
@@ -864,10 +787,10 @@ extern const uint8_t A5;
 #define DIGITAL_PIN_PIM_11		0x00	/* P51	*/
 #define DIGITAL_PIN_PIM_12		0x00	/* P50	*/
 #define DIGITAL_PIN_PIM_13		0x00	/* P30	*/
-#define DIGITAL_PIN_PIM_14		0x00	/* P20(REF)	*/
+#define DIGITAL_PIN_PIM_14		0x00	/* P40	*/
 #define DIGITAL_PIN_PIM_15		0x00	/* P52	*/
-#define DIGITAL_PIN_PIM_16		0x00	/* P53	*/
-#define DIGITAL_PIN_PIM_17		0x00	/* P54	*/
+#define DIGITAL_PIN_PIM_16		0x08	/* P53	*/
+#define DIGITAL_PIN_PIM_17		0x10	/* P54	*/
 #define DIGITAL_PIN_PIM_18		0x20	/* P55	*/
 #define DIGITAL_PIN_PIM_19		0x00	/* P70	*/
 #define DIGITAL_PIN_PIM_20		0x02	/* P71	*/
@@ -914,7 +837,7 @@ extern const uint8_t A5;
 /* Define Digital Pin POM */
 #define DIGITAL_PIN_POM_0		0x08	/* P03	*/
 #define DIGITAL_PIN_POM_1		0x04	/* P02	*/
-#define DIGITAL_PIN_POM_2		0x00	/* P43	*/
+#define DIGITAL_PIN_POM_2		0x08	/* P43	*/
 #define DIGITAL_PIN_POM_3		0x04	/* P42	*/
 #define DIGITAL_PIN_POM_4		0x00	/* P77	*/
 #define DIGITAL_PIN_POM_5		0x00	/* P41	*/
@@ -926,10 +849,10 @@ extern const uint8_t A5;
 #define DIGITAL_PIN_POM_11		0x00	/* P51	*/
 #define DIGITAL_PIN_POM_12		0x01	/* P50	*/
 #define DIGITAL_PIN_POM_13		0x00	/* P30	*/
-#define DIGITAL_PIN_POM_14		0x00	/* P20(REF)	*/
-#define DIGITAL_PIN_POM_15		0x00	/* P52	*/
-#define DIGITAL_PIN_POM_16		0x00	/* P53	*/
-#define DIGITAL_PIN_POM_17		0x00	/* P54	*/
+#define DIGITAL_PIN_POM_14		0x00	/* P40	*/
+#define DIGITAL_PIN_POM_15		0x04	/* P52	*/
+#define DIGITAL_PIN_POM_16		0x08	/* P53	*/
+#define DIGITAL_PIN_POM_17		0x10	/* P54	*/
 #define DIGITAL_PIN_POM_18		0x20	/* P55	*/
 #define DIGITAL_PIN_POM_19		0x00	/* P70	*/
 #define DIGITAL_PIN_POM_20		0x02	/* P71	*/
@@ -1007,14 +930,12 @@ extern const uint8_t A5;
 //#define DIGITAL_PIN_MASK_30	0x20	// P75
 #endif
 
-#define SWPWM_PIN			0xE0
-
 #define PWM_PIN_3			3		// TO4
 #define PWM_PIN_5			5		// TO7
 #define PWM_PIN_6			6		// TO3
 #define PWM_PIN_9			9		// TO6
 #define PWM_PIN_10			10		// TO5
-#define PWM_PIN_11			11		// TO2
+#define PWM_PIN_11			11		// TO2 -> ELCL
 
 #define TONE_PIN_3			3		// TO4
 #define TONE_PIN_5			5		// TO7
@@ -1065,9 +986,6 @@ extern const uint8_t A5;
 #else
 #define IS_PIN_SERIAL2(p)        (0)
 #endif
-
-// #define IS_PIN_SERIAL1(p)        (0)
-// #define IS_PIN_SERIAL2(p)        ((p) == PIN_SERIAL2_RX || (p) == PIN_SERIAL2_TX)
 
 #define IS_PIN_DIGITAL(p)       ((p) >= 0 && (p) < NUM_DIGITAL_PINS && (!(IS_PIN_SERIAL(p))) && !((p) == 14) && !((p) == 27) && !((p) == 28) && !((p) == 41) )
 #define IS_PIN_ANALOG(p)        ((p) >= 51 && (p) < 57)

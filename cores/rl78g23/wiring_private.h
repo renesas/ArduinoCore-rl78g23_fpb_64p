@@ -1,31 +1,3 @@
-/*
-  wiring_private.h - Internal header file.
-  Part of Arduino - http://www.arduino.cc/
-
-  Copyright (c) 2005-2006 David A. Mellis
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-
-  You should have received a copy of the GNU Lesser General
-  Public License along with this library; if not, write to the
-  Free Software Foundation, Inc., 59 Temple Place, Suite 330,
-  Boston, MA  02111-1307  USA
-
-  $Id: wiring.h 239 2007-01-12 17:58:39Z mellis $
-*/
-/*
-  Modified 13 July 2014 by Nozomu Fujita for GR-SAKURA
-  Modified 1  Mar  2017 by Yuuki Okamiya for RL78/G13
-*/
-
 #ifndef WiringPrivate_h
 #define WiringPrivate_h
 
@@ -50,14 +22,6 @@ fInterruptFunc_t g_afInterruptFuncTable[EXTERNAL_NUM_INTERRUPTS] __attribute__((
 
 #define MICROSEC_OVFL_FLAG   (TMIF01)
 #define MICROSEC_TIMER_CNT      (TCR01)
-typedef struct {
-    uint8_t valid:1;
-    uint8_t pin:7;
-    uint8_t value;
-    volatile uint8_t* port;
-    uint8_t mask;
-    uint8_t newValue;
-} SwPwm;
 
 typedef struct {
     void (*open)();

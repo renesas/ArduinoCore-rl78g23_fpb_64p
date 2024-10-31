@@ -1,31 +1,3 @@
-/*
-  wiring_variant.h - Internal header file.
-  Part of Arduino - http://www.arduino.cc/
-
-  Copyright (c) 2005-2006 David A. Mellis
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-
-  You should have received a copy of the GNU Lesser General
-  Public License along with this library; if not, write to the
-  Free Software Foundation, Inc., 59 Temple Place, Suite 330,
-  Boston, MA  02111-1307  USA
-
-  $Id: wiring.h 239 2007-01-12 17:58:39Z mellis $
-*/
-/*
-  Modified 13 July 2014 by Nozomu Fujita for GR-SAKURA
-  Modified 1  Mar  2017 by Yuuki Okamiya for RL78/G13
-*/
-
 #ifndef WiringVariante_h
 #define WiringVariante_h
 
@@ -38,7 +10,7 @@
 extern "C"{
 #endif
 
-#define ANALOG_ADPC_OFFSET	4
+// #define ANALOG_ADPC_OFFSET	4
 #define ANALOG_PIN_START_NUMBER	(51)
 #define MAX_CYCLIC_HANDLER 		(8)
 #define EXTERNAL_NUM_INTERRUPTS (7)
@@ -64,7 +36,6 @@ extern "C"{
 
 /* pulseIn define. */
 #define PULSEIN_CLOCK_CYCLE 29
-
 
 #ifdef __cplusplus
 } // extern "C"

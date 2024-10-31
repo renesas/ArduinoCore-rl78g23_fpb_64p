@@ -4,7 +4,7 @@
 # For more info:
 # LLVM Prototype Package for Tools Test
 name=Renesas RL78/G23
-version=2.3.2
+version=2.4.0
 
 # --------------------- 
 # Compile variables
@@ -26,25 +26,25 @@ compiler.path={runtime.tools.llvm-rl78.path}/bin/
 # LLVM Compiler variable
 #------------------------------------#
 compiler.c.cmd=clang
-compiler.c.flags=--target=rl78 {compiler.optimize} -ffunction-sections -fdata-sections -fdiagnostics-parseable-fixits -g -mcpu=s3 -std=gnu99 -DARDUINO=1813 -D__RL78__ -DG23_FPB -Wnonportable-include-path {compiler.warning_flags}
+compiler.c.flags=--target=rl78 {compiler.optimize} -fno-diagnostics-show-line-numbers -ffunction-sections -fdata-sections -fdiagnostics-parseable-fixits -g -mcpu=s3 -std=gnu99 -DARDUINO=1813 -D__RL78__ -DG23_FPB -Wnonportable-include-path {compiler.warning_flags}
 
 #------------------------------------#
 # LLVM C++ Compiler variable
 #------------------------------------#
 compiler.cpp.cmd=clang++
-compiler.cpp.flags=--target=rl78 {compiler.optimize} -g -ffunction-sections -fdata-sections -fdiagnostics-parseable-fixits -DCPPAPP -DARDUINO=1813 -D__RL78__ -DG23_FPB -Wnonportable-include-path {compiler.warning_flags}
+compiler.cpp.flags=--target=rl78 {compiler.optimize} -g -fno-diagnostics-show-line-numbers -ffunction-sections -fdata-sections -fdiagnostics-parseable-fixits -DCPPAPP -DARDUINO=1813 -D__RL78__ -DG23_FPB -Wnonportable-include-path {compiler.warning_flags}
 
 #------------------------------------#
 # LLVM Asemble variable
 #------------------------------------#
 compiler.S.cmd=clang
-compiler.S.flags=--target=rl78 {compiler.optimize} -ffunction-sections -fdata-sections -fdiagnostics-parseable-fixits -g -mcpu=s3 -DCPPAPP 
+compiler.S.flags=--target=rl78 {compiler.optimize} -fno-diagnostics-show-line-numbers -ffunction-sections -fdata-sections -fdiagnostics-parseable-fixits -g -mcpu=s3 -DCPPAPP 
 
 #------------------------------------#
 # LLVM Linker variable
 #------------------------------------#
 compiler.c.elf.cmd=clang++
-compiler.c.elf.flags=--target=rl78 -ffunction-sections -fdata-sections -fdiagnostics-parseable-fixits -g -mcpu=s3 
+compiler.c.elf.flags=--target=rl78 -fno-diagnostics-show-line-numbers -ffunction-sections -fdata-sections -fdiagnostics-parseable-fixits -g -mcpu=s3 
 
 #------------------------------------#
 # LLVM Object Copy variable

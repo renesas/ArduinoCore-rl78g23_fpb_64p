@@ -1,31 +1,3 @@
-/*
- wiring_analog.c - analog input and output
- Part of Arduino - http://www.arduino.cc/
-
- Copyright (c) 2005-2006 David A. Mellis
-
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Lesser General Public
- License as published by the Free Software Foundation; either
- version 2.1 of the License, or (at your option) any later version. 
-
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- Lesser General Public License for more details.
-
- You should have received a copy of the GNU Lesser General
- Public License along with this library; if not, write to the
- Free Software Foundation, Inc., 59 Temple Place, Suite 330,
- Boston, MA  02111-1307  USA
-
- Modified 28 September 2010 by Mark Sproul
-
- $Id: wiring.c 248 2007-02-03 15:36:30Z mellis $
- */
-/*
- * Modified  4 Mar  2017 by Yuuki Okamiya for RL78/G13
- */
 #include "wiring_private.h"
 #include "wiring_variant.h"
 #include "pins_variant.h"
@@ -60,7 +32,6 @@ static int _analogRead(uint8_t u8ADS);
 static uint16_t _analogDuty(int val, uint16_t frequency);
 static uint16_t _analogFrequency (uint8_t pin, uint32_t u32Hz);
 
-volatile SwPwm g_SwPwm[NUM_SWPWM_PINS] = { { 0, 0, 0, 0, 0, 0 }, };
 bool g_u8AnalogReadAvailableTable[NUM_ANALOG_INPUTS] = { 0 };
 bool g_u8AnalogWriteAvailableTable[NUM_DIGITAL_PINS] = {};
 
@@ -118,7 +89,8 @@ int8_t get_analog_channel(uint8_t analog_num)
 *                Although it is limited to the resolution of the analog to digital converter
 *                (0-255 for 8 bits or 0-1023 for 10 bits).
 ***********************************************************************************************************************/
-int analogRead(uint8_t analog_pin) {
+// int analogRead(uint8_t analog_pin) {
+int analogRead(pin_size_t analog_pin) {
     int s16Result = 0;
     uint8_t analog_read_flg = 0;
     uint8_t cnt;
@@ -159,7 +131,7 @@ int analogRead(uint8_t analog_pin) {
 * Return Value : None
 ***********************************************************************************************************************/
 void analogWrite(uint8_t pin, int value) {
-	uint16_t pwm_frequency = 0;
+    uint16_t pwm_frequency = 0;
 
     if (pin < NUM_DIGITAL_PINS)
     {
@@ -196,11 +168,11 @@ void analogWrite(uint8_t pin, int value) {
                     /* Master Channel Frequency Set */
                     if(pwm_ch[pwm_channel].cycle == CYCLE_VALUE)
                     {
-                    	pwm_frequency = _analogFrequency(pwm_channel_table[0],FREQUENCY_MIN_VAL);
-                	    for(int i = 0;i<PWM_CH_NUM;i++)
-                	    {
-                	    	pwm_ch[i].cycle = pwm_frequency;
-                	    }
+                        pwm_frequency = _analogFrequency(pwm_channel_table[0],FREQUENCY_MIN_VAL);
+                        for(int i = 0;i<PWM_CH_NUM;i++)
+                        {
+                            pwm_ch[i].cycle = pwm_frequency;
+                        }
                     }
 
                     *(g_timer_period_reg[pwm_channel]) = pwm_ch[pwm_channel].cycle;
@@ -212,13 +184,13 @@ void analogWrite(uint8_t pin, int value) {
 
                 if(g_u8AnalogWriteAvailableTable[pin] == 0)
                 {
-                	pwm_ch[pwm_channel].open_slave();
-                	pwm_ch[pwm_channel].start_slave();
+                    pwm_ch[pwm_channel].open_slave();
+                    pwm_ch[pwm_channel].start_slave();
 
-                	g_analogWrite_enable_interrupt_flag = 1;
-                	g_u8AnalogWriteAvailableTable[pin] = 1;
+                    g_analogWrite_enable_interrupt_flag = 1;
+                    g_u8AnalogWriteAvailableTable[pin] = 1;
 
-                	pwm_ch[pwm_channel].enable_interrupt();
+                    pwm_ch[pwm_channel].enable_interrupt();
                 }
 
                 if(g_pwm_create_flg == 0)
@@ -252,16 +224,16 @@ void analogWriteFrequency(uint32_t Hz) {
 */
 
 void analogWriteFrequency(uint32_t Hz) {
-	uint16_t pwm_frequency = 0;
+    uint16_t pwm_frequency = 0;
 
-	if(g_pwm_create_flg == 0)
-	{
-		pwm_frequency = _analogFrequency(pwm_channel_table[0],Hz);
-	    for(int i = 0;i<PWM_CH_NUM;i++)
-	    {
-	        pwm_ch[i].cycle = pwm_frequency;
-	    }
-	}
+    if(g_pwm_create_flg == 0)
+    {
+        pwm_frequency = _analogFrequency(pwm_channel_table[0],Hz);
+        for(int i = 0;i<PWM_CH_NUM;i++)
+        {
+            pwm_ch[i].cycle = pwm_frequency;
+        }
+    }
 }
 
 /***********************************************************************************************************************
@@ -272,7 +244,7 @@ void analogWriteFrequency(uint32_t Hz) {
 * Return Value : None
 ***********************************************************************************************************************/
 void analogWritePinFrequency(uint8_t pin, uint32_t Hz) {
-	/* Due to a change in the PWM control method, this function is not supported. */
+    /* Due to a change in the PWM control method, this function is not supported. */
 #if 0
     /* PWM output pulse cycle setting
     Pulse period = (TDR00 setting value + 1) x count clock period
@@ -362,13 +334,12 @@ static uint16_t _analogDuty(int val, uint16_t frequency)
     return u16Duty;
 }
 
-/* 1011 Nhu add */
 static void _analogPinRead (uint8_t pin)
 {
     int8_t pin_index;
     pin_index = (int8_t)pin - ANALOG_PIN_START_NUMBER;
     // if pin_index is not within the accessable range do nothing
-    if(pin_index < 0 || pin_index >= NUM_ANALOG_INPUTS)
+    if ((pin_index < 0) || (pin_index >= NUM_ANALOG_INPUTS))
     {
         return;
     }

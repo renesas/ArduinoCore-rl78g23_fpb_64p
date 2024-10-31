@@ -1,18 +1,10 @@
-/*
- * writing_tone.c
- *
- *  Created on: 2021/11/02
- *      Author: hmU11983
- */
-
-//#include "pins_arduino_classics.h"
 #include "pins_variant.h"
 #include "iodefine.h"
 #include "iodefine_ext.h"
 #include "api/Common.h"
 #include "wiring_private.h"
 #include "wiring_private_tone.h"
-
+#include "r_smc_entry.h"
 
 extern "C"
 {
@@ -54,7 +46,6 @@ void tone(uint8_t pin, unsigned int frequency, unsigned long duration)
 
     uint8_t i;
     uint8_t tone_pin_flg = 0;
-//    unsigned long tone_interrupt_cnt;
     int8_t tone_channel = get_tone_channel(pin);
     uint32_t fclk_frequency = 0;
     uint32_t timer_frequency = 0;

@@ -1,5 +1,3 @@
-//#include "api/deprecated-avr-comp/avr/dtostrf.c.impl"
-
 #if 1
 #include <stdio.h>
 #include <string.h>
