@@ -107,14 +107,6 @@ void loop();
 // Include board variant
 #include "pins_variant.h"
 
-// undefine stdlib's abs if encountered
-#ifdef abs
-#undef abs
-#endif // abs
-
-#define abs(x) ((x)>0?(x):-(x))
-
-
 #include "api/itoa.h"
 #ifndef configCPU_CLOCK_HZ
 #define configCPU_CLOCK_HZ 					(32000000)	//!< CPUの動作周波数（RTOS未使用時に定義）
