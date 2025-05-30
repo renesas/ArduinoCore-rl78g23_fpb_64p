@@ -2,34 +2,48 @@
 #define Arduino_h
 
 #include "api/ArduinoAPI.h"
+#include "api/deprecated-avr-comp/avr/dtostrf.h"
 #include <stdbool.h>
 #include "utilities.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 #include "r_cg_macrodriver.h"
+#include "pintable.h"
+#include "pins_variant.h"
 #ifdef __cplusplus
 }
 #endif
-#include "pintable.h"
-#include "pins_variant.h"
 
 #define RLDUINO78_VERSION 0x0203
 #define INTERRUPT
 #define _BV(bit) (1 << (bit))
-#define _HALT()		asm("halt;");
-#define _STOP()		asm("stop;");
+#define _HALT()     asm("halt;");
+#define _STOP()     asm("stop;");
 
-#define clockCyclesPerMicrosecond()			(configCPU_CLOCK_HZ / 1000000)				//!< CPUの動作周波数を1000000で割ったもの
-#define clockCyclesToMicroseconds(cycle)	((cycle) / clockCyclesPerMicrosecond())		//!< サイクルあたりの時間[us]
-#define microsecondsToClockCycles(us)		((us) * clockCyclesPerMicrosecond())		//!< 時間当たりのサイクル数
+// Get the bit location within the hardware port of the given virtual pin.
+// This comes from the pins_*.c file for the active board configuration.
+//
+// These perform slightly better as macros compared to inline functions
+//
+#define NOT_A_PIN 255
+#define NOT_A_PORT NULL
 
+#define clockCyclesPerMicrosecond()         (configCPU_CLOCK_HZ / 1000000)              //!< CPUの動作周波数を1000000で割ったもの
+#define clockCyclesToMicroseconds(cycle)    ((cycle) / clockCyclesPerMicrosecond())     //!< サイクルあたりの時間[us]
+#define microsecondsToClockCycles(us)       ((us) * clockCyclesPerMicrosecond())        //!< 時間当たりのサイクル数
+
+#define digitalPinToPort(P)         (uint8_t)( ((uint8_t)P < NUM_DIGITAL_PINS) ? pinTablelist[P]->portRegisterAddr - getPortRegisterAddr(0) : NOT_A_PIN)
+#define digitalPinToBitMask(P)      (uint8_t)( ((uint8_t)P < NUM_DIGITAL_PINS) ? pinTablelist[P]->mask : NOT_A_PIN)
+#define portOutputRegister(port)    (uint8_t *)( EXIST_PORT_REGISTER(port) ? getPortRegisterAddr(port) : NOT_A_PORT) /* 0:Low 1:High */
+#define portInputRegister(port)     (uint8_t *)( EXIST_PORT_REGISTER(port) ? getPortRegisterAddr(port) : NOT_A_PORT) /* 0:Low 1:High */
+#define portModeRegister(port)      (uint8_t *)( EXIST_PORT_MODE_REGISTER(port) ? getPortModeRegisterAddr(port) : NOT_A_PORT) /* 0:Output 1:Input */
 
 #define HOOK_TIMER_CHANNEL  7
 
 #define MICROSECONDS_PER_TIMER05_OVERFLOW 0xffff //1us * 2 ^ 16
 #define MILLISECONDS_PER_TIMER05_OVERFLOW (MICROSECONDS_PER_TIMER05_OVERFLOW / 1000)
-#define INTERVAL_MICRO_TDR	(MICROSECONDS_PER_TIMER05_OVERFLOW - 1)
+#define INTERVAL_MICRO_TDR  (MICROSECONDS_PER_TIMER05_OVERFLOW - 1)
 
 /* Serial define */
 #define USE_SMART_CONFIGRATOR (1)
@@ -51,8 +65,8 @@ extern "C"{
 
 // #include "WVariant.h"
 
-#define INPUT_TTL	0x5
-#define INPUT_TTL_PULLUP	0x6
+#define INPUT_TTL   0x5
+#define INPUT_TTL_PULLUP    0x6
 
 /* PWM setting. */
 #define PWM_MASTER_CLOCK    (32000000)
@@ -109,17 +123,17 @@ void loop();
 
 #include "api/itoa.h"
 #ifndef configCPU_CLOCK_HZ
-#define configCPU_CLOCK_HZ 					(32000000)	//!< CPUの動作周波数（RTOS未使用時に定義）
+#define configCPU_CLOCK_HZ                  (32000000)  //!< CPUの動作周波数（RTOS未使用時に定義）
 #endif
 /* Analog reference mode. */
-#define DEFAULT			0x00
-#define EXTERNAL		0x01
-#define INTERNAL		0x02
+#define DEFAULT         0x00
+#define EXTERNAL        0x01
+#define INTERNAL        0x02
 /* Power Management Mode. */
-#define PM_NORMAL_MODE	0
-#define PM_HALT_MODE	1
-#define PM_STOP_MODE	2
-#define PM_SNOOZE_MODE	3
+#define PM_NORMAL_MODE  0
+#define PM_HALT_MODE    1
+#define PM_STOP_MODE    2
+#define PM_SNOOZE_MODE  3
 
 
 #ifdef __RL78__

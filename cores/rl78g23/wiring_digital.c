@@ -8,7 +8,7 @@
 #define PMPUPIMPOM_CHECK_ENABLE        /* Do not change invalid bits */
 
 extern bool g_u8AnalogWriteAvailableTable[NUM_DIGITAL_PINS];
-extern const PinTableType * pinTablelist[NUM_DIGITAL_PINS];
+extern const PinTableType * const pinTablelist[NUM_DIGITAL_PINS];
 extern Pwm_func pwm_ch[PWM_CH_NUM];
 extern int8_t get_pwm_channel(uint8_t pwm_num);
 extern bool g_u8AnalogReadAvailableTable[NUM_ANALOG_INPUTS];
@@ -59,7 +59,7 @@ void pinMode(pin_size_t pin, PinMode pinMode)
 
         const PinTableType **pp;
         PinTableType *p;
-        pp = &pinTablelist[pin];
+        pp = (const PinTableType **)&pinTablelist[pin];
         p = (PinTableType *)*pp;
 
 #ifdef PMPUPIMPOM_CHECK_ENABLE
@@ -229,7 +229,7 @@ void digitalWrite(pin_size_t pin, PinStatus val)
         {
             return;
         }
-        pp = &pinTablelist[pin];
+        pp = (const PinTableType **)&pinTablelist[pin];
         p = (PinTableType *)*pp;
         /* When Output Mode  */
         if (val == LOW) {
@@ -251,7 +251,7 @@ PinStatus digitalRead(pin_size_t pin){
     if (pin < NUM_DIGITAL_PINS) {
         const PinTableType ** pp;
         PinTableType * p;
-        pp = &pinTablelist[pin];
+        pp = (const PinTableType **)&pinTablelist[pin];
         p = (PinTableType *)*pp;
         if (*p->portRegisterAddr & p->mask) {
 
@@ -275,7 +275,7 @@ void DisableDigitalInput(uint8_t pin)
     if (pin < NUM_DIGITAL_PINS) {
         const PinTableType ** pp;
         PinTableType * p;
-        pp = &pinTablelist[pin];
+        pp = (const PinTableType **)&pinTablelist[pin];
         p = (PinTableType *)*pp;
 #if defined(G23_FPB)
         if (0 != p->pdidis){    /* can be changed */
@@ -297,7 +297,7 @@ void EnableDigitalInput(uint8_t pin)
     if (pin < NUM_DIGITAL_PINS) {
         const PinTableType ** pp;
         PinTableType * p;
-        pp = &pinTablelist[pin];
+        pp = (const PinTableType **)&pinTablelist[pin];
         p = (PinTableType *)*pp;
 #if defined(G23_FPB)
         if (0 != p->pdidis){    /* can be changed */

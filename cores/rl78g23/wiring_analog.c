@@ -7,7 +7,7 @@
 #include "Config_Through.h"
 #endif // G23_FPB
 
-extern const PinTableType * pinTablelist[NUM_DIGITAL_PINS];
+extern const PinTableType * const pinTablelist[NUM_DIGITAL_PINS];
 extern volatile uint8_t g_adc_int_flg;
 static uint8_t g_u8AnalogReference = DEFAULT;
 boolean g_bAdcInterruptFlag = false;
@@ -346,7 +346,7 @@ static void _analogPinRead (uint8_t pin)
     if (g_u8AnalogReadAvailableTable[pin_index] == false) {
         const PinTableType ** pp;
         PinTableType * p;
-        pp = &pinTablelist[pin];
+        pp = (const PinTableType **)&pinTablelist[pin];
         p = (PinTableType *)*pp;
 #if defined(G22_FPB) || defined(G23_FPB)
         if (0!=p->pmca)

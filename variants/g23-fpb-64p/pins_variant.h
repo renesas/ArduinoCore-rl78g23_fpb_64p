@@ -140,6 +140,9 @@ extern const uint8_t A5;
 #define PORT_13				13
 #define PORT_14				14
 #define PORT_15				15
+#define PORT_NUM_MAX        PORT_15
+#define EXIST_PORT_REGISTER(port)   ((port >= PORT_0) && (port <= PORT_NUM_MAX))
+#define EXIST_PORT_MODE_REGISTER(port)   (((port >= PORT_0) && (port < PORT_13)) || (port == PORT_14) || (port == PORT_15))
 
 /* Port of digital pin define. */
 #define DIGITAL_PIN_0		PORT_0	/* P03	*/
@@ -956,6 +959,26 @@ extern const uint8_t A5;
 #define SERIAL_TXD2			35 // P13
 #define SERIAL_RXD2			34 // P14
 /* Define Serial Port Number */
+
+
+// These serial port names are intended to allow libraries and architecture-neutral
+// sketches to automatically default to the correct port name for a particular type
+// of use.  For example, a GPS module would normally connect to SERIAL_PORT_HARDWARE_OPEN,
+// the first hardware serial port whose RX/TX pins are not dedicated to another use.
+//
+// SERIAL_PORT_MONITOR        Port which normally prints to the Arduino Serial Monitor
+//
+// SERIAL_PORT_USBVIRTUAL     Port which is USB virtual serial
+//
+// SERIAL_PORT_LINUXBRIDGE    Port which connects to a Linux system via Bridge library
+//
+// SERIAL_PORT_HARDWARE       Hardware serial port, physical RX & TX pins.
+//
+// SERIAL_PORT_HARDWARE_OPEN  Hardware serial ports which are open for use.  Their RX & TX
+//                            pins are NOT connected to anything by default.
+#define SERIAL_PORT_MONITOR   Serial
+#define SERIAL_PORT_HARDWARE  Serial
+
 
 
 /* Define Firmata library */

@@ -47,6 +47,8 @@ Global variables and functions
 /* Start user code for global. Do not edit comment generated here */
 extern volatile unsigned long g_u32timer_periodic;
 void (*INT_TM_HOOK)() = NULL;
+void (*gp_cyclichandlerfunc)() = NULL;
+
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -78,7 +80,10 @@ void R_Config_ITL013_Callback_Shared_Interrupt(void)
     {
         g_fITInterruptFunc(g_u32timer_periodic);
     }
-    execCyclicHandler();
+    if(NULL != gp_cyclichandlerfunc)
+    {
+        gp_cyclichandlerfunc();
+    }
 
     // for MsTImer2
     if(NULL != INT_TM_HOOK)

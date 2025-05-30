@@ -28,6 +28,8 @@ volatile unsigned long g_u32timer_periodic = 0u;
 volatile unsigned long g_u32microtimer_periodic = 0u;
 #endif
 
+uint8_t g_cyclichandler_enable_flag;
+
 extern "C" {
 #include "r_smc_entry.h"
 // #include "Config_TAU0_7_MSTimer2.h"
@@ -44,6 +46,8 @@ static struct {
     {NULL, 0, 0, 0},
 };
 fITInterruptFunc_t    g_fITInterruptFunc = NULL;    //!< ユーザー定義インターバルタイマハンドラ
+
+extern void (*gp_cyclichandlerfunc)();
 
 fInterruptFunc_t g_fMicroInterruptFunc = NULL;
 #if 0
@@ -461,6 +465,8 @@ void attachCyclicHandler(uint8_t u8HandlerNumber, void (*fFunction)(unsigned lon
         g_CyclicHandlerTable[u8HandlerNumber].au32RemainTime = u32CyclicTime;
         g_CyclicHandlerTable[u8HandlerNumber].au32LastTime = millis();
         g_CyclicHandlerTable[u8HandlerNumber].afCyclicHandler = fFunction;
+        g_cyclichandler_enable_flag |= (1 << u8HandlerNumber);
+        gp_cyclichandlerfunc = execCyclicHandler;
     }
 }
 
@@ -481,6 +487,11 @@ void detachCyclicHandler(uint8_t u8HandlerNumber)
         g_CyclicHandlerTable[u8HandlerNumber].au32CyclicTime  = 0;
         g_CyclicHandlerTable[u8HandlerNumber].au32RemainTime = 0;
         g_CyclicHandlerTable[u8HandlerNumber].au32LastTime = 0;
+        g_cyclichandler_enable_flag &= ~(1 << u8HandlerNumber);
+        if(0 == g_cyclichandler_enable_flag)
+        {
+            gp_cyclichandlerfunc = NULL;
+        }
     }
 }
 

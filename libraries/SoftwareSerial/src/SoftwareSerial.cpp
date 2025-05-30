@@ -7,7 +7,7 @@
 #include "wiring_variant.h"
 extern "C" {
     #include "pintable.h"
-    extern const PinTableType * pinTablelist[NUM_DIGITAL_PINS];
+    extern const PinTableType * const pinTablelist[NUM_DIGITAL_PINS];
 }
 
 extern bool g_u8AnalogReadAvailableTable[NUM_ANALOG_INPUTS];
@@ -194,11 +194,11 @@ SoftwareSerial::SoftwareSerial(uint8_t receivePin, uint8_t transmitPin, bool inv
 
     const PinTableType ** pp;
     PinTableType* p;
-    pp = &pinTablelist[transmitPin];
+    pp = (const PinTableType **)&pinTablelist[transmitPin];
     p = (PinTableType *)*pp;
     _transmitBitMask = p->mask;
     _transmitPortRegister = p->portRegisterAddr;
-    pp = &pinTablelist[receivePin];
+    pp = (const PinTableType **)&pinTablelist[receivePin];
     p = (PinTableType *)*pp;
     _receiveBitMask = p->mask;
     _receivePortRegister = p->portRegisterAddr;
@@ -249,7 +249,7 @@ void SoftwareSerial::begin(long speed)
         _rx_delay_firstbit = 30;
         _rx_delay_intrabit = 30;
         _rx_delay_stopbit = 30;
-        _tx_delay = 30;
+        _tx_delay = 28;
     }
     else if (57600L == speed)
     {
@@ -424,7 +424,7 @@ void SoftwareSerial::Set_SerialPort(uint8_t txd_pin,uint8_t rxd_pin)
 
     /* Set RxD pin */
     //getPinTable(rxd_pin,p);
-    pp = &pinTablelist[rxd_pin];
+    pp = (const PinTableType **)&pinTablelist[rxd_pin];
     p = (PinTableType *)*pp;
     /* Set PM Register for Input */
     *p->portModeRegisterAddr |=  (unsigned long)(0x1 << p->bit);
@@ -456,7 +456,7 @@ void SoftwareSerial::Set_SerialPort(uint8_t txd_pin,uint8_t rxd_pin)
     }
 
     /* Set TxD pin */
-    pp = &pinTablelist[txd_pin];
+    pp = (const PinTableType **)&pinTablelist[txd_pin];
     p = (PinTableType *)*pp;
     /* Set PMCE Register t */
     if (0!=p->pmce){

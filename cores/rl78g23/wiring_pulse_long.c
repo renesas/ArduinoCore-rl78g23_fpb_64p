@@ -1,7 +1,7 @@
 #include "Arduino.h"
 #include "pins_arduino.h"
 
-extern const PinTableType * pinTablelist[NUM_DIGITAL_PINS];
+extern const PinTableType * const pinTablelist[NUM_DIGITAL_PINS];
 
 unsigned long pulseInLong(uint8_t pin, uint8_t state, unsigned long timeout)
 {
@@ -10,7 +10,7 @@ unsigned long pulseInLong(uint8_t pin, uint8_t state, unsigned long timeout)
     // digitalRead() instead yields much coarser resolution.
     const PinTableType **pp;
     PinTableType *p;
-    pp = &pinTablelist[pin];
+    pp = (const PinTableType **)&pinTablelist[pin];
     p = (PinTableType *)*pp;
     unsigned long start;
     unsigned long startMicros = micros();

@@ -42,12 +42,14 @@ class HardwareUart : public arduino::HardwareSerial
     operator bool() override ;
 
   private:
-    volatile int _rx_buffer_head;
-    volatile int _rx_buffer_tail;
-    volatile int _tx_buffer_head;
-    volatile int _tx_buffer_tail;
-    volatile int _rx_buf_size;
-    volatile int _tx_buf_size;
+    /* To improve ROM/RAM capacity, 
+       "volatile" designation of the following 6 variables has been deleted. */
+    int _rx_buffer_head;
+    int _rx_buffer_tail;
+    int _tx_buffer_head;
+    int _tx_buffer_tail;
+    int _rx_buf_size;
+    int _tx_buf_size;
     unsigned char *_rx_buffer;
     unsigned char *_tx_buffer;
 

@@ -1,6 +1,6 @@
 #include "wiring_variant.h"
 
-extern const PinTableType * pinTablelist[NUM_DIGITAL_PINS];
+extern const PinTableType * const pinTablelist[NUM_DIGITAL_PINS];
 
 static uint32_t countPulse(volatile uint8_t *port, uint8_t bit, uint8_t stateMask, unsigned long maxloops) {
 	unsigned long width = 0;
@@ -32,7 +32,7 @@ uint32_t pulseIn(pin_size_t pin, uint8_t state, uint32_t timeout)
 {
     const PinTableType **pp;
     PinTableType *p;
-    pp = &pinTablelist[pin];
+    pp = (const PinTableType **)&pinTablelist[pin];
     p = (PinTableType *)*pp;
    // unsigned long start;
    // unsigned long startMicros = micros();
