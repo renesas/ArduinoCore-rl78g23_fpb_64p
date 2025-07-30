@@ -4,12 +4,14 @@
 # For more info:
 # LLVM Prototype Package for Tools Test
 name=Renesas RL78/G23
-version=2.4.2
+version=2.5.0
 
 # --------------------- 
 # Compile variables
 # --------------------- 
-compiler.optimize =-Os
+compiler.optimization_flags=-Os
+compiler.optimization_flags.release=-Os
+compiler.optimization_flags.debug=-O0
 
 compiler.warning_flags=-w
 compiler.warning_flags.none=-w
@@ -26,19 +28,19 @@ compiler.path={runtime.tools.llvm-rl78.path}/bin/
 # LLVM Compiler variable
 #------------------------------------#
 compiler.c.cmd=clang
-compiler.c.flags=--target=rl78 {compiler.optimize} -fno-diagnostics-show-line-numbers -ffunction-sections -fdata-sections -fdiagnostics-parseable-fixits -g -mcpu=s3 -std=gnu99 -DARDUINO=1813 -D__RL78__ -DG23_FPB -Wnonportable-include-path {compiler.warning_flags}
+compiler.c.flags=--target=rl78 {compiler.optimization_flags} -fno-diagnostics-show-line-numbers -ffunction-sections -fdata-sections -fdiagnostics-parseable-fixits -g -mcpu=s3 -std=gnu99 -DARDUINO=1813 -D__RL78__ -DG23_FPB -Wnonportable-include-path {compiler.warning_flags}
 
 #------------------------------------#
 # LLVM C++ Compiler variable
 #------------------------------------#
 compiler.cpp.cmd=clang++
-compiler.cpp.flags=--target=rl78 {compiler.optimize} -g -fno-diagnostics-show-line-numbers -ffunction-sections -fdata-sections -fdiagnostics-parseable-fixits -DCPPAPP -DARDUINO=1813 -D__RL78__ -DG23_FPB -Wnonportable-include-path {compiler.warning_flags}
+compiler.cpp.flags=--target=rl78 {compiler.optimization_flags} -g -fno-diagnostics-show-line-numbers -ffunction-sections -fdata-sections -fdiagnostics-parseable-fixits -DCPPAPP -DARDUINO=1813 -D__RL78__ -DG23_FPB -Wnonportable-include-path {compiler.warning_flags}
 
 #------------------------------------#
 # LLVM Asemble variable
 #------------------------------------#
 compiler.S.cmd=clang
-compiler.S.flags=--target=rl78 {compiler.optimize} -fno-diagnostics-show-line-numbers -ffunction-sections -fdata-sections -fdiagnostics-parseable-fixits -g -mcpu=s3 -DCPPAPP 
+compiler.S.flags=--target=rl78 {compiler.optimization_flags} -fno-diagnostics-show-line-numbers -ffunction-sections -fdata-sections -fdiagnostics-parseable-fixits -g -mcpu=s3 -DCPPAPP 
 
 #------------------------------------#
 # LLVM Linker variable
@@ -204,5 +206,27 @@ tools.rl78flash.path={runtime.tools.rl78.path}
 tools.rl78flash.upload.params.verbose=
 tools.rl78flash.upload.params.quiet=
 tools.rl78flash.upload.pattern="{path}/{cmd}" -b 0 {serial.port.file} "{build.path}/{build.project_name}.mot"
+
+# --------------------
+# RL78 Debugger
+# -------------------
+debug.executable={build.path}/{build.project_name}.elf
+debug.server=external
+debug.cortex-debug.custom.gdbTarget=localhost:61234
+debug.cortex-debug.custom.gdbPath={runtime.tools.gdb-rl78.path}/rl78-elf-gdb
+debug.cortex-debug.custom.serverpath={runtime.tools.gdb-rl78.path}/e2-server-gdb
+debug.cortex-debug.custom.cwd={runtime.tools.gdb-rl78.path}
+# debug.cortex-debug.custom.showDevDebugOutput=raw
+debug.cortex-debug.custom.postLaunchCommands.0=monitor enable_stopped_notify_on_connect
+debug.cortex-debug.custom.postLaunchCommands.1=monitor enable_execute_on_connect
+debug.cortex-debug.custom.postLaunchCommands.2=monitor launch_complete
+debug.cortex-debug.custom.postLaunchCommands.3=monitor all_launches_complete
+debug.cortex-debug.custom.postLaunchCommands.4=monitor skip_continue
+debug.cortex-debug.custom.postLaunchCommands.5=source ./Arduino/{build.mcu}.gdb
+debug.cortex-debug.custom.postRestartCommands.0=monitor skip_continue
+debug.cortex-debug.custom.preLaunchCommands.0=set breakpoint auto-hw off
+debug.cortex-debug.custom.debuggerArgs.0=-ex
+debug.cortex-debug.custom.debuggerArgs.1=set non-stop on
+debug.cortex-debug.custom.svdFile={runtime.tools.gdb-rl78.path}/Arduino/{build.mcu}.svd
 
 #<EOF>
