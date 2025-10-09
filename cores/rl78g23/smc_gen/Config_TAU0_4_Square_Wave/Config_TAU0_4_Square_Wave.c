@@ -105,6 +105,10 @@ void R_Config_TAU0_4_Square_Wave_Stop(void)
 {
     TT0 |= _0010_TAU_CH4_STOP_TRG_ON;
     TOE0 &= (uint16_t)~_0010_TAU_CH4_OUTPUT_ENABLE;
+
+    /* Output Low */
+    P4 &= 0xFBU;
+    TO0 &= (uint16_t)~_0010_TAU_CH4_OUTPUT_VALUE_1;
     /* Mask channel 4 interrupt */
 //    TMMK04 = 1U;    /* disable INTTM04 interrupt */
 //    TMIF04 = 0U;    /* clear INTTM04 interrupt flag */

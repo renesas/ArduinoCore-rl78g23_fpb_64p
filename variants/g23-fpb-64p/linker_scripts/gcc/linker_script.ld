@@ -108,6 +108,21 @@ SECTIONS
 		/*INPUT_SECTION_FLAGS(SHF_EXECINSTR) *(*_f)*/
 	}>ROM
 
+
+	RFD_ROM_CODE :
+	{
+		*(RFD_CMN)
+		*(RFD_CMN.*)
+		*(RFD_DF)
+		*(RFD_DF.*)
+		*(SMP_CMN)
+		*(SMP_CMN.*)
+		*(SMP_DF)
+		*(SMP_DF.*)
+		. = ALIGN(2);
+	} >ROM
+
+
 	.frodata :
 	{
 		. = ALIGN(2);
@@ -189,6 +204,16 @@ SECTIONS
 	PROVIDE(__romsaddrstart = LOADADDR(.saddr));
 	PROVIDE (__romsaddrcopysize = SIZEOF(.saddr));
 
+
+	RFD_DATA :
+	{
+		PROVIDE(__RFD_DATAstart = .);
+		*(RFD_DATA)
+		*(RFD_DATA.*)
+		. = ALIGN(2);
+	} >RAM AT>ROM
+	PROVIDE(__RFD_DATAromstart = LOADADDR(RFD_DATA));
+	PROVIDE(__RFD_DATAromend = __RFD_DATAromstart + SIZEOF(RFD_DATA));
 
 
 	.sbss :

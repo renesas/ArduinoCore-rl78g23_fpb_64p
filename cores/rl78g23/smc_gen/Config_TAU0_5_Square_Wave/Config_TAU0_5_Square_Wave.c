@@ -105,6 +105,10 @@ void R_Config_TAU0_5_Square_Wave_Stop(void)
 {
     TT0 |= _0020_TAU_CH5_STOP_TRG_ON;
     TOE0 &= (uint16_t)~_0020_TAU_CH5_OUTPUT_ENABLE;
+
+    /* Output Low */
+    P0 &= 0xDFU;
+    TO0 &= (uint16_t)~_0020_TAU_CH5_OUTPUT_VALUE_1;
     /* Mask channel 5 interrupt */
 //    TMMK05 = 1U;    /* disable INTTM05 interrupt */
 //    TMIF05 = 0U;    /* clear INTTM05 interrupt flag */

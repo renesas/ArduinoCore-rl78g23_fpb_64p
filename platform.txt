@@ -4,7 +4,7 @@
 # For more info:
 # LLVM Prototype Package for Tools Test
 name=Renesas RL78/G23
-version=2.5.0
+version=2.6.0
 
 # --------------------- 
 # Compile variables
@@ -192,8 +192,8 @@ recipe.objcopy.hex.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf
 # Compute size
 # --------------------
 recipe.size.pattern="{compiler.path}{compiler.size.cmd}" {compiler.size.flags} "{build.path}/{build.project_name}.elf"
-recipe.size.regex=^(?:\.vec |\.vects |\.callt0 |\.option_byte |\.security_id |\.lowtext |\.init |\.fini |\.rodata |\.text |\.textf |\.frodata |\.eh_frame_hdr |\.eh_frame |\.data |\.dataf |\.sdata |\.saddr )\s+([0-9]+).*
-recipe.size.regex.data=^(?:\.data |\.dataf |\.sdata |\.saddr |\.sbss |\.bss |\.bssf |\.stack )\s+([0-9]+).*
+recipe.size.regex=^(?:\.vec |\.vects |\.callt0 |\.option_byte |\.security_id |\.lowtext |\.init |\.fini |\.rodata |\.text |\.textf |RFD_ROM_CODE |\.frodata |\.eh_frame_hdr |\.eh_frame |\.data |\.dataf |\.sdata |\.saddr |RFD_DATA )\s+([0-9]+).*
+recipe.size.regex.data=^(?:\.data |\.dataf |\.sdata |\.saddr |RFD_DATA |\.sbss |\.bss |\.bssf |\.stack )\s+([0-9]+).*
 
 # --------------------
 # RL78 Uploader tools

@@ -104,6 +104,10 @@ void R_Config_TAU0_7_Square_Wave_Stop(void)
 {
     TT0 |= _0080_TAU_CH7_STOP_TRG_ON;
     TOE0 &= (uint16_t)~_0080_TAU_CH7_OUTPUT_ENABLE;
+
+    /* Output Low */
+    P4 &= 0xFDU;
+    TO0 &= (uint16_t)~_0080_TAU_CH7_OUTPUT_VALUE_1;
     /* Mask channel 7 interrupt */
 //    TMMK07 = 1U;    /* disable INTTM07 interrupt */
 //    TMIF07 = 0U;    /* clear INTTM07 interrupt flag */

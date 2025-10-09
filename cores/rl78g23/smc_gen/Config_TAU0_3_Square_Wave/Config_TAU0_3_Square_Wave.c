@@ -105,6 +105,10 @@ void R_Config_TAU0_3_Square_Wave_Stop(void)
 {
     TT0 |= _0008_TAU_CH3_STOP_TRG_ON;
     TOE0 &= (uint16_t)~_0008_TAU_CH3_OUTPUT_ENABLE;
+
+    /* Output Low */
+    P3 &= 0xFDU;
+    TO0 &= (uint16_t)~_0008_TAU_CH3_OUTPUT_VALUE_1;
     /* Mask channel 3 interrupt */
 //    TMMK03 = 1U;    /* disable INTTM03 interrupt */
 //    TMIF03 = 0U;    /* clear INTTM03 interrupt flag */

@@ -105,6 +105,10 @@ void R_Config_TAU0_6_Square_Wave_Stop(void)
 {
     TT0 |= _0040_TAU_CH6_STOP_TRG_ON;
     TOE0 &= (uint16_t)~_0040_TAU_CH6_OUTPUT_ENABLE;
+
+    /* Output Low */
+    P0 &= 0xBFU;
+    TO0 &= (uint16_t)~_0040_TAU_CH6_OUTPUT_VALUE_1;
     /* Mask channel 6 interrupt */
 //    TMMK06 = 1U;    /* disable INTTM06 interrupt */
 //    TMIF06 = 0U;    /* clear INTTM06 interrupt flag */
